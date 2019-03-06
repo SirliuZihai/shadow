@@ -27,7 +27,7 @@
 </template>
 <script>
 import {hexmd5} from '../assets/js/md5.js'
-
+import {changeTitle} from '@/pages/home.vue'
 export default {
   data () {
     return {
@@ -53,13 +53,15 @@ export default {
         },
         data: {username: self.username, password: hexmd5(self.password)}
       }).then(function (data) {
-        if (data === 'OK') {
-          self.toastbuttom('登录成功')
+        let data2 = self.$root.myevil(data)
+        if (data2.success === true) {
+          self.$root.toastbuttom(data2.message)
           localStorage.setItem('username', self.username)
           localStorage.setItem('password', hexmd5(self.password))
+          changeTitle(data2.data.alias)
           router.back()
         } else {
-          self.toastbuttom(data)
+          self.$root.toastbuttom(data)
         }
       })
     },
@@ -71,24 +73,7 @@ export default {
     },
     cancel () {
       this.$f7router.back()
-    },
-    toastbuttom (data) {
-      const self = this
-      if (!self.toastBottom) {
-        self.toastBottom = self.$f7.toast.create({
-          text: data,
-          cssClass: 'sd_center',
-          closeTimeout: 2000
-        })
-      }
-      // Open it
-      self.toastBottom.open()
     }
   }
 }
 </script>
-<style>
-  .sd_center {
-    text-align: center;
-  }
-</style>

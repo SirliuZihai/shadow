@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import {changeTitle} from '@/pages/home.vue'
 export default {
   created: function () {
     const self = this
@@ -75,12 +76,14 @@ export default {
       }).then(function (data) {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
+          if (data2.data === null) { return false }
           self.info = data2.data
           self.infoCache = Object.assign({}, data2.data)
+          changeTitle(self.info.alias)
         } else {
           self.toastbuttom(data2.message)
         }
-      })
+      }).catch(() => { self.$root.toastbuttom('通讯异常') })
     },
     saveInfo () {
       const self = this
@@ -94,26 +97,15 @@ export default {
           withCredentials: true
         },
         data: self.info
-      }).then(function (data) {
-        if (data === 'OK') {
-          self.toastbuttom('保存成功')
+      }).then((data) => {
+        let data2 = self.$root.myevil(data)
+        if (data2.success === true) {
+          self.$root.toastbuttom('保存成功')
           self.args.isdisable = true
           self.getInfo()
-        } else {
-          self.toastbuttom(data)
         }
-      })
-    },
-    toastbuttom (data) {
-      const self = this
-      if (!self.toastBottom) {
-        self.toastBottom = self.$f7.toast.create({
-          text: data,
-          closeTimeout: 2000
-        })
-      }
-      // Open it
-      self.toastBottom.open()
+        self.$root.toastbuttom(data2.message)
+      }).catch(() => { self.$root.toastbuttom('通讯异常') })
     },
     cancel () {
       const self = this

@@ -50,7 +50,7 @@ export default {
           self.contacts = data2.data
           sessionStorage.setItem('contacts', JSON.stringify(data2.data))
         } else {
-          self.toastbuttom(data2.message)
+          self.$root.toastbuttom(data2.message)
         }
       })
     },
@@ -72,7 +72,7 @@ export default {
         if (data2.success === true) {
           self.people = data2.data
         } else {
-          self.toastbuttom(data2.message)
+          self.$root.toastbuttom(data2.message)
         }
       })
     },
@@ -93,22 +93,11 @@ export default {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
           self.getContact()
-          self.toastbuttom(data2.message)
+          self.$root.toastbuttom(data2.message)
         } else {
-          self.toastbuttom(data2.message)
+          self.$root.toastbuttom(data2.message)
         }
       })
-    },
-    toastbuttom (data) {
-      const self = this
-      if (!self.toastBottom) {
-        self.toastBottom = self.$f7.toast.create({
-          text: data,
-          closeTimeout: 2000
-        })
-      }
-      // Open it
-      self.toastBottom.open()
     }
   }
 }

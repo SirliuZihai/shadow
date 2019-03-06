@@ -1,11 +1,10 @@
 <template>
   <f7-page>
-    <f7-block-title>导航</f7-block-title>
     <f7-list>
-      <f7-list-item>
-        <img id="headImg" slot="media" src="" width="50rem" height="50rem"/>
-        <f7-button @click="uploadFile">上传头像</f7-button>
-      </f7-list-item>
+      <div style="text-align:center">
+        <img id="headImg"  src="" class="headImg"/>
+      </div>
+      <f7-button @click="uploadFile">点击上传头像</f7-button>
     </f7-list>
     <f7-list>
       <f7-list-item  link="/userInfo/" title="我" panel-close></f7-list-item>
@@ -18,23 +17,38 @@
   </f7-page>
 </template>
 <script>
-// import photo from '@/assets/js/phonto.js'
+import photo from '@/assets/js/phonto.js'
+import defautImg from '@/assets/image/nohead.jpg'
 export default {
   mounted: function () {
-    this.changeImgUrl()
+    const self = this
+    self.$$('#headImg').on('error', self.nohaedImg)
+    self.changeImgUrl()
   },
   methods: {
     uploadFile () {
       const self = this
+      self.$root.curSelf = self
       if (self.$device.android === true || self.$device.ios === true) {
-        // photo.getPhoto()
-        self.changeImgUrl()
+        photo.getPhoto()
       }
     },
     changeImgUrl () {
       let url = process.env.API_HOST + 'image/head/' + localStorage.getItem('username') + '.jpg?temp=' + Math.floor((Math.random() * 10000) + 1)
       this.$$('#headImg').attr('src', url)
+    },
+    nohaedImg () {
+      this.$$('#headImg').attr('src', defautImg)
     }
+
   }
 }
 </script>
+<style>
+  .headImg{
+    width: 50px;
+    height: 50px;
+    border-radius:50%
+  }
+
+</style>

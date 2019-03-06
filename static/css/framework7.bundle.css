@@ -7477,7 +7477,7 @@ html.device-android-4 .accordion-item-content {
 }
 /* === Panels === */
 :root {
-  --f7-panel-width: 260px;
+  --f7-panel-width: 200px;
   --f7-panel-bg-color: #fff;
 }
 .ios {
