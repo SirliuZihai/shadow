@@ -55,13 +55,13 @@ export default {
       }).then(function (data) {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
-          self.$root.toastbuttom(data2.message)
+          self.$root.toastbuttom(self, data2.message)
           localStorage.setItem('username', self.username)
           localStorage.setItem('password', hexmd5(self.password))
           changeTitle(data2.data.alias)
           router.back()
         } else {
-          self.$root.toastbuttom(data)
+          self.$root.toastbuttom(self, data)
         }
       })
     },

@@ -81,9 +81,9 @@ export default {
           self.infoCache = Object.assign({}, data2.data)
           changeTitle(self.info.alias)
         } else {
-          self.toastbuttom(data2.message)
+          self.toastbuttom(self, data2.message)
         }
-      }).catch(() => { self.$root.toastbuttom('通讯异常') })
+      }).catch(() => { self.$root.toastbuttom(self, '通讯异常') })
     },
     saveInfo () {
       const self = this
@@ -100,12 +100,12 @@ export default {
       }).then((data) => {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
-          self.$root.toastbuttom('保存成功')
+          self.$root.toastbuttom(self, '保存成功')
           self.args.isdisable = true
           self.getInfo()
         }
-        self.$root.toastbuttom(data2.message)
-      }).catch(() => { self.$root.toastbuttom('通讯异常') })
+        self.$root.toastbuttom(self, data2.message)
+      }).catch(() => { self.$root.toastbuttom(self, '通讯异常') })
     },
     cancel () {
       const self = this

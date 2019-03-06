@@ -72,7 +72,7 @@ export default {
         if (data2.success === true) {
           self.info = data2.data
         } else {
-          self.$root.toastbuttom(data2.message)
+          self.$root.toastbuttom(self, data2.message)
         }
       })
     },
@@ -90,7 +90,7 @@ export default {
         data: self.myInfo
       }).then(function (data) {
         let data2 = self.$root.myevil(data)
-        self.$root.toastbuttom(data2.message)
+        self.$root.toastbuttom(self, data2.message)
         if (data2.success === true) {
           self.$f7router.clearPreviousPages()
         }
@@ -111,7 +111,7 @@ export default {
         data: {'people': people}
       }).then(function (data) {
         let data2 = self.$root.myevil(data)
-        self.$root.toastbuttom(data2.message)
+        self.$root.toastbuttom(self, data2.message)
         if (data2.success === true) {
           self.$f7router.back()
         }

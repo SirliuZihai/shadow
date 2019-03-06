@@ -19,6 +19,7 @@
 <script>
 import photo from '@/assets/js/phonto.js'
 import defautImg from '@/assets/image/nohead.jpg'
+
 export default {
   mounted: function () {
     const self = this
@@ -44,11 +45,10 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
   .headImg{
     width: 50px;
     height: 50px;
     border-radius:50%
   }
-
 </style>

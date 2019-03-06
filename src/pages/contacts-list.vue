@@ -14,7 +14,9 @@
       </f7-list-item>
     </f7-list>
     <f7-list contacts-list v-show="contactIsShow">
-      <f7-list-item v-for="c in contacts" :key="c.people" :title="c.people" :link="/contactState/+c.people"></f7-list-item>
+      <f7-list-item v-for="c in contacts" :key="c.people" :title="c.remark.length===0?c.people:c.remark" :link="/contactState/+c.people">
+        <img slot="media" :src="changeContactListImgUrl(c.people)" @error="onerror"/>
+      </f7-list-item>
     </f7-list>
     <f7-list class="searchbar-not-found">
       <f7-list-item title="Nothing found"></f7-list-item>
@@ -22,6 +24,8 @@
   </f7-page>
 </template>
 <script>
+import defautImg from '@/assets/image/nohead.jpg'
+
 export default {
   created: function () {
     this.getContact()
@@ -50,7 +54,7 @@ export default {
           self.contacts = data2.data
           sessionStorage.setItem('contacts', JSON.stringify(data2.data))
         } else {
-          self.$root.toastbuttom(data2.message)
+          self.$root.toastbuttom(self, data2.message)
         }
       })
     },
@@ -72,7 +76,7 @@ export default {
         if (data2.success === true) {
           self.people = data2.data
         } else {
-          self.$root.toastbuttom(data2.message)
+          self.$root.toastbuttom(self, data2.message)
         }
       })
     },
@@ -93,17 +97,25 @@ export default {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
           self.getContact()
-          self.$root.toastbuttom(data2.message)
+          self.$root.toastbuttom(self, data2.message)
         } else {
-          self.$root.toastbuttom(data2.message)
+          self.$root.toastbuttom(self, data2.message)
         }
       })
+    },
+    changeContactListImgUrl (name) {
+      let url = process.env.API_HOST + 'image/head/' + name + '.jpg?temp=' + Math.floor((Math.random() * 10000) + 1)
+      return url
+    },
+    onerror (e) {
+      e.target.src = defautImg
     }
   }
 }
 </script>
 <style scoped>
-  .display{
-    display:none
+  img{
+    width: 2rem;
+    height: 2rem;
   }
 </style>
