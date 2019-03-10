@@ -116,6 +116,9 @@ export default {
           self.$f7router.back()
         }
       })
+    },
+    sendMessage () {
+
     }
   }
 }

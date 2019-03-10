@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {changeTitle} from '@/pages/home.vue'
+import thehome from '@/pages/home.vue'
 export default {
   created: function () {
     const self = this
@@ -79,7 +79,7 @@ export default {
           if (data2.data === null) { return false }
           self.info = data2.data
           self.infoCache = Object.assign({}, data2.data)
-          changeTitle(self.info.alias)
+          thehome.methods.changeTitle(self.info.alias)
         } else {
           self.toastbuttom(self, data2.message)
         }

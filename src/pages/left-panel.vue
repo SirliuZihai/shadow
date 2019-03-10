@@ -8,10 +8,10 @@
     </f7-list>
     <f7-list>
       <f7-list-item  link="/userInfo/" title="我" panel-close></f7-list-item>
-      <f7-list-item  link="/login-screen-page/" title="登录" panel-close></f7-list-item>
       <f7-list-item  link="/contact/" title="联系人" panel-close></f7-list-item>
       <f7-list-item  link="/insertPanOrHistory/" title="录入"  panel-close></f7-list-item>
       <f7-list-item link="/about2/" title="发现" panel-close></f7-list-item>
+      <f7-list-item  link="/login-screen-page/" title="注销" panel-close></f7-list-item>
       <f7-list-item link="/about/" title="关于" panel-close></f7-list-item>
     </f7-list>
   </f7-page>
@@ -19,10 +19,11 @@
 <script>
 import photo from '@/assets/js/phonto.js'
 import defautImg from '@/assets/image/nohead.jpg'
-
+var LeftPanelCur
 export default {
   mounted: function () {
     const self = this
+    LeftPanelCur = self
     self.$$('#headImg').on('error', self.nohaedImg)
     self.changeImgUrl()
   },
@@ -36,7 +37,7 @@ export default {
     },
     changeImgUrl () {
       let url = process.env.API_HOST + 'image/head/' + localStorage.getItem('username') + '.jpg?temp=' + Math.floor((Math.random() * 10000) + 1)
-      this.$$('#headImg').attr('src', url)
+      LeftPanelCur.$$('#headImg').attr('src', url)
     },
     nohaedImg () {
       this.$$('#headImg').attr('src', defautImg)

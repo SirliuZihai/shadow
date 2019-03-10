@@ -50,7 +50,6 @@ export default {
         'method': 'POST',
         'contentType': 'application/json',
         'url': url,
-        'crossDomain': false,
         data: {username: self.username, password: hexmd5(self.password)}
       }).then(function (data) {
         if (data === 'OK') { router.back() } else { self.$f7.dialog.alert(data) }

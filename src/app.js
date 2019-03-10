@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Framework7 from 'framework7/framework7.esm.bundle'
 import Framework7Vue, {f7Block, f7Button, f7Input, f7Link, f7ListButton, f7ListInput, f7ListItem, f7List,
   f7LoginScreenTitle, f7LoginScreen, f7NavLeft, f7NavRight, f7NavTitle, f7Navbar, f7Page, f7Panel, f7PhotoBrowser, f7Searchbar,
-  f7Statusbar, f7Tab, f7Tabs, f7Toggle, f7BlockTitle, f7Row} from 'framework7-vue'
+  f7Statusbar, f7Tab, f7Tabs, f7Toggle, f7BlockTitle, f7Row,f7BlockFooter} from 'framework7-vue'
 import App from './app.vue'
 import myutil from '@/assets/js/util.js'
 // import Phone from '@/assets/js/phonto.js'
@@ -31,15 +31,13 @@ Vue.component(f7Tab.name, f7Tab)
 Vue.component(f7Tabs.name, f7Tabs)
 Vue.component(f7Toggle.name, f7Toggle)
 Vue.component(f7Row.name, f7Row)
+Vue.component(f7BlockFooter.name,f7BlockFooter)
 // Init Vue App
 const myapp = new Vue({
   // Root Element
   el: '#app',
   render: c => c(App),
-  methods: {
-    myevil: myutil.evil,
-    toastbuttom: myutil.toastbuttom
-  },
+  methods: myutil,
   data: function () {
     return {
       curSelf: this

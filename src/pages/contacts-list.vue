@@ -14,7 +14,7 @@
       </f7-list-item>
     </f7-list>
     <f7-list contacts-list v-show="contactIsShow">
-      <f7-list-item v-for="c in contacts" :key="c.people" :title="c.remark.length===0?c.people:c.remark" :link="/contactState/+c.people">
+      <f7-list-item v-for="c in contacts" :key="c.people" :title="titleFormate(c)" :link="/contactState/+c.people">
         <img slot="media" :src="changeContactListImgUrl(c.people)" @error="onerror"/>
       </f7-list-item>
     </f7-list>
@@ -25,7 +25,7 @@
 </template>
 <script>
 import defautImg from '@/assets/image/nohead.jpg'
-
+import util from '@/assets/js/util.js'
 export default {
   created: function () {
     this.getContact()
@@ -109,6 +109,9 @@ export default {
     },
     onerror (e) {
       e.target.src = defautImg
+    },
+    titleFormate (c) {
+      return util.empty(c.remark) ? c.people : c.remark
     }
   }
 }

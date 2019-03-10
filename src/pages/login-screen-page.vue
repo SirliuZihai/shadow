@@ -21,13 +21,14 @@
     <f7-list>
       <f7-list-button @click="signIn">登录</f7-list-button>
       <f7-list-button @click="regist">注册</f7-list-button>
-      <f7-list-button @click="cancel">取消</f7-list-button>
+      <f7-list-button @click="cancel">退出</f7-list-button>
     </f7-list>
   </f7-page>
 </template>
 <script>
 import {hexmd5} from '../assets/js/md5.js'
-import {changeTitle} from '@/pages/home.vue'
+import thehome from '@/pages/home.vue'
+import theLeft from '@/pages/left-panel.vue'
 export default {
   data () {
     return {
@@ -58,7 +59,10 @@ export default {
           self.$root.toastbuttom(self, data2.message)
           localStorage.setItem('username', self.username)
           localStorage.setItem('password', hexmd5(self.password))
-          changeTitle(data2.data.alias)
+          thehome.methods.clearEvents()
+          thehome.methods.changeTitle(data2.data.alias)
+          thehome.methods.initSocket()
+          theLeft.methods.changeImgUrl()
           router.back()
         } else {
           self.$root.toastbuttom(self, data)
@@ -72,7 +76,7 @@ export default {
       // this.$f7.mainView.router.load({url: '/chat/'});
     },
     cancel () {
-      this.$f7router.back()
+      navigator.app.exitApp()
     }
   }
 }

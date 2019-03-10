@@ -1,7 +1,5 @@
-const myconfig = {
-  BACK_URL: 'http://192.168.137.1/myapp/',
-  COMM_API: process.env.API_HOST
-}
-export {
-  myconfig
+
+var pubarg = 0
+export default {
+  pubarg
 }

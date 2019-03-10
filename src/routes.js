@@ -8,6 +8,7 @@ import InsertPanOrHistory from './pages/insertPanOrHistory.vue'
 import userInfo from './pages/userInfo.vue'
 import contact from './pages/contacts-list.vue'
 import contactState from './pages/contact-state.vue'
+import eventDetail from './pages/eventDetail.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -50,6 +51,10 @@ export default [
   {
     path: '/contactState/:people',
     component: contactState
+  },
+  {
+    path: '/event-detail/:eventId',
+    component: eventDetail
   },
   /* {
     path: '/showPanOrHistory/',
