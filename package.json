@@ -16,6 +16,8 @@
   "dependencies": {
     "framework7": "^4.0.5",
     "framework7-vue": "^4.0.5",
+    "mongodb": "^3.1.13",
+    "mongojs": "^2.6.0",
     "vue": "^2.6.3",
     "vue-router": "^3.0.1"
   },

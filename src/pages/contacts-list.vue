@@ -6,7 +6,7 @@
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-contacts_new" icon-ios="f7:add" icon-md="material:add"></f7-link>
       </f7-nav-right>
       <f7-searchbar class="searchbar-contacts_old" search-container=".contacts-list" placeholder="查找联系人" disableButtonText="取消" expandable></f7-searchbar>
-      <f7-searchbar class="searchbar-contacts_new" search-container=".contacts-list2" @change="searchPeople($event.target.value)" @searchbarEnable="contactIsShow=false" @searchbarDisable="contactIsShow=true"  disableButtonText="取消" placeholder="搜索用户" expandable></f7-searchbar>
+      <f7-searchbar class="searchbar-contacts_new" @change="searchPeople($event.target.value)" @searchbarEnable="contactIsShow=false" @searchbarDisable="contactIsShow=true"  disableButtonText="取消" placeholder="搜索用户" expandable></f7-searchbar>
     </f7-navbar>
     <f7-list class=".contacts-list2" v-show="!contactIsShow">
       <f7-list-item v-for="p in people" :key="p.username" :title="p.username+' '+p.alias">

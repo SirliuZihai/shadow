@@ -7,11 +7,27 @@
       <f7-nav-title>{{thetitle}}</f7-nav-title>
       <f7-nav-right>
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-home" icon-ios="f7:search" icon-md="material:search"></f7-link>
+        <f7-link class="searchbar-enable" data-searchbar=".searchbar-history" icon-ios="f7:add" icon-md="material:add"></f7-link>
       </f7-nav-right>
       <f7-searchbar class="searchbar-home" search-container=".homeevents-list" placeholder="搜索当前事项" disableButtonText="取消" expandable></f7-searchbar>
+      <f7-searchbar class="searchbar-history" @change="queryHistroy($event.target.value)" @searchbarEnable="args.homeIsShow=false" @searchbarDisable="args.homeIsShow=true"  placeholder="搜索历史事项" disableButtonText="取消" expandable>
+      </f7-searchbar>
     </f7-navbar>
-    <f7-list class="homeevents-list">
-      <f7-list-item v-for="e in events" :key="e.index" :title="e.title" link="\event-detail\">
+    <f7-list mediaList class="homeevents-list" style="margin-top: 0px" v-show="args.homeIsShow">
+      <f7-list-item v-for="e in events" :key="e.index" :title="e.title"  :subtitle="e.remark" :badge="e.num===null?'':e.num"
+                    :after="dateformate(e._id.date,'MM-dd hh:mm')"  swipeout >
+        <f7-swipeout-actions right>
+          <f7-swipeout-button @click="detail(e)">详情</f7-swipeout-button>
+        </f7-swipeout-actions>
+        <img slot="media" :src="homedefautImg" />
+      </f7-list-item>
+    </f7-list>
+    <f7-list mediaList class="historyevents-list" style="margin-top: 0px" v-show="!args.homeIsShow">
+      <f7-list-item v-for="e1 in hisEvents" :key="e1.index" :title="e1.title"  :subtitle="e1.remark" @click="addEvent(e1)"
+                    :after="dateformate(e1._id.date,'MM-dd hh:mm')" swipeout>
+        <f7-swipeout-actions right>
+          <f7-swipeout-button @click="detail(e1)">详情</f7-swipeout-button>
+        </f7-swipeout-actions>
         <img slot="media" :src="homedefautImg" />
       </f7-list-item>
     </f7-list>
@@ -39,10 +55,15 @@ function initSocket () {
 function initwebSocket (webSocket) {
   webSocket.onmessage = function (data) {
     let array = homeCur.$root.myevil(data.data)
+    if (array.length === 0) { return false }
     for (let i = 0; i < array.length; i++) {
-      homeCur.events.unshift(array[i])
+      homeCur.addEvent(array[i])
     }
     localStorage.setItem('events', JSON.stringify(homeCur.events))
+    try {
+      // cordovaUtil.notify(array[0], null, null)
+    } catch (e) {
+    }
   }
   webSocket.onopen = function () {
     webSocket.send('receive Home date')
@@ -64,10 +85,10 @@ function initwebSocket (webSocket) {
       tryTime = 0
     }
   }
-  //监听下socket的close事件，代码中最好还是别用try catch了，会严重拖垮性能
+  // 监听下socket的close事件，代码中最好还是别用try catch了，会严重拖垮性能
   var heartid = window.setInterval(function () { // 每隔20秒钟发送一次心跳，避免websocket连接因超时而自动断开
     if (webSocket) {
-      if (webSocket.readyState !== webSocket.CLOSING || webSocket.readyState !== webSocket.CLOSED) {
+      if (webSocket.readyState === webSocket.OPEN) {
         webSocket.send('heartbeat[myapp]')
       } else {
         window.clearInterval(heartid)
@@ -80,7 +101,17 @@ export default {
     return {
       thetitle: '',
       events: [],
-      homedefautImg: defautImg
+      hisEvents: [],
+      queryEvent: {
+        title: '',
+        starttime: '',
+        endtime: ''
+      },
+      curEvent: {},
+      homedefautImg: defautImg,
+      args: {
+        homeIsShow: true
+      }
     }
   },
   created () {
@@ -111,6 +142,33 @@ export default {
     })
   },
   methods: {
+    queryHistroy (value) {
+      const self = this
+      let url = process.env.API_HOST + 'event/queryHistroy.do'
+      if (self.queryEvent.starttime) { self.queryEvent.starttime = self.$root.timeToObjId(self.queryEvent.starttime) }
+      if (self.queryEvent.endtime) { self.queryEvent.endtime = self.$root.timeToObjId(self.queryEvent.endtime) }
+      if(value){
+        self.queryEvent.title = value
+      }
+      self.$f7.request.promise.postJSON(url, self.queryEvent).then(
+        (data) => {
+          let array = data.data
+          if (array.length === 0) { return false }
+          self.hisEvents = []
+          for (let i = 0; i < array.length; i++) {
+            self.hisEvents.push(array[i])
+          }
+        },
+        () => { self.$root.toastbuttom(self, '通讯异常') }
+      )
+    },
+    addEvent (e) {
+      for (let i = 0; i < self.events.length; i++) {
+        let e1 = self.events[i]
+        if (e._id === e1._id) { self.events.remove(e1) }
+      }
+      self.events.unshift(e)
+    },
     changeTitle (alia) {
       homeCur.thetitle = (alia === undefined || alia === null) ? '客官，你好' : '您好，' + alia
     },
@@ -119,13 +177,23 @@ export default {
     },
     clearEvents () {
       homeCur.events = []
+    },
+    dateformate (time, fmt) {
+      return this.$root.dateFormat(new Date(time), fmt)
+    },
+    getCurHome () {
+      return homeCur
+    },
+    detail (e) {
+      this.curEvent = e
+      this.$f7router.navigate('/event-detail/')
     }
   }
 }
 </script>
 <style scoped>
   img{
-    width: 2rem;
-    height: 2rem;
+    width: 3rem;
+    height: 3rem;
   }
 </style>

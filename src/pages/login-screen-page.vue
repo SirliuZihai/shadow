@@ -72,6 +72,7 @@ export default {
     regist () {
       const self = this
       const router = self.$f7router
+      localStorage.clear()
       router.navigate('/register/')
       // this.$f7.mainView.router.load({url: '/chat/'});
     },

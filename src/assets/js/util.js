@@ -29,9 +29,17 @@ function dateFormat (thedate, fmt) { // author: meizz
   for (var k in o) { if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length))) }
   return fmt
 }
+function timeToObjId( time ) {
+  var t = new Date(time);
+  t = t.getTime()/1000; // 转换成秒数
+  return t.toString(16)+'0000000000000000'// 转换成16进制的字符串，再加补齐16个0}
+}
+
 export default{
   myevil,
   toastbuttom,
   empty,
-  dateFormat
+  dateFormat,
+  timeToObjId
 }
+

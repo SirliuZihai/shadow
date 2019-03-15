@@ -101,7 +101,25 @@ function upload (fileURL) {
   ft.upload(fileURL, encodeURI(SERVER), success, fail, options)
 };
 
+function notify (event,success,ignore) {
+  cordova.plugins.notification.local.on('yes', success)
+  cordova.plugins.notification.local.on('no', ignore)
+  cordova.plugins.notification.local.schedule({
+    id: Math.random(),
+    title: event.title,
+    text: event.remark,
+    foreground: true,
+    actions: [
+      { id: 'yes', title: '确认查看' },
+      { id: 'no', title: '忽略' }
+    ],
+  })
+}
+var ignore=function(notification, eopts){
+  alert("消息详情：消息标题["+notification["title"]+"], 消息内容["+notification["text"]+"]")
+}
 export default {
   getPhoto,
-  myPosition
+  myPosition,
+  notify
 }

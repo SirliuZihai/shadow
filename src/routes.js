@@ -53,7 +53,7 @@ export default [
     component: contactState
   },
   {
-    path: '/event-detail/:eventId',
+    path: '/event-detail/',
     component: eventDetail
   },
   /* {
