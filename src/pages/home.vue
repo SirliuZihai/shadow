@@ -10,7 +10,8 @@
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-history" icon-ios="f7:add" icon-md="material:add"></f7-link>
       </f7-nav-right>
       <f7-searchbar class="searchbar-home" search-container=".homeevents-list" placeholder="搜索当前事项" disableButtonText="取消" expandable></f7-searchbar>
-      <f7-searchbar class="searchbar-history" @change="queryHistroy($event.target.value)" @searchbarEnable="args.homeIsShow=false" @searchbarDisable="args.homeIsShow=true"  placeholder="搜索历史事项" disableButtonText="取消" expandable>
+      <f7-searchbar ref="searchbarHomeEvent" class="searchbar-history" @change="queryHistroy($event.target.value)" @searchbarEnable="args.homeIsShow=false" @searchbarDisable="args.homeIsShow=true"  placeholder="搜索历史事项" disableButtonText="取消" expandable>
+
       </f7-searchbar>
     </f7-navbar>
     <f7-list mediaList class="homeevents-list" style="margin-top: 0px" v-show="args.homeIsShow">
@@ -23,7 +24,7 @@
       </f7-list-item>
     </f7-list>
     <f7-list mediaList class="historyevents-list" style="margin-top: 0px" v-show="!args.homeIsShow">
-      <f7-list-item v-for="e1 in hisEvents" :key="e1.index" :title="e1.title"  :subtitle="e1.remark" @click="addEvent(e1)"
+      <f7-list-item v-for="e1 in hisEvents" :key="e1.index" :title="e1.title"  :subtitle="e1.remark" @click="addEvent2(e1)"
                     :after="dateformate(e1._id.date,'MM-dd hh:mm')" swipeout>
         <f7-swipeout-actions right>
           <f7-swipeout-button @click="detail(e1)">详情</f7-swipeout-button>
@@ -147,7 +148,7 @@ export default {
       let url = process.env.API_HOST + 'event/queryHistroy.do'
       if (self.queryEvent.starttime) { self.queryEvent.starttime = self.$root.timeToObjId(self.queryEvent.starttime) }
       if (self.queryEvent.endtime) { self.queryEvent.endtime = self.$root.timeToObjId(self.queryEvent.endtime) }
-      if(value){
+      if (value) {
         self.queryEvent.title = value
       }
       self.$f7.request.promise.postJSON(url, self.queryEvent).then(
@@ -162,12 +163,36 @@ export default {
         () => { self.$root.toastbuttom(self, '通讯异常') }
       )
     },
+    // 用于监听homeWebsockt接收消息刷新页面
     addEvent (e) {
+      const self = this
       for (let i = 0; i < self.events.length; i++) {
         let e1 = self.events[i]
-        if (e._id === e1._id) { self.events.remove(e1) }
+        if (self.$root.oIdIsEqual(e._id, e1._id)) {
+          // 计数
+          if (e1.num) {
+            e.num = ++e1.num
+          } else {
+            e.num = 1
+          }
+          self.events.remove(e1)
+        }
       }
       self.events.unshift(e)
+    },
+    // 用于从历史中添加事件
+    addEvent2 (e) {
+      const self = this
+      for (let i = 0; i < self.events.length; i++) {
+        let e1 = self.events[i]
+        if (self.$root.oIdIsEqual(e._id, e1._id)) {
+          self.events.splice(i, 1)
+          break
+        }
+      }
+      self.events.unshift(e)
+      localStorage.setItem('events', JSON.stringify(homeCur.events))
+      self.$refs.searchbarHomeEvent.disable()
     },
     changeTitle (alia) {
       homeCur.thetitle = (alia === undefined || alia === null) ? '客官，你好' : '您好，' + alia

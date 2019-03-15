@@ -52,6 +52,7 @@ export default {
     saveEvent () {
       const self = this
       let url = process.env.API_HOST + 'event/saveEvent.do'
+      self.eventInfo.relationship = self.eventInfo.relationship.split(";")
       self.$f7.request.promise.postJSON(url, self.eventInfo).then(
         (data) => {
           self.$root.toastbuttom(self, data.message)
