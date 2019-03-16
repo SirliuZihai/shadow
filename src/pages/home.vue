@@ -73,6 +73,7 @@ function initwebSocket (webSocket) {
     console.log(event)
   }
   webSocket.onclose = function () {
+    console.log('homeEvent closeed')
     window.clearInterval(heartid)
     let tryTime = 3 // 0 避免主动close Seocket尝试重连
     // 重试2次，每次之间间隔5秒
@@ -166,30 +167,19 @@ export default {
     // 用于监听homeWebsockt接收消息刷新页面
     addEvent (e) {
       const self = this
-      for (let i = 0; i < self.events.length; i++) {
-        let e1 = self.events[i]
-        if (self.$root.oIdIsEqual(e._id, e1._id)) {
-          // 计数
-          if (e1.num) {
-            e.num = ++e1.num
-          } else {
-            e.num = 1
-          }
-          self.events.remove(e1)
-        }
+      let e1 = self.$root.delEleFromArray(e, self.events)
+      // 计数
+      if (e1.num) {
+        e.num = ++e1.num
+      } else {
+        e.num = 1
       }
       self.events.unshift(e)
     },
     // 用于从历史中添加事件
     addEvent2 (e) {
       const self = this
-      for (let i = 0; i < self.events.length; i++) {
-        let e1 = self.events[i]
-        if (self.$root.oIdIsEqual(e._id, e1._id)) {
-          self.events.splice(i, 1)
-          break
-        }
-      }
+      self.$root.delEleFromArray(e, self.events)
       self.events.unshift(e)
       localStorage.setItem('events', JSON.stringify(homeCur.events))
       self.$refs.searchbarHomeEvent.disable()
