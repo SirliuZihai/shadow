@@ -10,8 +10,8 @@
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-history" icon-ios="f7:add" icon-md="material:add"></f7-link>
       </f7-nav-right>
       <f7-searchbar class="searchbar-home" search-container=".homeevents-list" placeholder="搜索当前事项" disableButtonText="取消" expandable></f7-searchbar>
-      <f7-searchbar ref="searchbarHomeEvent" class="searchbar-history" @change="queryHistroy($event.target.value)" @searchbarEnable="args.homeIsShow=false" @searchbarDisable="args.homeIsShow=true"  placeholder="搜索历史事项" disableButtonText="取消" expandable>
-
+      <f7-searchbar ref="searchbarHomeEvent" class="searchbar-history" @inpput="queryEvent.title = $event.target.value" @focus="args.querytime = true" @searchbarEnable="args.homeIsShow=false"
+                    @searchbarDisable="()=>{args.homeIsShow=true;args.querytime=false}"  placeholder="搜索历史事项" disableButtonText="取消" expandable>
       </f7-searchbar>
     </f7-navbar>
     <f7-list mediaList class="homeevents-list" style="margin-top: 0px" v-show="args.homeIsShow">
@@ -22,6 +22,19 @@
         </f7-swipeout-actions>
         <img slot="media" :src="homedefautImg" />
       </f7-list-item>
+    </f7-list>
+    <f7-list inline-labels form v-show="(!args.homeIsShow)&&args.querytime" style="margin-top: 0px">
+      <f7-list-input :value="queryEvent.starttime" @input="queryEvent.starttime=$event.target.value"
+                     label="起始时间"
+                     type="datetime-local"
+                     placeholder="请选择时间" clear-button
+      />
+      <f7-list-input :value="queryEvent.endtime" @input="queryEvent.endtime=$event.target.value"
+                     label="截止时间"
+                     type="datetime-local"
+                     placeholder="请选择时间" clear-button
+      />
+      <f7-list-button @click="queryHistroy">查询</f7-list-button>
     </f7-list>
     <f7-list mediaList class="historyevents-list" style="margin-top: 0px" v-show="!args.homeIsShow">
       <f7-list-item v-for="e1 in hisEvents" :key="e1.index" :title="e1.title"  :subtitle="e1.remark" @click="addEvent2(e1)"
@@ -112,7 +125,8 @@ export default {
       curEvent: {},
       homedefautImg: defautImg,
       args: {
-        homeIsShow: true
+        homeIsShow: true,
+        querytime: false
       }
     }
   },
@@ -144,21 +158,21 @@ export default {
     })
   },
   methods: {
-    queryHistroy (value) {
+    queryHistroy () {
       const self = this
+      self.args.querytime = false
       let url = process.env.API_HOST + 'event/queryHistroy.do'
-      if (self.queryEvent.starttime) { self.queryEvent.starttime = self.$root.timeToObjId(self.queryEvent.starttime) }
-      if (self.queryEvent.endtime) { self.queryEvent.endtime = self.$root.timeToObjId(self.queryEvent.endtime) }
-      if (value) {
-        self.queryEvent.title = value
-      }
       self.$f7.request.promise.postJSON(url, self.queryEvent).then(
         (data) => {
-          let array = data.data
-          if (array.length === 0) { return false }
-          self.hisEvents = []
-          for (let i = 0; i < array.length; i++) {
-            self.hisEvents.push(array[i])
+          if(data.success){
+            let array = data.data
+            if (array.length === 0) { return false }
+            self.hisEvents = []
+            for (let i = 0; i < array.length; i++) {
+              self.hisEvents.push(array[i])
+            }
+          }else{
+            self.$root.toastbuttom(self, data.message)
           }
         },
         () => { self.$root.toastbuttom(self, '通讯异常') }
