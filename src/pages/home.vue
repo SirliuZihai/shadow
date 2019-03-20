@@ -15,8 +15,8 @@
       </f7-searchbar>
     </f7-navbar>
     <f7-list mediaList class="homeevents-list" style="margin-top: 0px" v-show="args.homeIsShow">
-      <f7-list-item v-for="e in events" :key="e.index" :title="e.title"  :subtitle="e.remark" :badge="e.num===null?'':e.num"
-                    :after="dateformate(e._id.date,'MM-dd hh:mm')"  swipeout >
+      <f7-list-item v-for="e in events" :key="e.index" :title="e.title"  :subtitle="e.latestMsg === null?'':e.latestMsg" :badge="e.num===null?'':e.num"
+                    :after="dateformate(e._id,'MM-dd hh:mm')"  swipeout >
         <f7-swipeout-actions right>
           <f7-swipeout-button @click="detail(e)">详情</f7-swipeout-button>
         </f7-swipeout-actions>
@@ -38,7 +38,7 @@
     </f7-list>
     <f7-list mediaList class="historyevents-list" style="margin-top: 0px" v-show="!args.homeIsShow">
       <f7-list-item v-for="e1 in hisEvents" :key="e1.index" :title="e1.title"  :subtitle="e1.remark" @click="addEvent2(e1)"
-                    :after="dateformate(e1._id.date,'MM-dd hh:mm')" swipeout>
+                    :after="dateformate(e1._id,'MM-dd hh:mm')" swipeout>
         <f7-swipeout-actions right>
           <f7-swipeout-button @click="detail(e1)">详情</f7-swipeout-button>
         </f7-swipeout-actions>
@@ -52,6 +52,7 @@
 </template>
 <script>
 import defautImg from '@/assets/image/nohead.jpg'
+let ObjectID = require('bson').ObjectID
 var homeCur
 // home event websocket
 var webSocket
@@ -68,15 +69,41 @@ function initSocket () {
 }
 function initwebSocket (webSocket) {
   webSocket.onmessage = function (data) {
-    let array = homeCur.$root.myevil(data.data)
-    if (array.length === 0) { return false }
-    for (let i = 0; i < array.length; i++) {
-      homeCur.addEvent(array[i])
+    let type = data.data.substring(0, 4)
+    if (type === '0000') {
+      let array = homeCur.$root.myevil(data.data.substring(4))
+      if (array.length === 0) {
+        return false
+      }
+      for (let i = 0; i < array.length; i++) {
+        homeCur.addEvent(array[i])
+      }
+      localStorage.setItem('events', JSON.stringify(homeCur.events))
+      try {
+        // cordovaUtil.notify(array[0], null, null)
+      } catch (e) {
+      }
     }
-    localStorage.setItem('events', JSON.stringify(homeCur.events))
-    try {
-      // cordovaUtil.notify(array[0], null, null)
-    } catch (e) {
+    if (type === '0001') {
+      let array2 = homeCur.$root.myevil(data.data.substring(4))
+      if (array2.length === 0) {
+        return false
+      }
+      for (let i = 0; i < array2.length; i++) {
+        homeCur.addMessage(array2[i])
+        for (let j = 0; j < homeCur.events.length; j++) {
+          if (homeCur.events[j]._id === array2[i].relateId) {
+            homeCur.events[j].num++
+            if (array2[i].dataType === null) {
+              homeCur.events[j].latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
+            } else {
+              if (array2[i].type === 'operate') { homeCur.events[j].latestMsg = array2[i].data }
+              if (array2[i].type === 'image') { homeCur.events[j].latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
+              if (array2[i].type === 'file') { homeCur.events[j].latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
+            }
+          }
+        }
+      }
     }
   }
   webSocket.onopen = function () {
@@ -164,14 +191,14 @@ export default {
       let url = process.env.API_HOST + 'event/queryHistroy.do'
       self.$f7.request.promise.postJSON(url, self.queryEvent).then(
         (data) => {
-          if(data.success){
+          if (data.success) {
             let array = data.data
             if (array.length === 0) { return false }
             self.hisEvents = []
             for (let i = 0; i < array.length; i++) {
               self.hisEvents.push(array[i])
             }
-          }else{
+          } else {
             self.$root.toastbuttom(self, data.message)
           }
         },
@@ -182,12 +209,6 @@ export default {
     addEvent (e) {
       const self = this
       let e1 = self.$root.delEleFromArray(e, self.events)
-      // 计数
-      if (e1.num) {
-        e.num = ++e1.num
-      } else {
-        e.num = 1
-      }
       self.events.unshift(e)
     },
     // 用于从历史中添加事件
@@ -201,14 +222,21 @@ export default {
     changeTitle (alia) {
       homeCur.thetitle = (alia === undefined || alia === null) ? '客官，你好' : '您好，' + alia
     },
+    addMessage (m) {
+      // eventId 作为键，存messages
+      let messages = JSON.parse(localStorage.getItem(m.relateId))
+      if (messages === null)messages = []
+      messages.push(m)
+      localStorage.setItem(m.relateId, JSON.stringify(messages))
+    },
     initSocket () {
       initSocket()
     },
     clearEvents () {
       homeCur.events = []
     },
-    dateformate (time, fmt) {
-      return this.$root.dateFormat(new Date(time), fmt)
+    dateformate (id, fmt) {
+      return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt)
     },
     getCurHome () {
       return homeCur

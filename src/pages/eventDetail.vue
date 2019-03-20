@@ -77,13 +77,12 @@ export default {
     deleteEvent () {
       const self = this
       let url = process.env.API_HOST + 'event/deleteEvent.do'
-      self.$f7.request.promise.postJSON(url, {'_id':self.eventInfo._id,'username':self.eventInfo.username}).then(
+      self.$f7.request.promise.postJSON(url, {'_id': self.eventInfo._id, 'username': self.eventInfo.username}).then(
         (data) => {
           self.$root.toastbuttom(self, data.message)
-          if (data.success === true||data.message==='该记录已被移除') {
+          if (data.success === true || data.message === '该记录已被移除') {
             let deletobj = self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().events)
-            if(deletobj !== null)
-              localStorage.setItem('events', JSON.stringify(theHome.methods.getCurHome().events))
+            if (deletobj !== null) { localStorage.setItem('events', JSON.stringify(theHome.methods.getCurHome().events)) }
             self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().hisEvents)
           }
           self.$f7router.back()

@@ -14,8 +14,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "dns": "^0.2.2",
     "framework7": "^4.0.5",
     "framework7-vue": "^4.0.5",
+    "module": "^1.2.5",
     "mongodb": "^3.1.13",
     "mongojs": "^2.6.0",
     "vue": "^2.6.3",

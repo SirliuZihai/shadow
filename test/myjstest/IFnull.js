@@ -5,6 +5,7 @@ let c = undefined
 let d = null
 let e = true
 let f = false
+let g = []
 
 console.log("the i")
 if(i){
@@ -33,5 +34,10 @@ if(e){
 console.log("the f")
 if(f){
   console.log(f)
+}
+console.log("the g")
+
+if(g){
+  console.log(g)
 }
 
