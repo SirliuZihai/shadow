@@ -185,10 +185,14 @@ export default {
     })
   },
   watch :{
-    events: function (val){
-      localStorage.setItem('events', JSON.stringify(val))
-      console.log('events saved')
+    events: {
+      handler:function (val){
+        localStorage.setItem('events', JSON.stringify(val))
+        console.log('events saved')
+      },
+      deep:true
     },
+
     curEvent: function (val) {
       this.addEvent(val)
     }
