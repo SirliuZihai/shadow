@@ -4,9 +4,9 @@
     </f7-navbar>
 
     <f7-messages>
-      <template v-for="(msg ,index) in msgs">
-        <f7-messages-title v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-        <f7-message v-if="msg.type!=='operate'" :key="index" :first="true" :last="true" :tail="true"
+      <template v-for="msg in msgs" >
+        <f7-messages-title :key="msg.index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
+        <f7-message :key="msg.index" v-if="msg.type!=='operate'" :first="true" :last="true" :tail="true"
                     :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :text="msg.data" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
                     />
       </template>
@@ -60,13 +60,13 @@ export default {
       attachmentsVisible: true
     }
   },
-  watch:{
-    msgs:function (val) {
+  watch: {
+    msgs: function (val) {
       const self = this
       localStorage.setItem(self.$f7route.params.eventId, JSON.stringify(val))
     }
   },
-  methods:{
+  methods: {
     sendMessage () {
       const self = this
       const text = self.$f7.messagebar.getValue().replace(/\n/g, '<br>').trim()
@@ -82,9 +82,9 @@ export default {
     headImgUrl (name) {
       const self = this
       let url = process.env.API_HOST + 'image/head/' + name + '.jpg'
-      if(self.$root.isHasImg(url)){
+      if (self.$root.isHasImg(url)) {
         return url
-      }else{
+      } else {
         return defautImg
       }
     },
@@ -139,7 +139,7 @@ export default {
         }
       }, 20000)
     },
-    dateformate (id,fmt){return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt)}
+    dateformate (id, fmt) { return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt) }
   }
 }
 </script>

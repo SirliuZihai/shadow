@@ -29,16 +29,8 @@ function dateFormat (thedate, fmt) { // author: meizz
   for (var k in o) { if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length))) }
   return fmt
 }
-
-function timeToObjId (time) {
-  var t = new Date(time)
-  t = t.getTime() / 1000 // 转换成秒数
-  return t.toString(16) + '0000000000000000'// 转换成16进制的字符串，再加补齐16个0}
-}
 // eslint-disable-next-line to
-function oIdIsEqual (id1, id2) {
-  return id1.counter === id2.counter && id1.timestamp === id2.timestamp && id1.machineIdentifier === id2.machineIdentifier && id1.processIdentifier === id2.processIdentifier
-}
+function oIdIsEqual (id1, id2) { return id1.counter === id2.counter && id1.timestamp === id2.timestamp && id1.machineIdentifier === id2.machineIdentifier && id1.processIdentifier === id2.processIdentifier }
 /**
  * 从数组中删除元素，根据objectId 返回被删除元素
  * */
@@ -53,14 +45,13 @@ function delEleFromArray (e, array) {
   return null
 }
 
-function isHasImg(pathImg){
-  var ImgObj=new Image();
-  ImgObj.src= pathImg;
-  if(ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0))
-  {
-    return true;
+function isHasImg (pathImg) {
+  var ImgObj = new Image()
+  ImgObj.src = pathImg
+  if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
+    return true
   } else {
-    return false;
+    return false
   }
 }
 
