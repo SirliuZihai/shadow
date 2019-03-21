@@ -52,12 +52,23 @@ function delEleFromArray (e, array) {
   }
   return null
 }
+
+function isHasImg(pathImg){
+  var ImgObj=new Image();
+  ImgObj.src= pathImg;
+  if(ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0))
+  {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export default{
   myevil,
   toastbuttom,
   empty,
   dateFormat,
-  timeToObjId,
-  oIdIsEqual,
-  delEleFromArray
+  delEleFromArray,
+  isHasImg
 }

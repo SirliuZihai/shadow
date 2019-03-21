@@ -2,12 +2,16 @@ import Vue from 'vue'
 import Framework7 from 'framework7/framework7.esm.bundle'
 import Framework7Vue, {f7Block, f7Button, f7Input, f7Link, f7ListButton, f7ListInput, f7ListItem, f7List,
   f7LoginScreenTitle, f7LoginScreen, f7NavLeft, f7NavRight, f7NavTitle, f7Navbar, f7Page, f7Panel, f7PhotoBrowser, f7Searchbar,
-  f7Statusbar, f7Tab, f7Tabs, f7Toggle, f7BlockTitle, f7Row, f7BlockFooter, f7SwipeoutActions,
-  f7SwipeoutButton } from 'framework7-vue'
+  f7Statusbar, f7Tab, f7Tabs, f7Toggle, f7BlockTitle, f7Row, f7BlockFooter, f7SwipeoutActions, f7Messages, f7MessagesTitle,
+  f7Message, f7Messagebar, f7SwipeoutButton } from 'framework7-vue'
 import App from './app.vue'
 import myutil from '@/assets/js/util.js'
 // import Phone from '@/assets/js/phonto.js'
 Framework7.use(Framework7Vue)
+Vue.component(f7Messages.name, f7Messages)
+Vue.component(f7MessagesTitle.name, f7MessagesTitle)
+Vue.component(f7Message.name, f7Message)
+Vue.component(f7Messagebar.name, f7Messagebar)
 Vue.component(f7BlockTitle.name, f7BlockTitle)
 Vue.component(f7Block.name, f7Block)
 Vue.component(f7Button.name, f7Button)

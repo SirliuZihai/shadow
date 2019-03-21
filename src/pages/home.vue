@@ -16,7 +16,7 @@
     </f7-navbar>
     <f7-list mediaList class="homeevents-list" style="margin-top: 0px" v-show="args.homeIsShow">
       <f7-list-item v-for="e in events" :key="e.index" :title="e.title"  :subtitle="e.latestMsg === null?'':e.latestMsg" :badge="e.num===null?'':e.num"
-                    :after="dateformate(e._id,'MM-dd hh:mm')"  swipeout >
+                    :after="dateformate(e._id,'MM-dd hh:mm')" :link="/chat/+e._id+'/'+e.title" @click="curEvent = e;e.num=null" swipeout >
         <f7-swipeout-actions right>
           <f7-swipeout-button @click="detail(e)">详情</f7-swipeout-button>
         </f7-swipeout-actions>
@@ -78,7 +78,7 @@ function initwebSocket (webSocket) {
       for (let i = 0; i < array.length; i++) {
         homeCur.addEvent(array[i])
       }
-      localStorage.setItem('events', JSON.stringify(homeCur.events))
+      //localStorage.setItem('events', JSON.stringify(homeCur.events))
       try {
         // cordovaUtil.notify(array[0], null, null)
       } catch (e) {
@@ -94,7 +94,7 @@ function initwebSocket (webSocket) {
         for (let j = 0; j < homeCur.events.length; j++) {
           if (homeCur.events[j]._id === array2[i].relateId) {
             homeCur.events[j].num++
-            if (array2[i].dataType === null) {
+            if (array2[i].type === undefined || array2[i].type === 'text') {
               homeCur.events[j].latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
             } else {
               if (array2[i].type === 'operate') { homeCur.events[j].latestMsg = array2[i].data }
@@ -184,6 +184,15 @@ export default {
       }
     })
   },
+  watch :{
+    events: function (val){
+      localStorage.setItem('events', JSON.stringify(val))
+      console.log('events saved')
+    },
+    curEvent: function (val) {
+      this.addEvent(val)
+    }
+  },
   methods: {
     queryHistroy () {
       const self = this
@@ -208,7 +217,7 @@ export default {
     // 用于监听homeWebsockt接收消息刷新页面
     addEvent (e) {
       const self = this
-      let e1 = self.$root.delEleFromArray(e, self.events)
+      self.$root.delEleFromArray(e, self.events)
       self.events.unshift(e)
     },
     // 用于从历史中添加事件
@@ -216,7 +225,7 @@ export default {
       const self = this
       self.$root.delEleFromArray(e, self.events)
       self.events.unshift(e)
-      localStorage.setItem('events', JSON.stringify(homeCur.events))
+      //localStorage.setItem('events', JSON.stringify(homeCur.events))
       self.$refs.searchbarHomeEvent.disable()
     },
     changeTitle (alia) {
