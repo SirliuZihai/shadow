@@ -15,7 +15,7 @@
       </f7-searchbar>
     </f7-navbar>
     <f7-list mediaList class="homeevents-list" style="margin-top: 0px" v-show="args.homeIsShow">
-      <f7-list-item v-for="e in events" :key="e.index" :title="e.title"  :subtitle="e.latestMsg === null?'':e.latestMsg" :badge="e.num===null?'':e.num"
+      <f7-list-item v-for="e in events" :key="e.index" :title="e.title"  :subtitle="e.latestMsg === null?'':e.latestMsg" :badge="e.num===null?'':e.num" badge-color="blue"
                     :after="dateformate(e._id,'MM-dd hh:mm')" :link="/chat/+e._id+'/'+e.title" @click="curEvent = e;e.num=null" swipeout >
         <f7-swipeout-actions right>
           <f7-swipeout-button @click="detail(e)">详情</f7-swipeout-button>
@@ -78,7 +78,7 @@ function initwebSocket (webSocket) {
       for (let i = 0; i < array.length; i++) {
         homeCur.addEvent(array[i])
       }
-      //localStorage.setItem('events', JSON.stringify(homeCur.events))
+      // localStorage.setItem('events', JSON.stringify(homeCur.events))
       try {
         // cordovaUtil.notify(array[0], null, null)
       } catch (e) {
@@ -160,41 +160,24 @@ export default {
   created () {
     const self = this
     homeCur = self
-    let uname = localStorage.getItem('username')
-    let pword = localStorage.getItem('password')
-    if (!(uname != null && pword != null)) { self.$f7router.navigate('/LoginScreenPage/'); return false }
-    var url = process.env.API_HOST + 'shiro/login.do'
-    self.$f7.request.promise({
-      method: 'POST',
-      contentType: 'application/json',
-      url: url,
-      crossDomain: true,
-      xhrFields: {
-        withCredentials: true
-      },
-      data: {username: uname, password: pword}
-    }).then((data) => {
-      let data2 = self.$root.myevil(data)
-      if (data2.success === true) {
-        console.log(data2.message)
-        self.changeTitle(data2.data.alias)
-        let temp = JSON.parse(localStorage.getItem('events'))
-        self.events = temp === null ? [] : temp
-        initSocket()
-      }
-    })
+    self.changeTitle(localStorage.getItem('alias'))
+    let temp = JSON.parse(localStorage.getItem('events'))
+    self.events = temp === null ? [] : temp
+    initSocket()
   },
-  watch :{
+  watch: {
     events: {
-      handler:function (val){
+      handler: function (val) {
         localStorage.setItem('events', JSON.stringify(val))
         console.log('events saved')
       },
-      deep:true
+      deep: true
     },
-
-    curEvent: function (val) {
-      this.addEvent(val)
+    curEvent: {
+      handler: function (val) {
+        this.addEvent(val)
+      },
+      deep: true
     }
   },
   methods: {
@@ -229,7 +212,7 @@ export default {
       const self = this
       self.$root.delEleFromArray(e, self.events)
       self.events.unshift(e)
-      //localStorage.setItem('events', JSON.stringify(homeCur.events))
+      // localStorage.setItem('events', JSON.stringify(homeCur.events))
       self.$refs.searchbarHomeEvent.disable()
     },
     changeTitle (alia) {

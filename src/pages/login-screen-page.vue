@@ -36,13 +36,40 @@ export default {
       password: ''
     }
   },
+  beforeCreate () {
+    const self = this
+    if (thehome.methods.getCurHome()) { // 如果已登录（主页已加载）则跳过
+      return
+    }
+    let uname = localStorage.getItem('username')
+    let pword = localStorage.getItem('password')
+    if (!(uname != null && pword != null)) { // 初始化可自动登录判断
+      return
+    }
+    var url = process.env.API_HOST + 'shiro/login.do'
+    self.$f7.request.promise({
+      method: 'POST',
+      contentType: 'application/json',
+      url: url,
+      crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      },
+      data: {username: uname, password: pword}
+    }).then((data) => {
+      let data2 = self.$root.myevil(data)
+      if (data2.success === true) {
+        self.$f7router.navigate('/')
+      } else {
+      }
+    })
+  },
   methods: {
     test (e) {
       console.log('aa')
     },
     signIn () {
       const self = this
-      const router = self.$f7router
       var url = process.env.API_HOST + 'shiro/login.do'
       this.$f7.request.promise({
         method: 'POST',
@@ -57,13 +84,18 @@ export default {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
           self.$root.toastbuttom(self, data2.message)
+          localStorage.clear()
           localStorage.setItem('username', self.username)
           localStorage.setItem('password', hexmd5(self.password))
-          thehome.methods.clearEvents()
-          thehome.methods.changeTitle(data2.data.alias)
-          thehome.methods.initSocket()
-          theLeft.methods.changeImgUrl()
-          router.back()
+          localStorage.setItem('alias', data2.data.alias)
+          let curhome1 = thehome.methods.getCurHome()
+          if (curhome1) {
+            theLeft.methods.changeImgUrl()
+            curhome1.changeTitle(localStorage.getItem('alias'))
+            curhome1.events = []
+            curhome1.initSocket()
+          }
+          self.$f7router.navigate('/')
         } else {
           self.$root.toastbuttom(self, data)
         }

@@ -9,6 +9,8 @@ import userInfo from './pages/userInfo.vue'
 import contact from './pages/contacts-list.vue'
 import contactState from './pages/contact-state.vue'
 import eventDetail from './pages/eventDetail.vue'
+import letterBox from './pages/letterBox.vue'
+import letter from './pages/letter.vue'
 import chat from './pages/chat.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
@@ -60,6 +62,18 @@ export default [
   {
     path: '/chat/:eventId/:title',
     component: chat
+  },
+  {
+    path: '/letterBox/',
+    component: letterBox
+  },
+  {
+    path: '/letter/:option/',
+    component: letter
+  },
+  {
+    path: '/explore/',
+    templateUrl: process.env.API_HOST + 'explore/home.do'
   },
   /* {
     path: '/showPanOrHistory/',

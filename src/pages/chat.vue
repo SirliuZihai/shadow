@@ -6,7 +6,10 @@
     <f7-messages>
       <template v-for="msg in msgs" >
         <f7-messages-title :key="msg.index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-        <f7-message :key="msg.index" v-if="msg.type!=='operate'" :first="true" :last="true" :tail="true"
+        <f7-message :key="msg.index" v-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true"
+                    :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
+        />
+        <f7-message :key="msg.index" v-else :first="true" :last="true" :tail="true"
                     :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :text="msg.data" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
                     />
       </template>
@@ -17,7 +20,7 @@
         icon-ios="f7:camera_fill"
         icon-md="material:camera_alt"
         slot="inner-start"
-        @click="sheetVisible = !sheetVisible"
+        @click="getPicture"
       ></f7-link>
       <f7-link
         icon-ios="f7:arrow_up_fill"
@@ -45,9 +48,6 @@ export default {
   },
   beforeDestroy () {
     this.webSocket.close()
-  },
-  updated () {
-    this.$$('.message-avatar').on('error', self.nohaedImg)
   },
   data: function () {
     return {
@@ -77,7 +77,7 @@ export default {
       // Clear area
       self.$f7.messagebar.clear()
       // Send message
-      if (text)self.webSocket.send(text)
+      if (text)self.webSocket.send('[text]:' + text)
     },
     headImgUrl (name) {
       const self = this
@@ -139,7 +139,14 @@ export default {
         }
       }, 20000)
     },
-    dateformate (id, fmt) { return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt) }
+    dateformate (id, fmt) { return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt) },
+    getPicture () {
+      const self = this
+      navigator.camera.getPicture((dataUrl) => {
+        if (dataUrl)self.webSocket.send('[image]:' + dataUrl)
+      }, null,
+      { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY })
+    }
   }
 }
 </script>

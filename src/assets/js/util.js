@@ -29,8 +29,6 @@ function dateFormat (thedate, fmt) { // author: meizz
   for (var k in o) { if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length))) }
   return fmt
 }
-// eslint-disable-next-line to
-function oIdIsEqual (id1, id2) { return id1.counter === id2.counter && id1.timestamp === id2.timestamp && id1.machineIdentifier === id2.machineIdentifier && id1.processIdentifier === id2.processIdentifier }
 /**
  * 从数组中删除元素，根据objectId 返回被删除元素
  * */
