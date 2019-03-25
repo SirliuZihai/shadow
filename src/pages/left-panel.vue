@@ -10,8 +10,9 @@
       <f7-list-item  link="/userInfo/" title="我" panel-close></f7-list-item>
       <f7-list-item  link="/contact/" title="联系人" panel-close></f7-list-item>
       <f7-list-item  link="/insertPanOrHistory/" title="录入"  panel-close></f7-list-item>
-      <f7-list-item link="/about2/" title="发现" panel-close></f7-list-item>
-      <f7-list-item  link="/login-screen-page/" title="注销" panel-close></f7-list-item>
+      <f7-list-item link="/letterBox/" title="信箱" panel-close></f7-list-item>
+      <f7-list-item link="/explore/" title="发现" panel-close></f7-list-item>
+      <f7-list-item  link="/login-screen-page/" title="注销" @click="logoff" panel-close></f7-list-item>
       <f7-list-item link="/about/" title="关于" panel-close></f7-list-item>
     </f7-list>
   </f7-page>
@@ -41,6 +42,9 @@ export default {
     },
     nohaedImg () {
       this.$$('#headImg').attr('src', defautImg)
+    },
+    logoff () {
+      localStorage.removeItem('username')
     }
 
   }
