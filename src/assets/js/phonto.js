@@ -22,7 +22,7 @@ function getPosition(){
   );
 }
 function onBackKeyDown() {
-  if(myapp.$f7.views.main.history.length>0){
+  if(myapp.$f7.views.main.history.length>1){
     //如果有history则执行返回
     myapp.$f7.views.main.router.back()
   }else{

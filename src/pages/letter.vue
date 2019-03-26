@@ -30,24 +30,23 @@ export default {
   name: 'letter',
   created () {
     const self = this
-    if(self.$f7route.params.option === 'show'){
+    if (self.$f7route.params.option === 'show') {
       self.letter = theLetterBox.methods.getCur().curLetter
-    }else{
-      args.isAdd = true
+    } else {
+      self.args.isAdd = true
     }
-
   },
   data: function () {
     return {
       letter: {
         title: '',
         content: '',
-        sender:localStorage.getItem('username'),
-        public:false
+        sender: localStorage.getItem('username'),
+        public: false
       },
-      args:{
-        enable:false,
-        isAdd:false
+      args: {
+        enable: false,
+        isAdd: false
       }
     }
   },
@@ -55,17 +54,17 @@ export default {
     saveLetter () {
       const self = this
       let myletters = JSON.parse(localStorage.getItem('myletters'))
-      if(!myletters){
+      if (!myletters) {
         myletters = []
       }
       myletters.unshift(self.letter)
-      localStorage.setItem('myletters',JSON.stringify(myletters))
+      localStorage.setItem('myletters', JSON.stringify(myletters))
     },
-    deleteLetter() {
+    deleteLetter () {
       const self = this
       let myletters = JSON.parse(localStorage.getItem('myletters'))
-      myletters.splice(self.letter.index,1)
-      localStorage.setItem('myletters',JSON.stringify(myletters))
+      myletters.splice(self.letter.index, 1)
+      localStorage.setItem('myletters', JSON.stringify(myletters))
       self.$f7router.back()
     }
   }

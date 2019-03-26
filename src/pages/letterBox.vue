@@ -60,13 +60,14 @@ export default {
     let url = process.env.API_HOST + 'letter/getLetter.do'
     self.$f7.request.promise.get(url, uname, 'json').then(
       (data) => {
-        self.$root.toastbuttom(self, data.message)
         if (data.success === true) {
           let array = data.data
           if (array.length === 0) { return false }
           for (let i = 0; i < array.length; i++) {
             self.letters.unshift(data.data)
           }
+        } else {
+          self.$root.toastbuttom(self, data.message)
         }
       },
       (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
@@ -74,13 +75,13 @@ export default {
   },
   data: function () {
     return {
-      letters: [],
-      curLetter: {},
-      othername: '',
-      otherletters: [],
-      myletters: [],
+      letters: [], // 我收的
+      curLetter: {}, // 当前看的
+      othername: '', // 用于查询的
+      otherletters: [], // 别人信箱的信件
+      myletters: [], // 我写的
       args: {
-        showotherletter
+        showotherletter: false
       }
     }
   },
