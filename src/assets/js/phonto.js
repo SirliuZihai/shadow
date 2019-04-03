@@ -22,7 +22,7 @@ function getPosition(){
   );
 }
 function onBackKeyDown() {
-  if(myapp.$f7.views.main.history.length>1){
+  if(myapp.$f7.views.main.history.length>2){
     //如果有history则执行返回
     myapp.$f7.views.main.router.back()
   }else{
@@ -80,6 +80,7 @@ function onPhotoURISuccess (imageURI) {
 
 // 上传文件
 function upload (fileURL) {
+  alert(fileURL)
   // 上传成功
   var success = function (r) {
     let data = myapp.myevil(r.response)
@@ -118,8 +119,36 @@ function notify (event,success,ignore) {
 var ignore=function(notification, eopts){
   alert("消息详情：消息标题["+notification["title"]+"], 消息内容["+notification["text"]+"]")
 }
+
+function sendPicture (ws) {
+  navigator.camera.getPicture((dataUrl) => {
+      if (dataUrl){
+        // 上传成功
+        let success = function (r) {
+          let data = myapp.myevil(r.response)
+          alert(JSON.stringify(data.response))
+          ws.send('[image]:' + process.env.API_HOST +data.message)
+
+        }
+        // 上传失败
+        let fail = function (error) {
+          myapp.$f7.dialog.alert("发送失败! ")
+        }
+        let options = new FileUploadOptions()
+        options.fileKey = 'tempFile'
+        options.fileName = 'temqq.jpg'
+
+        let ft = new FileTransfer()
+        // 上传地址
+        let SERVER = process.env.API_HOST + 'event/uploadtempfile.do'
+        ft.upload(dataUrl, encodeURI(SERVER), success, fail, options)
+      }
+    }, (e)=>{alert(e)},
+    { quality: 25, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY })
+}
 export default {
   getPhoto,
   myPosition,
-  notify
+  notify,
+  sendPicture
 }

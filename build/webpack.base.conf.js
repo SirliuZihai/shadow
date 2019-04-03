@@ -88,5 +88,10 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
+  },
+  externals: {
+    'vue': 'Vue',
+    'framework7/framework7.esm.bundle': 'Framework7'
+    // 'framework7-vue': 'Framework7Vue'
   }
 }

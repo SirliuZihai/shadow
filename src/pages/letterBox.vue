@@ -4,7 +4,7 @@
       <f7-nav-right>
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-letters" icon-ios="f7:search" icon-md="material:search"></f7-link>
         <f7-menu-dropdown icon-f7="add" center>
-          <f7-menu-dropdown-item text="添加信件" link="/letter/add/"></f7-menu-dropdown-item>
+          <f7-menu-dropdown-item text="添加信件" href="/letter/add/"></f7-menu-dropdown-item>
           <f7-menu-dropdown-item text="查找附件信箱" class="searchbar-enable" data-searchbar=".searchbar-otherletters" ></f7-menu-dropdown-item>
         </f7-menu-dropdown>
       </f7-nav-right>
@@ -79,6 +79,7 @@ export default {
       curLetter: {}, // 当前看的
       othername: '', // 用于查询的
       otherletters: [], // 别人信箱的信件
+      otherletterBox: [], // 别人的信箱
       myletters: [], // 我写的
       args: {
         showotherletter: false

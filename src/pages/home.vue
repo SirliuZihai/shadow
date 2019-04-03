@@ -52,12 +52,17 @@
 </template>
 <script>
 import defautImg from '@/assets/image/nohead.jpg'
+import nativeUtil from '@/assets/js/nativeUtil.js'
 let ObjectID = require('bson').ObjectID
 var homeCur
 // home event websocket
 var webSocket
 function initSocket () {
-  var newUrl = 'ws://' + location.host + process.env.API_WS + 'websocket/homeview.do'
+  if (!window.WebSocket) {
+    alert('error:不支持socket通信')
+    return false
+  }
+  var newUrl = process.env.API_WS + 'websocket/homeview.do?token=' + localStorage.getItem('token')
   if (webSocket) {
     webSocket.close()
     webSocket = new WebSocket(newUrl)
@@ -110,10 +115,9 @@ function initwebSocket (webSocket) {
     webSocket.send('receive Home date')
   }
   webSocket.onerror = function (event) {
-    console.log(event)
+    nativeUtil.writeLogFile2(event)
   }
   webSocket.onclose = function () {
-    console.log('homeEvent closeed')
     window.clearInterval(heartid)
     let tryTime = 3 // 0 避免主动close Seocket尝试重连
     // 重试2次，每次之间间隔5秒
@@ -163,7 +167,11 @@ export default {
     self.changeTitle(localStorage.getItem('alias'))
     let temp = JSON.parse(localStorage.getItem('events'))
     self.events = temp === null ? [] : temp
-    initSocket()
+    try {
+      initSocket()
+    } catch (e) {
+      console.log(e)
+    }
   },
   watch: {
     events: {
@@ -216,7 +224,7 @@ export default {
       self.$refs.searchbarHomeEvent.disable()
     },
     changeTitle (alia) {
-      homeCur.thetitle = (alia === undefined || alia === null) ? '客官，你好' : '您好，' + alia
+      homeCur.thetitle = (alia === undefined || alia === null || alia === 'undefined') ? localStorage.getItem('username') : localStorage.getItem('username') + '[' + alia + ']'
     },
     addMessage (m) {
       // eventId 作为键，存messages

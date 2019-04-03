@@ -41,9 +41,8 @@ export default {
     if (thehome.methods.getCurHome()) { // 如果已登录（主页已加载）则跳过
       return
     }
-    let uname = localStorage.getItem('username')
-    let pword = localStorage.getItem('password')
-    if (!(uname != null && pword != null)) { // 初始化可自动登录判断
+    let token = localStorage.getItem('token')
+    if (!token) { // 初始化可自动登录判断
       return
     }
     var url = process.env.API_HOST + 'shiro/login.do'
@@ -55,7 +54,7 @@ export default {
       xhrFields: {
         withCredentials: true
       },
-      data: {username: uname, password: pword}
+      data: {token: token}
     }).then((data) => {
       let data2 = self.$root.myevil(data)
       if (data2.success === true) {
@@ -86,7 +85,7 @@ export default {
           self.$root.toastbuttom(self, data2.message)
           localStorage.clear()
           localStorage.setItem('username', self.username)
-          localStorage.setItem('password', hexmd5(self.password))
+          localStorage.setItem('token', data2.data.token)
           localStorage.setItem('alias', data2.data.alias)
           let curhome1 = thehome.methods.getCurHome()
           if (curhome1) {

@@ -34,6 +34,7 @@
 <script>
 import defautImg from '@/assets/image/nohead.jpg'
 import theHome from '@/pages/home.vue'
+import photo from '@/assets/js/phonto.js'
 let ObjectID = require('bson').ObjectID
 export default {
   created () {
@@ -93,7 +94,8 @@ export default {
     },
     initSocket () {
       const self = this
-      var newUrl = 'ws://' + location.host + process.env.API_WS + 'websocket/chatview.do?eventId=' + self.$f7route.params.eventId
+      var newUrl = process.env.API_WS + 'websocket/chatview.do?eventId=' + self.$f7route.params.eventId +
+      '&token=' + localStorage.getItem('token')
       if (self.webSocket) {
         self.webSocket.close()
         self.webSocket = new WebSocket(newUrl)
@@ -142,10 +144,7 @@ export default {
     dateformate (id, fmt) { return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt) },
     getPicture () {
       const self = this
-      navigator.camera.getPicture((dataUrl) => {
-        if (dataUrl)self.webSocket.send('[image]:' + dataUrl)
-      }, null,
-      { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY })
+      photo.sendPicture(self.webSocket)
     }
   }
 }
@@ -156,5 +155,9 @@ export default {
     width: 50px;
     height: 50px;
     border-radius:50%
+  }
+  .message-image img{
+    width: 50%;
+    width: 50%;
   }
 </style>
