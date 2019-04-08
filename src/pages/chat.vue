@@ -81,13 +81,8 @@ export default {
       if (text)self.webSocket.send('[text]:' + text)
     },
     headImgUrl (name) {
-      const self = this
       let url = process.env.API_HOST + 'image/head/' + name + '.jpg'
-      if (self.$root.isHasImg(url)) {
-        return url
-      } else {
-        return defautImg
-      }
+      return url
     },
     nohaedImg () {
       this.$$('#headImg').attr('src', defautImg)

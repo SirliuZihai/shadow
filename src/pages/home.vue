@@ -119,16 +119,11 @@ function initwebSocket (webSocket) {
   }
   webSocket.onclose = function () {
     window.clearInterval(heartid)
-    let tryTime = 3 // 0 避免主动close Seocket尝试重连
-    // 重试2次，每次之间间隔5秒
-    if (tryTime < 2) {
+    while (webSocket.readyState !== webSocket.OPEN) {
       setTimeout(function () {
         webSocket = null
-        tryTime++
         initSocket()
       }, 10000)
-    } else {
-      tryTime = 0
     }
   }
   // 监听下socket的close事件，代码中最好还是别用try catch了，会严重拖垮性能

@@ -18,7 +18,7 @@ function getPosition(){
     function(position){
       myPosition = position.coords.longitude+","+position.coords.latitude+","+position.coords.altitude;
     },
-    function(error){}, options
+    function(error){myPosition = ''}, options
   );
 }
 function onBackKeyDown() {

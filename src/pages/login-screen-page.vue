@@ -60,6 +60,7 @@ export default {
       if (data2.success === true) {
         self.$f7router.navigate('/')
       } else {
+        self.$root.toastbuttom(self, data2.message)
       }
     })
   },
@@ -80,13 +81,13 @@ export default {
         },
         data: {username: self.username, password: hexmd5(self.password)}
       }).then(function (data) {
-        let data2 = self.$root.myevil(data)
-        if (data2.success === true) {
-          self.$root.toastbuttom(self, data2.message)
+        let data3 = self.$root.myevil(data)
+        if (data3.success === true) {
+          self.$root.toastbuttom(self, data3.message)
           localStorage.clear()
           localStorage.setItem('username', self.username)
-          localStorage.setItem('token', data2.data.token)
-          localStorage.setItem('alias', data2.data.alias)
+          localStorage.setItem('token', data3.data.token)
+          localStorage.setItem('alias', data3.data.alias)
           let curhome1 = thehome.methods.getCurHome()
           if (curhome1) {
             theLeft.methods.changeImgUrl()
@@ -96,7 +97,7 @@ export default {
           }
           self.$f7router.navigate('/')
         } else {
-          self.$root.toastbuttom(self, data)
+          self.$root.toastbuttom(self, data3.message)
         }
       })
     },

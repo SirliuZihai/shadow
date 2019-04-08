@@ -3,7 +3,7 @@ import Framework7 from 'framework7/framework7.esm.bundle'
 import Framework7Vue, {f7Block, f7Button, f7Input, f7Link, f7ListButton, f7ListInput, f7ListItem, f7List,
   f7LoginScreenTitle, f7LoginScreen, f7NavLeft, f7NavRight, f7NavTitle, f7Navbar, f7Page, f7Panel, f7PhotoBrowser, f7Searchbar,
   f7Statusbar, f7Tab, f7Tabs, f7Toggle, f7BlockTitle, f7Row, f7BlockFooter, f7SwipeoutActions, f7Messages, f7MessagesTitle,
-  f7Message, f7Messagebar, f7SwipeoutButton, f7Toolbar, f7MenuDropdown, f7MenuDropdownItem } from 'framework7-vue'
+  f7Message, f7Messagebar, f7SwipeoutButton, f7Toolbar, f7MenuItem, f7MenuDropdown, f7MenuDropdownItem } from 'framework7-vue'
 import App from './app.vue'
 import myutil from '@/assets/js/util.js'
 // import Phone from '@/assets/js/phonto.js'
@@ -42,6 +42,7 @@ Vue.component(f7SwipeoutButton.name, f7SwipeoutButton)
 Vue.component(f7Toolbar.name, f7Toolbar)
 Vue.component(f7MenuDropdown.name, f7MenuDropdown)
 Vue.component(f7MenuDropdownItem.name, f7MenuDropdownItem)
+Vue.component(f7MenuItem.name, f7MenuItem)
 // Init Vue App
 const myapp = new Vue({
   // Root Element

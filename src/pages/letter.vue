@@ -32,7 +32,7 @@ export default {
     const self = this
     if (self.$f7route.params.option === 'show') {
       self.letter = theLetterBox.methods.getCur().curLetter
-    } else {
+    } else if (self.$f7route.params.option === 'add') {
       self.args.isAdd = true
     }
   },
@@ -53,19 +53,31 @@ export default {
   methods: {
     saveLetter () {
       const self = this
-      let myletters = JSON.parse(localStorage.getItem('myletters'))
+      let myletters = theLetterBox.methods.getCur().myletters
       if (!myletters) {
         myletters = []
       }
       myletters.unshift(self.letter)
-      localStorage.setItem('myletters', JSON.stringify(myletters))
+      self.$root.toastbuttom(self, '保存成功')
+      self.$f7router.back()
     },
     deleteLetter () {
       const self = this
-      let myletters = JSON.parse(localStorage.getItem('myletters'))
-      myletters.splice(self.letter.index, 1)
-      localStorage.setItem('myletters', JSON.stringify(myletters))
-      self.$f7router.back()
+      // 如果有id则删除服务器，否则删除本地
+      if (self.letter._id) {
+        let url = process.env.API_HOST + 'letter/delete.do'
+        self.$f7.request.promise.postJSON(url, self.letter).then(
+          (data) => {
+            self.$root.toastbuttom(self, data.message)
+            self.$f7router.back()
+          },
+          () => { self.$root.toastbuttom(self, '通讯异常') }
+        )
+      } else {
+        let myletters = theLetterBox.methods.getCur().myletters
+        myletters.splice(self.letter.index, 1)
+        self.$f7router.back()
+      }
     }
   }
 }

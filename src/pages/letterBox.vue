@@ -2,39 +2,35 @@
   <f7-page>
     <f7-navbar title="信箱" back-link="Back">
       <f7-nav-right>
-        <f7-link class="searchbar-enable" data-searchbar=".searchbar-letters" icon-ios="f7:search" icon-md="material:search"></f7-link>
-        <f7-menu-dropdown icon-f7="add" center>
-          <f7-menu-dropdown-item text="添加信件" href="/letter/add/"></f7-menu-dropdown-item>
-          <f7-menu-dropdown-item text="查找附件信箱" class="searchbar-enable" data-searchbar=".searchbar-otherletters" ></f7-menu-dropdown-item>
-        </f7-menu-dropdown>
+        <f7-link class="searchbar-enable" data-searchbar=".searchbar-otherletters" icon-ios="f7:search" icon-md="material:search"></f7-link>
+          <f7-menu-item icon-f7="add" style="margin-left: auto" link=true dropdown>
+              <f7-menu-dropdown right>
+                <f7-menu-dropdown-item text="添加信件" href="/letter/add/"></f7-menu-dropdown-item>
+                <f7-menu-dropdown-item text="刷新"  href="#" @click="getNearrBox()" ></f7-menu-dropdown-item>
+              </f7-menu-dropdown>
+           </f7-menu-item>
       </f7-nav-right>
-      <f7-searchbar class="searchbar-otherletters" @change="searchLetters($event.target.value)" @searchbarEnable="lettersShow=false" @searchbarDisable="lettersShow=true"  disableButtonText="取消" placeholder="搜索附近信箱" expandable></f7-searchbar>
+      <f7-searchbar class="searchbar-otherletters" search-container=".letter-list" @searchbarEnable="lettersShow=false" @searchbarDisable="lettersShow=true"  disableButtonText="取消" placeholder="搜索附近信箱" expandable></f7-searchbar>
     </f7-navbar>
     <f7-toolbar tabbar bottom>
-      <f7-link tab-link="#tab-1" tab-link-active>我的信箱</f7-link>
-      <f7-link tab-link="#tab-2">附近的信箱</f7-link>
-      <f7-link tab-link="#tab-3">我的信件</f7-link>
+    <!--<f7-link tab-link="#tab-1" >我的信箱</f7-link>-->
+      <f7-link tab-link="#tab-2" :tab-link-active="args.nearActive">附近的信箱</f7-link>
+      <f7-link tab-link="#tab-3" :tab-link-active="!args.nearActive">我的信件</f7-link>
     </f7-toolbar>
     <f7-tabs swipeable>
-      <f7-tab id="tab-1" class="page-content" tab-active>
-        <f7-list>
-          <f7-list-item v-for="l in letters" :key="l.index" :title="l.username+': '+l.title" @click="showDetal(l)">
-          </f7-list-item>
-        </f7-list>
-      </f7-tab>
       <f7-tab id="tab-2" class="page-content">
-        <f7-list v-show="args.showotherletter">
-          <f7-list-item v-for="o in otherletterBox" :key="o.index" :title="o.username" @click="showotherlist(o)">
+        <f7-list v-show="!args.showotherletter" class="letter-list">
+          <f7-list-item v-for="o in otherletterBox" :key="o.index" :title="o.username + 的信箱" @click="args.showotherletter=true;showotherlist(o.username)">
           </f7-list-item>
         </f7-list>
-        <f7-list v-show="!args.showotherletter">
+        <f7-list v-show="args.showotherletter" class="letter-list">
           <f7-list-item v-for="ol in otherletters" :key="ol.index" :title="ol.title" @click="showDetal(ol)">
           </f7-list-item>
         </f7-list>
       </f7-tab>
       <f7-tab id="tab-3" class="page-content">
-        <f7-list>
-          <f7-list-item v-for="m in myletters" :key="m.index" :title="m.title" :subtitle="m.content" @click="showDetal2(m)">
+        <f7-list class="letter-list">
+          <f7-list-item v-for="m in myletters" :key="m.index" :title="m.title" :subtitle="m.content" @click="showDetal(m)">
           </f7-list-item>
         </f7-list>
       </f7-tab>
@@ -47,48 +43,35 @@
 </template>
 
 <script>
+import phonto from '@/assets/js/phonto.js'
 var curLetterBox
 export default {
   created () {
     const self = this
     curLetterBox = self
-    let myletters = localStorage.getItem('myletters')
+    let myletters = JSON.parse(localStorage.getItem('myletters'))
     if (myletters) { self.myletters = myletters }
-
-    self.letters = localStorage.getItem('letters')
-    let uname = localStorage.getItem('username')
-    let url = process.env.API_HOST + 'letter/getLetter.do'
-    self.$f7.request.promise.get(url, uname, 'json').then(
-      (data) => {
-        if (data.success === true) {
-          let array = data.data
-          if (array.length === 0) { return false }
-          for (let i = 0; i < array.length; i++) {
-            self.letters.unshift(data.data)
-          }
-        } else {
-          self.$root.toastbuttom(self, data.message)
-        }
-      },
-      (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
-    )
+    self.getNearrBox()
   },
   data: function () {
     return {
-      letters: [], // 我收的
       curLetter: {}, // 当前看的
       othername: '', // 用于查询的
       otherletters: [], // 别人信箱的信件
       otherletterBox: [], // 别人的信箱
       myletters: [], // 我写的
       args: {
-        showotherletter: false
+        showotherletter: false,
+        nearActive: true
       }
     }
   },
   watch: {
-    letter: function (val) {
-      localStorage.setItem('letters', val)
+    myletters: {
+      handler: function (val) {
+        localStorage.setItem('myletters', JSON.stringify(val))
+      },
+      deep: true
     }
   },
   methods: {
@@ -110,6 +93,31 @@ export default {
         },
         (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
       )
+    },
+    showotherlist (username) {
+      const self = this
+      let url = process.env.API_HOST + 'letter/getOtherLetter.do'
+      self.$f7.request.promise.postJSON(url, {'other': username}).then(
+        (data) => {
+          self.$root.toastbuttom(self, data.message)
+        },
+        (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
+      )
+    },
+    getNearrBox () {
+      const self = this
+      if (phonto.myPosition) {
+        var array = phonto.myPosition.split(',')
+        let url = process.env.API_HOST + 'letter/getOtherLetter.do'
+        self.$f7.request.promise.postJSON(url, {'longitude': array[0], 'latitude': array[1]}).then(
+          (data) => {
+            self.$root.toastbuttom(self, data.message)
+          },
+          (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
+        )
+      } else {
+        self.$root.toastbuttom(self, '获取位置失败')
+      }
     }
   }
 }

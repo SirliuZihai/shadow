@@ -3,12 +3,13 @@ function myevil (fn) {
   return new Fn('return ' + fn)()
 }
 function toastbuttom (self, data) {
-  if (!self.toastBottom) {
-    self.toastBottom = self.$f7.toast.create({
-      text: data,
-      closeTimeout: 2000
-    })
+  if (self.toastBottom) {
+    self.toastBottom.destroy()
   }
+  self.toastBottom = self.$f7.toast.create({
+    text: data,
+    closeTimeout: 2000
+  })
   // Open it
   self.toastBottom.open()
 }
