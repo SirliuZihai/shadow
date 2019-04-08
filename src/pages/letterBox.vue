@@ -14,11 +14,11 @@
     </f7-navbar>
     <f7-toolbar tabbar bottom>
     <!--<f7-link tab-link="#tab-1" >我的信箱</f7-link>-->
-      <f7-link tab-link="#tab-2" :tab-link-active="args.nearActive">附近的信箱</f7-link>
-      <f7-link tab-link="#tab-3" :tab-link-active="!args.nearActive">我的信件</f7-link>
+      <f7-link tab-link="#tab-2" tab-link-active >附近的信箱</f7-link>
+      <f7-link tab-link="#tab-3" >我的信件</f7-link>
     </f7-toolbar>
     <f7-tabs swipeable>
-      <f7-tab id="tab-2" class="page-content">
+      <f7-tab id="tab-2" class="page-content" tab-active>
         <f7-list v-show="!args.showotherletter" class="letter-list">
           <f7-list-item v-for="o in otherletterBox" :key="o.index" :title="o.username + 的信箱" @click="args.showotherletter=true;showotherlist(o.username)">
           </f7-list-item>
@@ -61,8 +61,7 @@ export default {
       otherletterBox: [], // 别人的信箱
       myletters: [], // 我写的
       args: {
-        showotherletter: false,
-        nearActive: true
+        showotherletter: false
       }
     }
   },
