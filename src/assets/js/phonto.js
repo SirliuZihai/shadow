@@ -1,24 +1,27 @@
 /* eslint-disable */
 import myapp from '@/app'
+var myPosition
 
 document.addEventListener('deviceready', onDeviceReady, false)
 
 // Cordova加载完成会触发
 function onDeviceReady () {
   document.addEventListener("backbutton", onBackKeyDown, false);
+  document.addEventListener("resume", onResume, false);
   setInterval("getPosition()","1000");
 }
-var myPosition
+function onResume () {
+  reconnectSocket()
+}
+function reconnectSocket(){}
+
 function getPosition(){
-  var options = {
-    enableHighAccuracy: true,
-    maximumAge: 3600000
-  }
-  var watchid = navigator.geolocation.getCurrentPosition(
+  alert("do getPosition")
+navigator.geolocation.getCurrentPosition(
     function(position){
-      myPosition = position.coords.longitude+","+position.coords.latitude+","+position.coords.altitude;
+      myPosition = position.coords.longitude+","+position.coords.latitude//+","+position.coords.altitude;
     },
-    function(error){myPosition = ''}, options
+    function(error){myPosition = ''}, null
   );
 }
 function onBackKeyDown() {
@@ -150,5 +153,7 @@ export default {
   getPhoto,
   myPosition,
   notify,
-  sendPicture
+  sendPicture,
+  getPosition,
+  reconnectSocket
 }

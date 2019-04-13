@@ -53,10 +53,12 @@
 <script>
 import defautImg from '@/assets/image/nohead.jpg'
 import nativeUtil from '@/assets/js/nativeUtil.js'
+import photo from '@/assets/js/phonto.js'
 let ObjectID = require('bson').ObjectID
 var homeCur
 // home event websocket
 var webSocket
+photo.reconnectSocket = initSocket
 function initSocket () {
   if (!window.WebSocket) {
     alert('error:不支持socket通信')
@@ -64,9 +66,10 @@ function initSocket () {
   }
   var newUrl = process.env.API_WS + 'websocket/homeview.do?token=' + localStorage.getItem('token')
   if (webSocket) {
-    webSocket.close()
-    webSocket = new WebSocket(newUrl)
-    initwebSocket(webSocket)
+    if (webSocket.readyState !== webSocket.OPEN && webSocket.readyState !== webSocket.CONNECTING) {
+      webSocket = new WebSocket(newUrl)
+      initwebSocket(webSocket)
+    }
   } else {
     webSocket = new WebSocket(newUrl)
     initwebSocket(webSocket)
@@ -119,12 +122,12 @@ function initwebSocket (webSocket) {
   }
   webSocket.onclose = function () {
     window.clearInterval(heartid)
-    while (webSocket.readyState !== webSocket.OPEN) {
+    /* while (webSocket.readyState !== webSocket.OPEN) {
       setTimeout(function () {
         webSocket = null
         initSocket()
       }, 10000)
-    }
+    } */
   }
   // 监听下socket的close事件，代码中最好还是别用try catch了，会严重拖垮性能
   var heartid = window.setInterval(function () { // 每隔20秒钟发送一次心跳，避免websocket连接因超时而自动断开

@@ -12,6 +12,7 @@ import eventDetail from './pages/eventDetail.vue'
 import letterBox from './pages/letterBox.vue'
 import letter from './pages/letter.vue'
 import chat from './pages/chat.vue'
+import myLetters from './pages/myLetters.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -65,7 +66,12 @@ export default [
   },
   {
     path: '/letterBox/',
-    component: letterBox
+    component: letterBox,
+    keepAlive: true
+  },
+  {
+    path: '/myletters/',
+    component: myLetters
   },
   {
     path: '/letter/:option/',
