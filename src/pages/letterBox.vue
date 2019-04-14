@@ -39,7 +39,7 @@
     </f7-tabs>
 
     <f7-list class="searchbar-not-found">
-      <f7-list-item title="Nothing found"></f7-list-item>
+      <f7-list-item title="没有更多的消息了"></f7-list-item>
     </f7-list>
   </f7-page>
 </template>
@@ -143,7 +143,6 @@ export default {
       const self = this
       navigator.geolocation.getCurrentPosition(
         function (position) {
-          alert(position)
           self.setBoxPlace(position)
         },
         function (error) { alert(error) }, null
@@ -169,7 +168,7 @@ export default {
             self.$root.toastbuttom(self, '获取位置失败')
           }
         },
-        function (error) { alert(error) }, null
+        function (error) { self.$root.toastbuttom(self, error) }, null
       )
     }
   }

@@ -1,29 +1,32 @@
 <template>
   <f7-page>
     <f7-navbar title="我的状态" back-link="Back"></f7-navbar>
-    <f7-list inline-labels>
+    <f7-list inline-labels style="margin-top: 0px">
       <f7-list-input
         label="昵称" type="text" :clear-button="!args.isdisable" :disabled="args.isdisable"
         :value="info.alias" @input="info.alias = $event.target.value"
       />
-      <f7-list-input
-        label="背景音乐" type="text" :clear-button="!args.isdisable" :disabled="args.isdisable"
-        :value="info.music" @input="info.music = $event.target.value"
-      />
-      <f7-list-input
-        label="关注的书" type="text" :clear-button="!args.isdisable" :disabled="args.isdisable"
-        :value="info.book" @input="info.book = $event.target.value"
-      />
-      <f7-list-input
-        label="关注的运动" type="text" :clear-button="!args.isdisable" :disabled="args.isdisable"
-        :value="info.sport" @input="info.sport = $event.target.value"
-      />
+      <f7-list-item title="关注的IP">
+        <div strong style="width: 70%;height: 100%;">
+          <f7-chip v-for="(tag,index) in info.ips" :key="index" :text="tag" :deleteable="!args.isdisable" @delete="deleteTag(info.ips,index,'IP')" ></f7-chip>
+          <f7-chip v-show="!args.isdisable" text="添加"  color="blue" @click="addTag(info.ips,'IP')"></f7-chip>
+        </div>
+      </f7-list-item>
+      <f7-list-item title="关注的运动">
+        <div style="width: 70%;height: 100%;">
+          <f7-chip v-for="(tag,index) in info.sports" :key="index" :text="tag" :deleteable="!args.isdisable" @delete="deleteTag(info.sports,index,'运动')" ></f7-chip>
+          <f7-chip v-show="!args.isdisable" text="添加"  color="blue" @click="addTag(info.sports,'运动')"></f7-chip>
+        </div>
+      </f7-list-item>
+      <f7-list-item title="标签">
+        <div style="width: 70%;height: 100%;">
+          <f7-chip v-for="(tag,index) in info.tags" :key="index" :text="tag" :deleteable="!args.isdisable" @delete="deleteTag(info.tags,index,'关键字')" ></f7-chip>
+          <f7-chip v-show="!args.isdisable" text="添加"  color="blue" @click="addTag(info.tags,'标签')"></f7-chip>
+        </div>
+      </f7-list-item>
+
       <f7-list-input :disabled="args.isdisable"
-        label="关键字" type="text" :clear-button="!args.isdisable" placeholder="请输入关键字（词）（如：A,B）,它将用于邀请索引"
-        :value="info.like" @input="info.like = $event.target.value"
-      />
-      <f7-list-input :disabled="args.isdisable"
-        label="位置" type="text" :clear-button="!args.isdisable" placeholder="请输入一个位置，系统将自动为您打卡"
+        label="城市" type="text" :clear-button="!args.isdisable"
         :value="info.place" @input="info.place = $event.target.value"
       />
     </f7-list>
@@ -50,10 +53,9 @@ export default {
       info: {
         alias: '',
         doing: '',
-        like: '',
-        music: '',
-        book: '',
-        sport: '',
+        tags: [],
+        ips: [],
+        sports: [],
         place: ''
       },
       infoCache: {},
@@ -77,6 +79,16 @@ export default {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
           if (data2.data === null) { return false }
+          // 数组初始化，
+          if (data2.data.ips === undefined) {
+            data2.data.ips = []
+          }
+          if (data2.data.sports === undefined) {
+            data2.data.sports = []
+          }
+          if (data2.data.tags === undefined) {
+            data2.data.tags = []
+          }
           self.info = data2.data
           self.infoCache = Object.assign({}, data2.data)
           thehome.methods.changeTitle(self.info.alias)
@@ -100,7 +112,6 @@ export default {
       }).then((data) => {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
-          self.$root.toastbuttom(self, '保存成功')
           self.args.isdisable = true
           self.getInfo()
         }
@@ -111,6 +122,14 @@ export default {
       const self = this
       self.args.isdisable = true
       self.info = self.infoCache
+    },
+    deleteTag (array, index, text) {
+      const self = this
+      self.$root.deleteTag(self, array, index, text)
+    },
+    addTag (array, text) {
+      const self = this
+      self.$root.addTag(self, array, text)
     }
   }
 }

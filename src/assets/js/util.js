@@ -54,11 +54,35 @@ function isHasImg (pathImg) {
   }
 }
 
+function deleteTag (self, array, index, text) {
+  self.$f7.dialog.confirm('是否删除该' + text, () => {
+    array.splice(index, 1)
+  }, () => {})
+}
+function addTag (self, array, text) {
+  self.$f7.dialog.prompt('请添加' + text, (data) => {
+    try {
+      if (data) {
+        if (array.indexOf(data) > -1) {
+          self.$f7.dialog.alert('已存在')
+        } else {
+          array.push(data)
+        }
+      } else {
+        self.$f7.dialog.alert('不能为空')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }, null)
+}
 export default{
   myevil,
   toastbuttom,
   empty,
   dateFormat,
   delEleFromArray,
-  isHasImg
+  isHasImg,
+  deleteTag,
+  addTag
 }

@@ -6,10 +6,12 @@
         label="备注" type="text"
         :value="myInfo.remark" @input="myInfo.remark = $event.target.value"
       />
-      <f7-list-input
-        label="标签" type="text"
-        :value="myInfo.tag" @input="myInfo.tag = $event.target.value"
-      />
+      <f7-list-item title="标签">
+        <div strong style="width: 70%;height: 100%;">
+          <f7-chip v-for="(tag,index) in myInfo.tags" :key="index" :text="tag" deleteable @delete="deleteTag(myInfo.tags,index,'标签')" ></f7-chip>
+          <f7-chip text="添加"  color="blue" @click="addTag(myInfo.tags,'标签')"></f7-chip>
+        </div>
+      </f7-list-item>
       <f7-list-item title="是否关注">
         <f7-toggle slot="after" :checked="myInfo.interest"  @change="myInfo.interest = $event.target.checked"></f7-toggle>
       </f7-list-item>
@@ -32,6 +34,10 @@ export default {
     let contacts = JSON.parse(sessionStorage.getItem('contacts'))
     for (let i = 0; i < contacts.length; i++) {
       if (contacts[i].people === people) {
+        // 数组初始化，
+        if (contacts[i].tags === undefined) {
+          contacts[i].tags = []
+        }
         self.myInfo = contacts[i]
         break
       }
@@ -47,7 +53,7 @@ export default {
       },
       myInfo: {
         remark: '',
-        tag: '',
+        tags: [],
         interest: false,
         people: ''
       }
@@ -119,6 +125,14 @@ export default {
     },
     sendMessage () {
 
+    },
+    deleteTag (array, index, text) {
+      const self = this
+      self.$root.deleteTag(self, array, index, text)
+    },
+    addTag (array, text) {
+      const self = this
+      self.$root.addTag(self, array, text)
     }
   }
 }

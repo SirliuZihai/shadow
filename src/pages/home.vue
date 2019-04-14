@@ -20,7 +20,7 @@
         <f7-swipeout-actions right>
           <f7-swipeout-button @click="detail(e)">详情</f7-swipeout-button>
         </f7-swipeout-actions>
-        <img slot="media" :src="homedefautImg" />
+        <img slot="media" :src="eventImage(e.username)" />
       </f7-list-item>
     </f7-list>
     <f7-list inline-labels form v-show="(!args.homeIsShow)&&args.querytime" style="margin-top: 0px">
@@ -42,11 +42,11 @@
         <f7-swipeout-actions right>
           <f7-swipeout-button @click="detail(e1)">详情</f7-swipeout-button>
         </f7-swipeout-actions>
-        <img slot="media" :src="homedefautImg" />
+        <img slot="media" :src="eventImage(e1.username)" />
       </f7-list-item>
     </f7-list>
-    <f7-list class="searchbar-not-found">
-      <f7-list-item title="Nothing found"></f7-list-item>
+    <f7-list class="searchbar-not-found" style="text-align: center">
+      <span >没有更多的消息了</span>
     </f7-list>
   </f7-page>
 </template>
@@ -246,6 +246,9 @@ export default {
     detail (e) {
       this.curEvent = e
       this.$f7router.navigate('/event-detail/')
+    },
+    eventImage (name) {
+      return process.env.API_HOST + 'image/head/' + name + '.jpg'
     }
   }
 }
