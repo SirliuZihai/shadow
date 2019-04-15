@@ -59,22 +59,27 @@ function deleteTag (self, array, index, text) {
     array.splice(index, 1)
   }, () => {})
 }
-function addTag (self, array, text) {
-  self.$f7.dialog.prompt('请添加' + text, (data) => {
-    try {
-      if (data) {
-        if (array.indexOf(data) > -1) {
-          self.$f7.dialog.alert('已存在')
-        } else {
-          array.push(data)
-        }
+function addTag (self, array, data) {
+  try {
+    if (data) {
+      if (array.indexOf(data) > -1) {
+        self.$f7.dialog.alert('已存在')
       } else {
-        self.$f7.dialog.alert('不能为空')
+        array.push(data)
       }
-    } catch (e) {
-      console.log(e)
+    } else {
+      self.$f7.dialog.alert('不能为空')
     }
-  }, null)
+  } catch (e) {
+    console.log(e)
+  }
+}
+function highlight (str, key) {
+  if (str.indexOf(key) > -1) {
+    return str.substring(0, str.indexOf(key)) + '<span style="background-color: #ffeb3b">' + key + '</span>' + str.substring(str.indexOf(key) + key.length)
+  } else {
+    return str
+  }
 }
 export default{
   myevil,
@@ -84,5 +89,6 @@ export default{
   delEleFromArray,
   isHasImg,
   deleteTag,
-  addTag
+  addTag,
+  highlight
 }

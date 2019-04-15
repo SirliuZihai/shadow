@@ -50,7 +50,8 @@ export default [
   },
   {
     path: '/contact/',
-    component: contact
+    component: contact,
+    keepAlive: true
   },
   {
     path: '/contactState/:people',

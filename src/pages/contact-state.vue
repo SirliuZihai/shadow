@@ -132,7 +132,9 @@ export default {
     },
     addTag (array, text) {
       const self = this
-      self.$root.addTag(self, array, text)
+      self.$f7.dialog.prompt('请添加' + text, (data) => {
+        self.$root.addTag(self, array, data)
+      }, null)
     }
   }
 }

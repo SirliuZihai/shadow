@@ -8417,7 +8417,7 @@ textarea {
   height: var(--f7-input-height);
 }
 .list input[type="datetime-local"] {
-  max-width: 50vw;
+ /* max-width: 50vw;*/
 }
 .list input[type="date"],
 .list input[type="datetime-local"] {
