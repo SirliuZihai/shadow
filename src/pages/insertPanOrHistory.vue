@@ -1,6 +1,6 @@
 <template>
   <f7-page>
-    <f7-navbar title="请计划您的日程" back-link="Back"></f7-navbar>
+    <f7-navbar title="添加事件" back-link="Back"></f7-navbar>
     <f7-list no-hairlines-md form >
       <f7-list-input label="标题&事件" type="text"  :value="eventInfo.title" @input="eventInfo.title=$event.target.value" placeholder="请输入关键字（默认：留白）" clear-button />
       <f7-list-input :value="eventInfo.starttime" @input="eventInfo.starttime=$event.target.value"

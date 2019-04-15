@@ -7,10 +7,16 @@
       <f7-nav-title>{{thetitle}}</f7-nav-title>
       <f7-nav-right>
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-home" icon-ios="f7:search" icon-md="material:search"></f7-link>
-        <f7-link class="searchbar-enable" data-searchbar=".searchbar-history" icon-ios="f7:add" icon-md="material:add"></f7-link>
+        <f7-menu-item icon-f7="add" link dropdown>
+          <f7-menu-dropdown right>
+            <f7-menu-dropdown-item v-show="false" text="处理样式问题" href="/404/" ></f7-menu-dropdown-item>
+            <f7-menu-dropdown-item text="添加事件" href="/insertPanOrHistory/" ></f7-menu-dropdown-item>
+            <f7-menu-dropdown-item text="搜索历史事件" link class="searchbar-enable" data-searchbar=".searchbar-history" ></f7-menu-dropdown-item>
+          </f7-menu-dropdown>
+        </f7-menu-item>
       </f7-nav-right>
       <f7-searchbar class="searchbar-home" search-container=".homeevents-list" placeholder="搜索当前事项" disableButtonText="取消" expandable></f7-searchbar>
-      <f7-searchbar ref="searchbarHomeEvent" class="searchbar-history" @inpput="queryEvent.title = $event.target.value" @focus="args.querytime = true" @searchbarEnable="args.homeIsShow=false"
+      <f7-searchbar ref="searchbarHomeEvent" class="searchbar-history" @input="queryEvent.title = $event.target.value" @focus="args.querytime = true" @searchbarEnable="args.homeIsShow=false"
                     @searchbarDisable="()=>{args.homeIsShow=true;args.querytime=false}"  placeholder="搜索历史事项" disableButtonText="取消" expandable>
       </f7-searchbar>
     </f7-navbar>

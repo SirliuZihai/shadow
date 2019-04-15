@@ -3,14 +3,14 @@
     <f7-navbar title="信箱" back-link="Back">
       <f7-nav-right>
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-otherletters" icon-ios="f7:search" icon-md="material:search"></f7-link>
-          <f7-menu-item icon-f7="add" link=true dropdown>
-              <f7-menu-dropdown right>
-                <f7-menu-dropdown-item v-show='args.showotherletter' text="投递信件" href="/myletters/" ></f7-menu-dropdown-item>
-                <f7-menu-dropdown-item text="添加信件" href="/letter/add/"></f7-menu-dropdown-item>
-                <f7-menu-dropdown-item text="将当前位置设置为信箱" link @click="setBoxPlace()"></f7-menu-dropdown-item>
-                <f7-menu-dropdown-item text="刷新"  href="#" @click="getNearrBox()" ></f7-menu-dropdown-item>
-              </f7-menu-dropdown>
-           </f7-menu-item>
+        <f7-menu-item icon-f7="add" link=true dropdown>
+            <f7-menu-dropdown right>
+              <f7-menu-dropdown-item v-show='args.showotherletter' text="投递信件" href="/myletters/" ></f7-menu-dropdown-item>
+              <f7-menu-dropdown-item text="添加信件" href="/letter/add/"></f7-menu-dropdown-item>
+              <f7-menu-dropdown-item text="将当前位置设置为信箱" link @click="setBoxPlace()"></f7-menu-dropdown-item>
+              <f7-menu-dropdown-item text="刷新"  href="#" @click="getNearrBox()" ></f7-menu-dropdown-item>
+            </f7-menu-dropdown>
+         </f7-menu-item>
       </f7-nav-right>
       <f7-searchbar class="searchbar-otherletters" search-container=".letter-list" @searchbarEnable="lettersShow=false" @searchbarDisable="lettersShow=true"  disableButtonText="取消" placeholder="搜索附近信箱" expandable></f7-searchbar>
     </f7-navbar>
