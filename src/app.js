@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Framework7 from 'framework7/framework7.esm.bundle'
 import Framework7Vue, {f7Block, f7Button, f7Input, f7Link, f7ListButton, f7ListInput, f7ListItem, f7List,
-  f7LoginScreenTitle, f7LoginScreen, f7NavLeft, f7NavRight, f7NavTitle, f7Navbar, f7Page, f7Panel, f7PhotoBrowser, f7Searchbar,
+  f7LoginScreenTitle, f7LoginScreen, f7NavLeft, f7NavRight, f7NavTitle, f7Navbar, f7Page, f7Panel, f7PhotoBrowser, f7Searchbar, f7Subnavbar,
   f7Statusbar, f7Tab, f7Tabs, f7Toggle, f7BlockTitle, f7Row, f7BlockFooter, f7SwipeoutActions, f7Messages, f7MessagesTitle,
   f7Message, f7Messagebar, f7SwipeoutButton, f7Toolbar, f7MenuItem, f7MenuDropdown, f7MenuDropdownItem, f7Chip } from 'framework7-vue'
 import App from './app.vue'
@@ -31,6 +31,7 @@ Vue.component(f7Page.name, f7Page)
 Vue.component(f7Panel.name, f7Panel)
 Vue.component(f7PhotoBrowser.name, f7PhotoBrowser)
 Vue.component(f7Searchbar.name, f7Searchbar)
+Vue.component(f7Subnavbar.name, f7Subnavbar)
 Vue.component(f7Statusbar.name, f7Statusbar)
 Vue.component(f7Tab.name, f7Tab)
 Vue.component(f7Tabs.name, f7Tabs)

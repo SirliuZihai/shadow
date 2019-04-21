@@ -13,6 +13,7 @@ import letterBox from './pages/letterBox.vue'
 import letter from './pages/letter.vue'
 import chat from './pages/chat.vue'
 import myLetters from './pages/myLetters.vue'
+import bdmap from '@/components/map.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -81,6 +82,10 @@ export default [
   {
     path: '/explore/',
     templateUrl: process.env.API_HOST + 'explore/home.do'
+  },
+  {
+    path: '/bdmap/',
+    component: bdmap
   },
   /* {
     path: '/showPanOrHistory/',

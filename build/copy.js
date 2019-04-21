@@ -56,6 +56,12 @@ fs.readdir(fPath2,(err,files)=> {
         readStream.pipe(writeStream);
         console.log(filename+"移动完成")
       }
+/*      if(filename.match('framework7.bundle.css.gz')){
+        let readStream = fs.createReadStream(path.join(fPath2,filename));
+        let writeStream = fs.createWriteStream(projectPath+'\\static\\css\\'+'framework7.bundle.css.gz');
+        readStream.pipe(writeStream);
+        console.log(filename+"移动完成")
+      }*/
     })
   }
 })

@@ -34,6 +34,7 @@
 import defautImg from '@/assets/image/nohead.jpg'
 import util from '@/assets/js/util.js'
 import insertPlan from '@/pages/insertPanOrHistory.vue'
+import eventDetail from '@/pages/eventDetail.vue'
 export default {
   created: function () {
     this.getContact()
@@ -180,6 +181,11 @@ export default {
       if (option) {
         if (option === 'insertEvent') {
           const curPlan = insertPlan.methods.getCur()
+          self.$root.addTag(curPlan, curPlan.eventInfo.relationship, name)
+          self.$f7router.back()
+        }
+        if (option === 'eventDetail') {
+          const curPlan = eventDetail.methods.getCur()
           self.$root.addTag(curPlan, curPlan.eventInfo.relationship, name)
           self.$f7router.back()
         }

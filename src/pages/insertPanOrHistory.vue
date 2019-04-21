@@ -1,17 +1,16 @@
 <template>
   <f7-page>
     <f7-navbar title="添加事件" back-link="Back"></f7-navbar>
-    <f7-list no-hairlines-md form >
+    <f7-list no-hairlines form >
       <f7-list-input label="标题&事件" type="text"  :value="eventInfo.title" @input="eventInfo.title=$event.target.value" placeholder="请输入关键字（默认：留白）" clear-button />
       <f7-list-input :value="eventInfo.starttime" @input="eventInfo.starttime=$event.target.value"
-        label="起始时间" type="datetime-local"
-        placeholder="请选择时间"/>
-      <f7-list-input :value="eventInfo.endtime" @input="eventInfo.endtime=$event.target.value" style="width: 100%;"
+        label="起始时间" type="datetime-local" placeholder="请选择时间"/>
+      <f7-list-input :value="eventInfo.endtime" @input="eventInfo.endtime=$event.target.value"
         label="截止时间"
         type="datetime-local"
         placeholder="请选择时间"
       />
-      <f7-list-input label="地点" type="text"  placeholder="请输入地址" :value="eventInfo.place" @input="eventInfo.place=$event.target.value" clear-button />
+      <f7-list-input label="地点" type="textarea"  placeholder="请输入地址" :value="eventInfo.place.name" @focus="callMap()" @input="eventInfo.place=$event.target.value" clear-button />
       <f7-list-item title="关联人">
         <div strong style="width: 70%;height: 100%;">
           <f7-chip v-for="(p,index) in eventInfo.relationship" :key="index" :text="p" deleteable @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
@@ -29,7 +28,7 @@
     </f7-list>
   </f7-page>
 </template>
-
+<bdmap/>
 <script>
 var CurInserPan
 let endOfDay = new Date()
@@ -49,7 +48,7 @@ export default {
         endtime: self.$root.dateFormat(endOfDay, 'yyyy-MM-ddThh:mm'),
         relationship: [],
         remark: '',
-        place: '',
+        place: {type: 'Point', coordinates: [], name: ''},
         public: '',
         type: ''
       }
@@ -77,6 +76,12 @@ export default {
     addTag () {
       const self = this
       self.$f7router.navigate('/contact/?option=insertEvent')
+    },
+    callMap () {
+      const self = this
+      sessionStorage.setItem('curMapPoint', self.eventInfo.place.coordinates)
+      sessionStorage.setItem('curMapPointName', self.eventInfo.place.name)
+      self.$f7router.navigate('/bdmap/?businessCode=insertPalce')
     }
   }
 }

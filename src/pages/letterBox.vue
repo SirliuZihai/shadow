@@ -5,9 +5,10 @@
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-otherletters" icon-ios="f7:search" icon-md="material:search"></f7-link>
         <f7-menu-item icon-f7="add" link=true dropdown>
             <f7-menu-dropdown right>
+              <f7-menu-dropdown-item v-show="false" text="处理bug" href="/404/" ></f7-menu-dropdown-item>
               <f7-menu-dropdown-item v-show='args.showotherletter' text="投递信件" href="/myletters/" ></f7-menu-dropdown-item>
               <f7-menu-dropdown-item text="添加信件" href="/letter/add/"></f7-menu-dropdown-item>
-              <f7-menu-dropdown-item text="将当前位置设置为信箱" link @click="setBoxPlace()"></f7-menu-dropdown-item>
+              <f7-menu-dropdown-item text="将当前位置设置为信箱" link @click="setBoxReplace()"></f7-menu-dropdown-item>
               <f7-menu-dropdown-item text="刷新"  href="#" @click="getNearrBox()" ></f7-menu-dropdown-item>
             </f7-menu-dropdown>
          </f7-menu-item>
