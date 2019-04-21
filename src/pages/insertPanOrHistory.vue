@@ -3,13 +3,7 @@
     <f7-navbar title="添加事件" back-link="Back"></f7-navbar>
     <f7-list no-hairlines form >
       <f7-list-input label="标题&事件" type="text"  :value="eventInfo.title" @input="eventInfo.title=$event.target.value" placeholder="请输入关键字（默认：留白）" clear-button />
-      <f7-list-input :value="eventInfo.starttime" @input="eventInfo.starttime=$event.target.value"
-        label="起始时间" type="datetime-local" placeholder="请选择时间"/>
-      <f7-list-input :value="eventInfo.endtime" @input="eventInfo.endtime=$event.target.value"
-        label="截止时间"
-        type="datetime-local"
-        placeholder="请选择时间"
-      />
+      <f7-list-input inputId="rangtime" label="起止日期"  placeholder="请选择日期" :value="eventInfo.starttime+'-'+eventInfo.endtime" @change="inputDate"/>
       <f7-list-input label="地点" type="textarea"  placeholder="请输入地址" :value="eventInfo.place.name" @focus="callMap()" @input="eventInfo.place=$event.target.value" clear-button />
       <f7-list-item title="关联人">
         <div strong style="width: 70%;height: 100%;">
@@ -39,13 +33,22 @@ export default {
   created () {
     CurInserPan = this
   },
+  mounted () {
+    const self = this
+    // Range Picker
+    self.calendarRange = self.$f7.calendar.create({
+      inputEl: '#rangtime',
+      dateFormat: 'yyyymmdd',
+      rangePicker: true
+    })
+  },
   data: function () {
     const self = this
     return {
       eventInfo: {
         title: '',
-        starttime: self.$root.dateFormat(new Date(), 'yyyy-MM-ddThh:mm'),
-        endtime: self.$root.dateFormat(endOfDay, 'yyyy-MM-ddThh:mm'),
+        starttime: self.$root.dateFormat(new Date(), 'yyyyMMdd'),
+        endtime: self.$root.dateFormat(endOfDay, 'yyyyMMdd'),
         relationship: [],
         remark: '',
         place: {type: 'Point', coordinates: [], name: ''},
@@ -76,6 +79,21 @@ export default {
     addTag () {
       const self = this
       self.$f7router.navigate('/contact/?option=insertEvent')
+    },
+    inputDate (e) {
+      const self = this
+      let value = e.target.value
+      if (value) {
+        let dateArray = value.split('-')
+        if (dateArray.length === 2) {
+          self.eventInfo.starttime = dateArray[0].trim()
+          self.eventInfo.endtime = dateArray[1].trim()
+        }
+        if (dateArray.length === 1) {
+          self.eventInfo.starttime = dateArray[0]
+          self.eventInfo.endtime = dateArray[0]
+        }
+      }
     },
     callMap () {
       const self = this

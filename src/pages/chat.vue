@@ -1,6 +1,6 @@
 <template>
   <f7-page>
-    <f7-navbar back-link="Back" sliding :title="title">
+    <f7-navbar back-link="Back" sliding :title="title" subtitle="讨论区">
     </f7-navbar>
 
     <f7-messages>

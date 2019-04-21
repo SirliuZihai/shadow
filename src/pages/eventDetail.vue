@@ -3,13 +3,7 @@
     <f7-navbar title="事件" back-link="Back"></f7-navbar>
     <f7-list no-hairlines form >
       <f7-list-input label="标题&事件" type="text"  :value="eventInfo.title" @input="eventInfo.title=$event.target.value" placeholder="请输入关键字（默认：留白）" :disabled="args.isdisable" :clear-button="!args.isdisable" />
-      <f7-list-input :value="eventInfo.starttime" @input="eventInfo.starttime=$event.target.value"
-        label="起始时间" :disabled="args.isdisable" type="datetime-local" placeholder="请选择时间"/>
-      <f7-list-input :value="eventInfo.endtime" @input="eventInfo.endtime=$event.target.value"
-        label="截止时间" :disabled="args.isdisable"
-        type="datetime-local"
-        placeholder="请选择时间"
-      />
+      <f7-list-input inputId="rangtime" label="起止日期"  placeholder="请选择日期" :value="eventInfo.starttime+'-'+eventInfo.endtime" @change="inputDate" :disabled="args.isdisable" />
       <f7-list-input label="地点" type="textarea"  placeholder="请输入地址" :value="eventInfo.place.name" @focus="callMap()" :readonly="args.isdisable" :clear-button="!args.isdisable" />
       <f7-list-item title="关联人">
         <div strong style="width: 70%;height: 100%;">
@@ -24,7 +18,8 @@
     </f7-list>
     <f7-list v-if="args.isdisable === true">
       <f7-list-button v-show="args.canedit" @click="args.isdisable = false">编辑</f7-list-button>
-      <f7-list-button  @click="deleteEvent">删除</f7-list-button>
+      <f7-list-button  v-show="args.canedit"  @click="deleteEvent">删除</f7-list-button>
+      <f7-list-button v-show="!args.canedit" @click="deleteEvent">不参与</f7-list-button>
     </f7-list>
     <f7-list  v-else>
       <f7-list-button @click="saveEvent">保存</f7-list-button>
@@ -46,6 +41,15 @@ export default {
     self.eventInfo = JSON.parse(JSON.stringify(theHome.methods.getCurHome().curEvent))
     let name = localStorage.getItem('username')
     self.args.canedit = self.eventInfo.username === name
+  },
+  mounted () {
+    const self = this
+    // Range Picker
+    self.calendarRange = self.$f7.calendar.create({
+      inputEl: '#rangtime',
+      dateFormat: 'yyyymmdd',
+      rangePicker: true
+    })
   },
   data: function () {
     const self = this
@@ -84,19 +88,21 @@ export default {
     },
     deleteEvent () {
       const self = this
-      let url = process.env.API_HOST + 'event/deleteEvent.do'
-      self.$f7.request.promise.postJSON(url, {'_id': self.eventInfo._id, 'username': self.eventInfo.username}).then(
-        (data) => {
-          self.$root.toastbuttom(self, data.message)
-          if (data.success === true || data.message === '该记录已被移除') {
-            self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().events)
-            // let deletobj =  if (deletobj !== null) { localStorage.setItem('events', JSON.stringify(theHome.methods.getCurHome().events)) }
-            self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().hisEvents)
-          }
-          self.$f7router.back()
-        },
-        () => { self.$root.toastbuttom(self, '通讯异常') }
-      )
+      self.$f7.dialog.confirm('是否删除该事件', () => {
+        let url = process.env.API_HOST + 'event/deleteEvent.do'
+        self.$f7.request.promise.postJSON(url, {'_id': self.eventInfo._id, 'username': self.eventInfo.username}).then(
+          (data) => {
+            self.$root.toastbuttom(self, data.message)
+            if (data.success === true || data.message === '该记录已被移除') {
+              self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().events)
+              // let deletobj =  if (deletobj !== null) { localStorage.setItem('events', JSON.stringify(theHome.methods.getCurHome().events)) }
+              self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().hisEvents)
+            }
+            self.$f7router.back()
+          },
+          () => { self.$root.toastbuttom(self, '通讯异常') }
+        )
+      }, null)
     },
     cancel () {
       const self = this
@@ -110,6 +116,21 @@ export default {
     addTag () {
       const self = this
       self.$f7router.navigate('/contact/?option=eventDetail')
+    },
+    inputDate (e) {
+      const self = this
+      let value = e.target.value
+      if (value) {
+        let dateArray = value.split('-')
+        if (dateArray.length === 2) {
+          self.eventInfo.starttime = dateArray[0].trim()
+          self.eventInfo.endtime = dateArray[1].trim()
+        }
+        if (dateArray.length === 1) {
+          self.eventInfo.starttime = dateArray[0]
+          self.eventInfo.endtime = dateArray[0]
+        }
+      }
     },
     callMap () {
       const self = this

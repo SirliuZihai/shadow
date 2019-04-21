@@ -30,16 +30,7 @@
       </f7-list-item>
     </f7-list>
     <f7-list inline-labels form v-show="(!args.homeIsShow)&&args.querytime" style="margin-top: 0px">
-      <f7-list-input :value="queryEvent.starttime" @input="queryEvent.starttime=$event.target.value"
-                     label="起始时间"
-                     type="datetime-local"
-                     placeholder="请选择时间" clear-button
-      />
-      <f7-list-input :value="queryEvent.endtime" @input="queryEvent.endtime=$event.target.value"
-                     label="截止时间"
-                     type="datetime-local"
-                     placeholder="请选择时间" clear-button
-      />
+      <f7-list-input inputId="rangtime" label="起止日期"  placeholder="请选择日期" :value="queryEvent.starttime+'-'+queryEvent.endtime" @change="inputDate" />
       <f7-list-button @click="queryHistroy">查询</f7-list-button>
     </f7-list>
     <f7-list mediaList class="historyevents-list" style="margin-top: 0px" v-show="!args.homeIsShow">
@@ -177,6 +168,15 @@ export default {
       console.log(e)
     }
   },
+  mounted () {
+    const self = this
+    // Range Picker
+    self.calendarRange = self.$f7.calendar.create({
+      inputEl: '#rangtime',
+      dateFormat: 'yyyymmdd',
+      rangePicker: true
+    })
+  },
   watch: {
     events: {
       handler: function (val) {
@@ -255,6 +255,21 @@ export default {
     },
     eventImage (name) {
       return process.env.API_HOST + 'image/head/' + name + '.jpg'
+    },
+    inputDate (e) {
+      const self = this
+      let value = e.target.value
+      if (value) {
+        let dateArray = value.split('-')
+        if (dateArray.length === 2) {
+          self.queryEvent.starttime = dateArray[0].trim()
+          self.queryEvent.endtime = dateArray[1].trim()
+        }
+        if (dateArray.length === 1) {
+          self.queryEvent.starttime = dateArray[0]
+          self.queryEvent.endtime = dateArray[0]
+        }
+      }
     }
   }
 }

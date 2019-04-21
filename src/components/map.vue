@@ -1,7 +1,7 @@
 <template>
   <f7-page>
     <f7-navbar title="地图" backLink="Back">
-      <f7-nav-right>
+      <f7-nav-right v-if="$f7route.query.businessCode !== 'show'">
         <f7-link @click="doConfirm()">确定</f7-link>
       </f7-nav-right>
       <f7-subnavbar :inner="false">
