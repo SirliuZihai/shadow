@@ -146,7 +146,7 @@ export default {
         function (position) {
           self.setBoxPlace(position)
         },
-        function (error) { alert(error) }, null
+        function (error) { self.$root.toastbuttom(self, '获取位置失败\n' + error.message) }, null
       )
     },
     getNearrBox () {
@@ -169,7 +169,7 @@ export default {
             self.$root.toastbuttom(self, '获取位置失败')
           }
         },
-        function (error) { self.$root.toastbuttom(self, error) }, null
+        function (error) { self.$root.toastbuttom(self, '获取位置失败\n' + error.message) }, null
       )
     }
   }
