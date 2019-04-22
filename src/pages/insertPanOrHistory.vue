@@ -22,7 +22,6 @@
     </f7-list>
   </f7-page>
 </template>
-<bdmap/>
 <script>
 var CurInserPan
 let endOfDay = new Date()

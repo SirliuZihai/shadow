@@ -13,7 +13,8 @@ import letterBox from './pages/letterBox.vue'
 import letter from './pages/letter.vue'
 import chat from './pages/chat.vue'
 import myLetters from './pages/myLetters.vue'
-import bdmap from '@/components/map.vue'
+import bdmap from './components/map.vue'
+import calendarPage from './components/calendar-page.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -86,6 +87,10 @@ export default [
   {
     path: '/bdmap/',
     component: bdmap
+  },
+  {
+    path: '/calendarPage/',
+    component: calendarPage
   },
   /* {
     path: '/showPanOrHistory/',

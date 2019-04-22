@@ -2331,7 +2331,7 @@ html.device-full-viewport body {
 .navbar ~ .page:not(.no-navbar) .toolbar-top,
 .ios .navbar ~ .page:not(.no-navbar) .toolbar-top-ios,
 .md .navbar ~ .page:not(.no-navbar) .toolbar-top-md {
-  top: var(--f7-navbar-height);
+ /* top: var(--f7-navbar-height);*/
 }
 .navbar ~ .toolbar-top ~ .page-content,
 .ios .navbar ~ .toolbar-top-ios ~ .page-content,

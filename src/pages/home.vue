@@ -11,6 +11,7 @@
           <f7-menu-dropdown right>
             <f7-menu-dropdown-item v-show="false" text="处理样式问题" href="/404/" ></f7-menu-dropdown-item>
             <f7-menu-dropdown-item text="添加事件" href="/insertPanOrHistory/" ></f7-menu-dropdown-item>
+            <f7-menu-dropdown-item text="查看日历" href="/calendarPage/" ></f7-menu-dropdown-item>
             <f7-menu-dropdown-item text="搜索历史事件" link class="searchbar-enable" data-searchbar=".searchbar-history" ></f7-menu-dropdown-item>
           </f7-menu-dropdown>
         </f7-menu-item>
@@ -21,10 +22,11 @@
       </f7-searchbar>
     </f7-navbar>
     <f7-list mediaList class="homeevents-list" style="margin-top: 0px" v-show="args.homeIsShow">
-      <f7-list-item v-for="e in events" :key="e.index" :title="e.title"  :subtitle="e.latestMsg === null?'':e.latestMsg" :badge="e.num===null?'':e.num" badge-color="blue"
+      <f7-list-item v-for="(e,index) in events" :key="index" :title="e.title"  :subtitle="e.latestMsg === null?'':e.latestMsg" :badge="e.num===null?'':e.num" badge-color="blue"
                     :after="dateformate(e._id,'MM-dd hh:mm')" :link="/chat/+e._id+'/'+e.title" @click="curEvent = e;e.num=null" swipeout >
         <f7-swipeout-actions right>
-          <f7-swipeout-button @click="detail(e)">详情</f7-swipeout-button>
+          <f7-swipeout-button color="blue" @click="detail(e)">详情</f7-swipeout-button>
+          <f7-swipeout-button color="red" @click="$f7.dialog.confirm('是否删除该条记录？',()=>{events.splice(index,1)},null)">删除</f7-swipeout-button>
         </f7-swipeout-actions>
         <img slot="media" :src="eventImage(e.username)" />
       </f7-list-item>
@@ -37,7 +39,7 @@
       <f7-list-item v-for="e1 in hisEvents" :key="e1.index" :title="e1.title"  :subtitle="e1.remark" @click="addEvent2(e1)"
                     :after="dateformate(e1._id,'MM-dd hh:mm')" swipeout>
         <f7-swipeout-actions right>
-          <f7-swipeout-button @click="detail(e1)">详情</f7-swipeout-button>
+          <f7-swipeout-button color="blue" @click="detail(e1)">详情</f7-swipeout-button>
         </f7-swipeout-actions>
         <img slot="media" :src="eventImage(e1.username)" />
       </f7-list-item>

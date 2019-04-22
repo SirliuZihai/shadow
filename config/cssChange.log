@@ -11,3 +11,7 @@
 .list input[type="datetime-local"] {
   /*max-width: 50vw;*/
 }
+
+.md .navbar ~ .page:not(.no-navbar) .toolbar-top-md {
+ /* top: var(--f7-navbar-height);*/
+}

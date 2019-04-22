@@ -31,7 +31,7 @@ export default {
     const self = this
     var map = new BMap.Map('allmap')
     self.map = map
-    let curMapPoint = sessionStorage.getItem('curMapPoint').split(',')
+    let curMapPoint = sessionStorage.getItem('curMapPoint') === null ? '' : sessionStorage.getItem('curMapPoint').split(',')
     let curMapPointName = sessionStorage.getItem('curMapPointName')
     if (curMapPointName) {
       self.curPoint = new BMap.Point(curMapPoint[0], curMapPoint[1])
