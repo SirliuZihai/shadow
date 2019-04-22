@@ -31,9 +31,9 @@ export default {
     const self = this
     var map = new BMap.Map('allmap')
     self.map = map
-    let curMapPoint = sessionStorage.getItem('curMapPoint') === null ? '' : sessionStorage.getItem('curMapPoint').split(',')
     let curMapPointName = sessionStorage.getItem('curMapPointName')
     if (curMapPointName) {
+      let curMapPoint = sessionStorage.getItem('curMapPoint').split(',')
       self.curPoint = new BMap.Point(curMapPoint[0], curMapPoint[1])
       self.placeName = curMapPointName
       self.updateCurPoint(true)
@@ -127,6 +127,9 @@ export default {
     },
     doConfirm () {
       const self = this
+      if (!self.curPoint.lng) {
+        self.$root.toastbuttom(self, '无位置信息')
+      }
       if (self.$f7route.query.businessCode === 'insertPalce') {
         insertPan.methods.getCur().eventInfo.place.name = self.placeName
         insertPan.methods.getCur().eventInfo.place.coordinates = [self.curPoint.lng, self.curPoint.lat]

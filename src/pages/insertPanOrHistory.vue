@@ -96,8 +96,16 @@ export default {
     },
     callMap () {
       const self = this
-      sessionStorage.setItem('curMapPoint', self.eventInfo.place.coordinates)
-      sessionStorage.setItem('curMapPointName', self.eventInfo.place.name)
+      if (self.eventInfo.place.coordinates) {
+        sessionStorage.setItem('curMapPoint', self.eventInfo.place.coordinates)
+      } else {
+        sessionStorage.setItem('curMapPoint', null)
+      }
+      if (self.eventInfo.place.name) {
+        sessionStorage.setItem('curMapPointName', self.eventInfo.place.name)
+      } else {
+        sessionStorage.setItem('curMapPointName', '')
+      }
       self.$f7router.navigate('/bdmap/?businessCode=insertPalce')
     }
   }

@@ -134,9 +134,17 @@ export default {
     },
     callMap () {
       const self = this
-      if (self.args.isdisable) {
+      if (self.eventInfo.place.coordinates) {
         sessionStorage.setItem('curMapPoint', self.eventInfo.place.coordinates)
+      } else {
+        sessionStorage.setItem('curMapPoint', null)
+      }
+      if (self.eventInfo.place.name) {
         sessionStorage.setItem('curMapPointName', self.eventInfo.place.name)
+      } else {
+        sessionStorage.setItem('curMapPointName', '')
+      }
+      if (self.args.isdisable) {
         self.$f7router.navigate('/bdmap/?businessCode=show')
       } else {
         self.$f7router.navigate('/bdmap/?businessCode=eventDetail')
