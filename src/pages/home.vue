@@ -32,7 +32,7 @@
       </f7-list-item>
     </f7-list>
     <f7-list inline-labels form v-show="(!args.homeIsShow)&&args.querytime" style="margin-top: 0px">
-      <f7-list-input inputId="rangtime" label="起止日期"  placeholder="请选择日期" :value="queryEvent.starttime+'-'+queryEvent.endtime" @change="inputDate" />
+      <f7-list-input inputId="homeRangtime" label="起止日期"  placeholder="请选择日期" :value="queryEvent.starttime+'-'+queryEvent.endtime" @change="inputDate" />
       <f7-list-button @click="queryHistroy">查询</f7-list-button>
     </f7-list>
     <f7-list mediaList class="historyevents-list" style="margin-top: 0px" v-show="!args.homeIsShow">
@@ -174,7 +174,7 @@ export default {
     const self = this
     // Range Picker
     self.calendarRange = self.$f7.calendar.create({
-      inputEl: '#rangtime',
+      inputEl: '#homeRangtime',
       dateFormat: 'yyyymmdd',
       rangePicker: true
     })
