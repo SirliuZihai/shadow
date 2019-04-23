@@ -6,7 +6,7 @@
     <f7-messages>
       <template v-for="msg in msgs" >
         <f7-messages-title :key="msg.index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-        <f7-message :key="msg.index" v-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true"
+        <f7-message :key="msg.index" v-else-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true"
                     :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
         />
         <f7-message :key="msg.index" v-else :first="true" :last="true" :tail="true"
