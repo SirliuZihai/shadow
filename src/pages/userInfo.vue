@@ -12,12 +12,6 @@
           <f7-chip v-show="!args.isdisable" text="添加"  color="blue" @click="addTag(info.ips,'IP')"></f7-chip>
         </div>
       </f7-list-item>
-      <f7-list-item title="关注的运动">
-        <div style="width: 70%;height: 100%;">
-          <f7-chip v-for="(tag,index) in info.sports" :key="index" :text="tag" :deleteable="!args.isdisable" @delete="deleteTag(info.sports,index,'运动')" ></f7-chip>
-          <f7-chip v-show="!args.isdisable" text="添加"  color="blue" @click="addTag(info.sports,'运动')"></f7-chip>
-        </div>
-      </f7-list-item>
       <f7-list-item title="标签">
         <div style="width: 70%;height: 100%;">
           <f7-chip v-for="(tag,index) in info.tags" :key="index" :text="tag" :deleteable="!args.isdisable" @delete="deleteTag(info.tags,index,'关键字')" ></f7-chip>
@@ -55,7 +49,6 @@ export default {
         doing: '',
         tags: [],
         ips: [],
-        sports: [],
         place: ''
       },
       infoCache: {},
@@ -114,6 +107,7 @@ export default {
         if (data2.success === true) {
           self.args.isdisable = true
           self.getInfo()
+          self.$f7router.back()
         }
         self.$root.toastbuttom(self, data2.message)
       }).catch(() => { self.$root.toastbuttom(self, '通讯异常') })

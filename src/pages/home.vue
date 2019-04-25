@@ -85,11 +85,6 @@ function initwebSocket (webSocket) {
       for (let i = 0; i < array.length; i++) {
         homeCur.addEvent(array[i])
       }
-      // localStorage.setItem('events', JSON.stringify(homeCur.events))
-      try {
-        // cordovaUtil.notify(array[0], null, null)
-      } catch (e) {
-      }
     }
     if (type === '0001') {
       let array2 = homeCur.$root.myevil(data.data.substring(4))
@@ -98,17 +93,25 @@ function initwebSocket (webSocket) {
       }
       for (let i = 0; i < array2.length; i++) {
         homeCur.addMessage(array2[i])
+        let hasevent = false
         for (let j = 0; j < homeCur.events.length; j++) {
           if (homeCur.events[j]._id === array2[i].relateId) {
-            homeCur.events[j].num++
+            hasevent = true
+            let eventM = homeCur.events[j]
+            eventM.num++
             if (array2[i].type === undefined || array2[i].type === 'text') {
-              homeCur.events[j].latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
+              eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
             } else {
-              if (array2[i].type === 'operate') { homeCur.events[j].latestMsg = array2[i].data }
-              if (array2[i].type === 'image') { homeCur.events[j].latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
-              if (array2[i].type === 'file') { homeCur.events[j].latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
+              if (array2[i].type === 'operate') { eventM.latestMsg = array2[i].data }
+              if (array2[i].type === 'image') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
+              if (array2[i].type === 'file') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
             }
+            homeCur.events.splice(j, 1)
+            homeCur.events.unshift(eventM)
           }
+        }
+        if (!hasevent) {
+          // 添加事件
         }
       }
     }

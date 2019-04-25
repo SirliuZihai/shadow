@@ -123,7 +123,7 @@ function onPhotoURISuccess (imageURI) {
 
 // 上传文件
 function upload (fileURL) {
-  alert(fileURL)
+  //alert(fileURL)
   // 上传成功
   var success = function (r) {
     let data = myapp.myevil(r.response)
