@@ -3,7 +3,7 @@
     <f7-navbar back-link="Back" sliding :title="title" subtitle="讨论区">
     </f7-navbar>
 
-    <f7-messages>
+    <f7-messages id="chat">
       <template v-for="msg in msgs" >
         <f7-messages-title :key="msg.index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
         <f7-message :key="msg.index" v-else-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true"
@@ -46,6 +46,12 @@ export default {
       self.msgs = oldData
     }
     self.initSocket()
+  },
+  mounted () {
+    const self = this
+    self.$nextTick(() => {
+      self.$$('#chat').scrollTop = self.$$('#chat').scrollHeight
+    })
   },
   beforeDestroy () {
     this.webSocket.close()

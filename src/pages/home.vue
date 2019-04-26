@@ -94,10 +94,20 @@ function initwebSocket (webSocket) {
       for (let i = 0; i < array2.length; i++) {
         homeCur.addMessage(array2[i])
         let hasevent = false
+        let eventM
         for (let j = 0; j < homeCur.events.length; j++) {
           if (homeCur.events[j]._id === array2[i].relateId) {
             hasevent = true
-            let eventM = homeCur.events[j]
+            eventM = homeCur.events[j]
+            homeCur.events.splice(j, 1)
+          }
+        }
+        if (!hasevent) {
+          // 添加事件
+          let url3 = process.env.API_HOST + 'event/getEvent.do'
+          homeCur.$f7.request.promise.get(url3, {'eventId': array2[i].relateId}, 'json').then((data) => {
+            eventM = data.data
+            // 更新事件栏
             eventM.num++
             if (array2[i].type === undefined || array2[i].type === 'text') {
               eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
@@ -106,12 +116,19 @@ function initwebSocket (webSocket) {
               if (array2[i].type === 'image') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
               if (array2[i].type === 'file') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
             }
-            homeCur.events.splice(j, 1)
             homeCur.events.unshift(eventM)
+          }, () => { homeCur.$root.toastbuttom(self, '通讯异常') })
+        } else {
+          // 更新事件栏
+          eventM.num++
+          if (array2[i].type === undefined || array2[i].type === 'text') {
+            eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
+          } else {
+            if (array2[i].type === 'operate') { eventM.latestMsg = array2[i].data }
+            if (array2[i].type === 'image') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
+            if (array2[i].type === 'file') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
           }
-        }
-        if (!hasevent) {
-          // 添加事件
+          homeCur.events.unshift(eventM)
         }
       }
     }
