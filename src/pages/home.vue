@@ -124,6 +124,7 @@ function initwebSocket (webSocket) {
   }
   webSocket.onclose = function () {
     window.clearInterval(heartid)
+    navigator.app.exitApp()
     /* while (webSocket.readyState !== webSocket.OPEN) {
       setTimeout(function () {
         webSocket = null
