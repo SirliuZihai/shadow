@@ -32,12 +32,6 @@ fs.readdir(fPath,(err,files)=>{
               readStream.pipe(writeStream);
               console.log(filename+"移动完成")
             }
-            if(filename.match(/nativeUtil\.js/)){
-              let readStream = fs.createReadStream(path.join(fPath,filename));
-              let writeStream = fs.createWriteStream(projectPath+'\\static\\js\\'+'nativeUtil.js');
-              readStream.pipe(writeStream);
-              console.log(filename+"移动完成")
-            }
           }
         }
       })
