@@ -54,6 +54,7 @@ const myapp = new Vue({
   methods: myutil,
   data: function () {
     return {
+      prefx: '#',
       curSelf: this
     }
   }

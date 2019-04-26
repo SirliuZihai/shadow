@@ -58,6 +58,7 @@ export default {
     }).then((data) => {
       let data2 = self.$root.myevil(data)
       if (data2.success === true) {
+        self.$root.prefx = localStorage.getItem('username') + '#'
         self.$f7router.navigate('/')
       } else {
         self.$root.toastbuttom(self, data2.message)
@@ -84,15 +85,15 @@ export default {
         let data3 = self.$root.myevil(data)
         if (data3.success === true) {
           self.$root.toastbuttom(self, data3.message)
-          localStorage.clear()
           localStorage.setItem('username', self.username)
-          localStorage.setItem('token', data3.data.token)
           localStorage.setItem('alias', data3.data.alias)
+          localStorage.setItem('token', data3.data.token)
+          self.$root.prefx = localStorage.getItem('username') + '#'
           let curhome1 = thehome.methods.getCurHome()
           if (curhome1) {
             theLeft.methods.changeImgUrl()
-            curhome1.changeTitle(localStorage.getItem('alias'))
-            curhome1.events = []
+            curhome1.changeTitle(data3.data.alias)
+            curhome1.events = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
             curhome1.initSocket()
           }
           self.$f7router.navigate('/')
@@ -104,7 +105,6 @@ export default {
     regist () {
       const self = this
       const router = self.$f7router
-      localStorage.clear()
       router.navigate('/register/')
       // this.$f7.mainView.router.load({url: '/chat/'});
     },

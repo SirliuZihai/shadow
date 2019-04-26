@@ -22,7 +22,7 @@ export default {
   name: 'myLetters',
   created () {
     const self = this
-    self.myletters = JSON.parse(localStorage.getItem('myletters'))
+    self.myletters = JSON.parse(localStorage.getItem(self.$root.prefx + 'myletters'))
   },
   data: function () {
     return {

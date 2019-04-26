@@ -6,7 +6,7 @@ let d = null
 let e = true
 let f = false
 let g = []
-
+let h = null&&43
 console.log("the i")
 if(i){
   console.log(i)
@@ -40,4 +40,7 @@ console.log("the g")
 if(g){
   console.log(g)
 }
-
+console.log("the h=="+h)
+if(h){
+  console.log(h)
+}

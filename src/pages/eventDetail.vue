@@ -95,7 +95,6 @@ export default {
             self.$root.toastbuttom(self, data.message)
             if (data.success === true || data.message === '该记录已被移除') {
               self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().events)
-              // let deletobj =  if (deletobj !== null) { localStorage.setItem('events', JSON.stringify(theHome.methods.getCurHome().events)) }
               self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().hisEvents)
             }
             self.$f7router.back()

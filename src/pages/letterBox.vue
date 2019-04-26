@@ -51,7 +51,7 @@ export default {
   created () {
     const self = this
     curLetterBox = self
-    let myletters = JSON.parse(localStorage.getItem('myletters'))
+    let myletters = JSON.parse(localStorage.getItem(self.$root.prefx + 'myletters'))
     if (myletters) { self.myletters = myletters }
     self.getNearrBox()
   },
@@ -76,7 +76,8 @@ export default {
   watch: {
     myletters: {
       handler: function (val) {
-        localStorage.setItem('myletters', JSON.stringify(val))
+        const self = this
+        localStorage.setItem(self.$root.prefx + 'myletters', JSON.stringify(val))
       },
       deep: true
     }

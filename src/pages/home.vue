@@ -166,7 +166,7 @@ export default {
     const self = this
     homeCur = self
     self.changeTitle(localStorage.getItem('alias'))
-    let temp = JSON.parse(localStorage.getItem('events'))
+    let temp = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
     self.events = temp === null ? [] : temp
     try {
       initSocket()
@@ -186,8 +186,8 @@ export default {
   watch: {
     events: {
       handler: function (val) {
-        localStorage.setItem('events', JSON.stringify(val))
-        console.log('events saved')
+        const self = this
+        localStorage.setItem(self.$root.prefx + 'events', JSON.stringify(val))
       },
       deep: true
     },
@@ -230,7 +230,6 @@ export default {
       const self = this
       self.$root.delEleFromArray(e, self.events)
       self.events.unshift(e)
-      // localStorage.setItem('events', JSON.stringify(homeCur.events))
       self.$refs.searchbarHomeEvent.disable()
     },
     changeTitle (alia) {
