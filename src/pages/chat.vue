@@ -3,13 +3,13 @@
     <f7-navbar back-link="Back" sliding :title="title" subtitle="讨论区">
     </f7-navbar>
 
-    <f7-messages id="chat">
-      <template v-for="msg in msgs" >
-        <f7-messages-title :key="msg.index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-        <f7-message :key="msg.index" v-else-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true"
+    <f7-messages ref="messages">
+      <template v-for="(msg,index) in msgs" >
+        <f7-messages-title :key="index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
+        <f7-message :key="index" v-else-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true"
                     :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
         />
-        <f7-message :key="msg.index" v-else :first="true" :last="true" :tail="true"
+        <f7-message :key="index" v-else :first="true" :last="true" :tail="true"
                     :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :text="msg.data" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
                     />
       </template>
@@ -49,8 +49,8 @@ export default {
   },
   mounted () {
     const self = this
-    self.$nextTick(() => {
-      self.$$('#chat').scrollTop = self.$$('#chat').scrollHeight
+    this.$nextTick(() => {
+      self.$refs.messages.scroll()
     })
   },
   beforeDestroy () {
