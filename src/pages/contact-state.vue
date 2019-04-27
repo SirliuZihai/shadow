@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import theList from '@/pages/contacts-list.vue'
 export default {
   created: function () {
     const self = this
@@ -98,7 +99,9 @@ export default {
         let data2 = self.$root.myevil(data)
         self.$root.toastbuttom(self, data2.message)
         if (data2.success === true) {
-          self.$f7router.clearPreviousPages()
+          // 缓存了 self.$f7router.clearPreviousPages()
+          theList.methods.getCur().getContact()
+          self.$f7router.back()
         }
       })
     },

@@ -9,7 +9,7 @@
       <f7-searchbar class="searchbar-contacts_new" @change="searchPeople($event.target.value)" @searchbarEnable="contactIsShow=1" @searchbarDisable="contactIsShow=0"  disableButtonText="取消" placeholder="搜索用户" expandable></f7-searchbar>
     </f7-navbar>
     <f7-list class=".contacts-list2" v-show="contactIsShow===1">
-      <f7-list-item v-for="p in people" :key="p.username" :title="p.username+' '+p.alias">
+      <f7-list-item v-for="p in people" :key="p.username" :title="p.username+' '+(p.alias === undefined?'':p.alias)">
         <f7-link slot="after" icon-ios="f7:add" icon-md="material:add" @click="addUser(p.username,p.alias)"></f7-link>
       </f7-list-item>
     </f7-list>
@@ -35,9 +35,12 @@ import defautImg from '@/assets/image/nohead.jpg'
 import util from '@/assets/js/util.js'
 import insertPlan from '@/pages/insertPanOrHistory.vue'
 import eventDetail from '@/pages/eventDetail.vue'
+var CurContact
 export default {
   created: function () {
-    this.getContact()
+    const self = this
+    CurContact = self
+    self.getContact()
   },
   data: function () {
     return {
@@ -49,6 +52,9 @@ export default {
     }
   },
   methods: {
+    getCur () {
+      return CurContact
+    },
     getContact () {
       const self = this
       var url = process.env.API_HOST + 'user/relationUser.do'
