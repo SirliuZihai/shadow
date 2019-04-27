@@ -25,8 +25,8 @@
       <f7-list-item v-for="(e,index) in events" :key="index" :title="e.title"  :subtitle="e.latestMsg === null?'':e.latestMsg" :badge="e.num===null?'':e.num" badge-color="blue"
                     :after="dateformate(e._id,'MM-dd hh:mm')" :link="/chat/+e._id+'/'+e.title" @click="curEvent = e;e.num=null" swipeout >
         <f7-swipeout-actions right>
-          <f7-swipeout-button color="blue" @click="detail(e)">详情</f7-swipeout-button>
-          <f7-swipeout-button color="red" @click="$f7.dialog.confirm('是否删除该条记录？',()=>{events.splice(index,1)},null)">删除</f7-swipeout-button>
+          <f7-swipeout-button close color="blue" @click="detail(e)">详情</f7-swipeout-button>
+          <f7-swipeout-button close color="red" @click="$f7.dialog.confirm('是否删除该条记录？',()=>{events.splice(index,1)},null)">删除</f7-swipeout-button>
         </f7-swipeout-actions>
         <img slot="media" :src="eventImage(e.username)" />
       </f7-list-item>
@@ -39,7 +39,7 @@
       <f7-list-item v-for="e1 in hisEvents" :key="e1.index" :title="e1.title"  :subtitle="e1.remark" @click="addEvent2(e1)"
                     :after="dateformate(e1._id,'MM-dd hh:mm')" swipeout>
         <f7-swipeout-actions right>
-          <f7-swipeout-button color="blue" @click="detail(e1)">详情</f7-swipeout-button>
+          <f7-swipeout-button close color="blue" @click="detail(e1)">详情</f7-swipeout-button>
         </f7-swipeout-actions>
         <img slot="media" :src="eventImage(e1.username)" />
       </f7-list-item>
