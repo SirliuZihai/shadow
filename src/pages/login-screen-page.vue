@@ -91,7 +91,7 @@ export default {
           self.$root.prefx = localStorage.getItem('username') + '#'
           let curhome1 = thehome.methods.getCurHome()
           if (curhome1) {
-            theLeft.methods.changeImgUrl()
+            theLeft.methods.getCur().changeImgUrl()
             curhome1.changeTitle(data3.data.alias)
             curhome1.events = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
             curhome1.initSocket()

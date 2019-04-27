@@ -24,10 +24,13 @@ export default {
   mounted: function () {
     const self = this
     LeftPanelCur = self
-    // self.$$('#headImg').on('error', self.nohaedImg)
+    self.$$('#headImg').on('error', self.nohaedImg)
     self.changeImgUrl()
   },
   methods: {
+    getCur () {
+      return LeftPanelCur
+    },
     uploadFile () {
       const self = this
       self.$root.curSelf = self
