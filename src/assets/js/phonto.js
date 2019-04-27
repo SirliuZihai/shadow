@@ -1,5 +1,6 @@
 /* eslint-disable */
 import myapp from '@/app'
+import theHome from '@/pages/home.vue'
 var myPosition
 document.addEventListener('deviceready', onDeviceReady, false)
 
@@ -64,13 +65,21 @@ navigator.geolocation.getCurrentPosition(
     function(error){myPosition = ''}, null
   );
 }
-function onBackKeyDown() {
+  function onBackKeyDown() {
   if(myapp.$f7.views.main.history.length>2){
     //如果有history则执行返回
     myapp.$f7.views.main.router.back()
   }else{
     //HOME键
     navigator.Backbutton.goHome(function() {
+      //清除所有以读
+      let curHome = theHome.methods.getCurHome()
+      let settings = JSON.parse(localStorage.getItem(curHome.$root.prefx + 'settings'))
+      if (settings&&settings.allReadOnExit === true) {
+        curHome.events.forEach((e)=>{
+          e.num = null
+        })
+      }
       console.log('go home success');
     }, function() {
       console.log('go home fail');
@@ -160,7 +169,7 @@ function notify (event,success,ignore) {
   })
 }
 var ignore=function(notification, eopts){
-  alert("消息详情：消息标题["+notification["title"]+"], 消息内容["+notification["text"]+"]")
+ // alert("消息详情：消息标题["+notification["title"]+"], 消息内容["+notification["text"]+"]")
 }
 
 function sendPicture (ws) {
