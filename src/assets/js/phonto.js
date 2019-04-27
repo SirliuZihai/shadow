@@ -113,7 +113,7 @@ function onPhotoURISuccess (imageURI) {
         upload('file://'+ response.filePath);
       },
       function(error) {
-        alert(error);
+        //alert(error);
       }
     );
   }, function fail(err) {
@@ -169,7 +169,7 @@ function sendPicture (ws) {
         // 上传成功
         let success = function (r) {
           let data = myapp.myevil(r.response)
-          alert(JSON.stringify(data.response))
+          //alert(JSON.stringify(data.response))
           ws.send('[image]:' + process.env.API_HOST +data.message)
 
         }
