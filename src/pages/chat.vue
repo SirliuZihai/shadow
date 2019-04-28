@@ -2,14 +2,15 @@
   <f7-page>
     <f7-navbar back-link="Back" sliding :title="title" subtitle="讨论区">
     </f7-navbar>
-
+    <f7-photo-browser type="popup" :photos="photos" ref="photosbrowser" />
     <f7-messages ref="messages">
       <template v-for="(msg,index) in msgs" >
         <f7-messages-title :key="index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-        <f7-message :key="index" v-else-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true"
+        <f7-message :key="index" v-else-if="msg.type==='image'" :image="msg.data" :first="true" :last="true" :tail="true" @click="photos[0].url=msg.data;$refs.photosbrowser.open()"
                     :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
+                    @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
         />
-        <f7-message :key="index" v-else :first="true" :last="true" :tail="true"
+        <f7-message :key="index" v-else :first="true" :last="true" :tail="true" @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
                     :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :text="msg.data" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
                     />
       </template>
@@ -64,7 +65,11 @@ export default {
       name: localStorage.getItem('username'),
       attachments: [],
       sheetVisible: false,
-      attachmentsVisible: true
+      attachmentsVisible: true,
+      photos: [{
+        url: '',
+        caption: ''
+      }]
     }
   },
   watch: {
@@ -156,9 +161,5 @@ export default {
     width: 50px;
     height: 50px;
     border-radius:50%
-  }
-  .message-image img{
-    width: 50%;
-    width: 50%;
   }
 </style>

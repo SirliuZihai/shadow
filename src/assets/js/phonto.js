@@ -188,7 +188,7 @@ function sendPicture (ws) {
         }
         let options = new FileUploadOptions()
         options.fileKey = 'tempFile'
-        options.fileName = 'temqq.jpg'
+        options.fileName = 'temqq.png'
 
         let ft = new FileTransfer()
         // 上传地址
@@ -196,7 +196,9 @@ function sendPicture (ws) {
         ft.upload(dataUrl, encodeURI(SERVER), success, fail, options)
       }
     }, (e)=>{alert(e)},
-    { quality: 25, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY })
+    { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: false,encodingType:1,targetWidth:416,targetHeight:312,mediaType:0
+    })
 }
 export default {
   getPhoto,
