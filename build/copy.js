@@ -3,6 +3,8 @@ var path = require('path');
 
 var fPath = 'D:\\dev\\work_2020\\dist\\static\\js'
 var fPath2 = 'D:\\dev\\work_2020\\dist\\static\\css'
+var fPaht3 = 'D:\\dev\\work_1.7jdk\\Secretary\\www\\dynamic\\js\\'
+var fPaht4 = 'D:\\dev\\work_1.7jdk\\Secretary\\www\\dynamic\\css\\'
 var projectPath = 'D:\\dev\\work_1.7jdk\\Myapp\\src\\main\\webapp'
 fs.readdir(fPath,(err,files)=>{
   if(err){
@@ -20,9 +22,21 @@ fs.readdir(fPath,(err,files)=>{
               readStream.pipe(writeStream);
               console.log(filename+"移动完成")
             }
+            if(filename.match(/app\..*\.js$/)){
+              let readStream = fs.createReadStream(path.join(fPath,filename));
+              let writeStream = fs.createWriteStream(fPaht3+'app.js');
+              readStream.pipe(writeStream);
+              console.log(filename+"移动完成")
+            }
             if(filename.match(/vendor\..*\.gz/)){
               let readStream = fs.createReadStream(path.join(fPath,filename));
               let writeStream = fs.createWriteStream(projectPath+'\\static\\js\\'+'vendor.js.gz');
+              readStream.pipe(writeStream);
+              console.log(filename+"移动完成")
+            }
+            if(filename.match(/vendor\..*\.js$/)){
+              let readStream = fs.createReadStream(path.join(fPath,filename));
+              let writeStream = fs.createWriteStream(fPaht3+'vendor.js');
               readStream.pipe(writeStream);
               console.log(filename+"移动完成")
             }
@@ -30,6 +44,8 @@ fs.readdir(fPath,(err,files)=>{
               let readStream = fs.createReadStream(path.join(fPath,filename));
               let writeStream = fs.createWriteStream(projectPath+'\\static\\js\\'+'manifest.js');
               readStream.pipe(writeStream);
+              let writeStream2 = fs.createWriteStream(fPaht3+'manifest.js');
+              readStream.pipe(writeStream2);
               console.log(filename+"移动完成")
             }
           }
@@ -48,6 +64,8 @@ fs.readdir(fPath2,(err,files)=> {
         let readStream = fs.createReadStream(path.join(fPath2,filename));
         let writeStream = fs.createWriteStream(projectPath+'\\static\\css\\'+'app2.css');
         readStream.pipe(writeStream);
+        let writeStream2 = fs.createWriteStream(fPaht4+'app2.css');
+        readStream.pipe(writeStream2);
         console.log(filename+"移动完成")
       }
 /*      if(filename.match('framework7.bundle.css.gz')){

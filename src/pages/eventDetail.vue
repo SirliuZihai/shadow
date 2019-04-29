@@ -7,7 +7,8 @@
       <f7-list-input label="地点" type="textarea"  placeholder="请输入地址" :value="eventInfo.place.name" @focus="callMap()" :readonly="args.isdisable" :clear-button="!args.isdisable" />
       <f7-list-item title="关联人">
         <div strong style="width: 70%;height: 100%;">
-          <f7-chip v-for="(p,index) in eventInfo.relationship" :key="index" :text="p" :deleteable="!args.isdisable" @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
+          <f7-chip v-show="!args.isdisable" v-for="(p,index) in eventInfo.relationship" :key="index" :text="p" deleteable @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
+          <f7-chip v-show="args.isdisable" v-for="(p,index) in eventInfo.relationship" :key="index" :text="p"  @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
           <f7-chip text="添加"  color="blue" @click="addTag()" v-if="!args.isdisable"></f7-chip>
         </div>
       </f7-list-item>

@@ -8,13 +8,15 @@
       />
       <f7-list-item title="关注的IP">
         <div strong style="width: 70%;height: 100%;">
-          <f7-chip v-for="(tag,index) in info.ips" :key="index" :text="tag" :deleteable="!args.isdisable" @delete="deleteTag(info.ips,index,'IP')" ></f7-chip>
+          <f7-chip v-show="!args.isdisable" v-for="(tag1,index) in info.ips" :key="index" :text="tag1" deleteable @delete="deleteTag(info.ips,index,'IP')"></f7-chip>
+          <f7-chip v-show="args.isdisable" v-for="(tag1,index) in info.ips" :key="index" :text="tag1" @delete="deleteTag(info.ips,index,'IP')"></f7-chip>
           <f7-chip v-show="!args.isdisable" text="添加"  color="blue" @click="addTag(info.ips,'IP')"></f7-chip>
         </div>
       </f7-list-item>
       <f7-list-item title="标签">
         <div style="width: 70%;height: 100%;">
-          <f7-chip v-for="(tag,index) in info.tags" :key="index" :text="tag" :deleteable="!args.isdisable" @delete="deleteTag(info.tags,index,'关键字')" ></f7-chip>
+          <f7-chip v-show="!args.isdisable" v-for="(tag,index) in info.tags" :key="index" :text="tag" deleteable @delete="deleteTag(info.tags,index,'关键字')" ></f7-chip>
+          <f7-chip v-show="args.isdisable" v-for="(tag,index) in info.tags" :key="index" :text="tag" @delete="deleteTag(info.tags,index,'关键字')" ></f7-chip>
           <f7-chip v-show="!args.isdisable" text="添加"  color="blue" @click="addTag(info.tags,'标签')"></f7-chip>
         </div>
       </f7-list-item>
@@ -83,7 +85,7 @@ export default {
             data2.data.tags = []
           }
           self.info = data2.data
-          self.infoCache = Object.assign({}, data2.data)
+          self.infoCache = JSON.parse(JSON.stringify(data2.data))
           thehome.methods.changeTitle(self.info.alias)
         } else {
           self.toastbuttom(self, data2.message)
@@ -115,7 +117,7 @@ export default {
     cancel () {
       const self = this
       self.args.isdisable = true
-      self.info = self.infoCache
+      self.info = JSON.parse(JSON.stringify(self.infoCache))
     },
     deleteTag (array, index, text) {
       const self = this

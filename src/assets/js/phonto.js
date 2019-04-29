@@ -57,7 +57,6 @@ function onResume () {
 function reconnectSocket(){}
 
 function getPosition(){
-  alert("do getPosition")
 navigator.geolocation.getCurrentPosition(
     function(position){
       myPosition = position.coords.longitude+","+position.coords.latitude//+","+position.coords.altitude;
