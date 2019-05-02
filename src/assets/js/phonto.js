@@ -8,6 +8,7 @@ document.addEventListener('deviceready', onDeviceReady, false)
 function onDeviceReady () {
   document.addEventListener("backbutton", onBackKeyDown, false);
   document.addEventListener("resume", onResume, false);
+  document.addEventListener("pause", onPause, false);
   //setInterval("getPosition()","1000");
 
   let chcp = window.chcp;
@@ -21,38 +22,46 @@ function onDeviceReady () {
         chcp.requestApplicationUpdate(dialogMessage, null, null);
       }
     }
-    // 服务器版本信息
-    chcp.isUpdateAvailableForInstallation((error, data) => {
-      if (error) {
-       // alert('No update was loaded => nothing to install');
-      } else {
-        // 询问用户是否更新
-        if ( window.confirm('检测到新版本，是否更新') ) {
-          // 更新中
-          chcp.installUpdate((error) => {
-            if (error) {
-              // 更新失败
-              alert('error code: ' + error.code +' DES:'+error.description);
-            } else {
-              // 更新成功
-              alert('更新成功!');
-            }
-          });
+    if(rror.code === -17){
+      setTimeout(()=>{
+      // 服务器版本信息
+      chcp.isUpdateAvailableForInstallation((error, data) => {
+        if (error) {
+         //alert('No update was loaded => nothing to install');
         } else {
-          console.log('您已拒绝更新');
+          // 询问用户是否更新
+          if ( window.confirm('检测到新版本，是否更新') ) {
+            // 更新中
+            chcp.installUpdate((error) => {
+              if (error) {
+                // 更新失败
+                alert('error code: ' + error.code +' DES:'+error.description);
+              } else {
+                // 更新成功
+                alert('更新成功!');
+              }
+            });
+          } else {
+            console.log('您已拒绝更新');
+          }
         }
-      }
-    });
+      })},2000);
     // 版本信息
     /*chcp.getVersionInfo((err, data) => {
       console.log('服务器应用时间版本: ' + data.readyToInstallWebVersion);
       console.log('当前应用时间版本： ' + data.currentWebVersion);
       console.log('当前应用version name: ' + data.appVersion + ' curVersion:' + data.currentVersion);
     });*/
+    }
   });
+
 }
 function onResume () {
-  reconnectSocket()
+  theHome.methods.getCurHome().$root.isForword = true
+  theHome.methods.getCurHome().initSocket()
+}
+function onPause () {
+  theHome.methods.getCurHome().$root.isForword = false
 }
 function reconnectSocket(){}
 
@@ -157,14 +166,14 @@ function notify (event,success,ignore) {
   cordova.plugins.notification.local.on('yes', success)
   cordova.plugins.notification.local.on('no', ignore)
   cordova.plugins.notification.local.schedule({
-    id: Math.random(),
+    id: 0,
     title: event.title,
-    text: event.remark,
+    text: event.latestMsg,
     foreground: true,
-    actions: [
+/*    actions: [
       { id: 'yes', title: '确认查看' },
       { id: 'no', title: '忽略' }
-    ],
+    ],*/
   })
 }
 var ignore=function(notification, eopts){
@@ -205,5 +214,5 @@ export default {
   notify,
   sendPicture,
   getPosition,
-  reconnectSocket
+  isForword
 }

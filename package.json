@@ -5,15 +5,16 @@
   "author": "liu",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --fix ./src",
-    "build": "node build/build.js",
-    "copy": "node build/copy.js"
-  },
+  "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+  "build": "node build/build.js",
+  "copy": "node build/copy.js",
+  "upload": "node build/uploadToPrd.js",
+  "lint": "eslint --fix ./src/pages/*",
+  "start": "npm run dev",
+  "unit": "jest --config test/unit/jest.conf.js --coverage",
+  "e2e": "node test/e2e/runner.js",
+  "test": "npm run unit && npm run e2e"
+},
   "dependencies": {
     "dns": "^0.2.2",
     "framework7": "^4.0.5",
@@ -24,6 +25,9 @@
     "module": "^1.2.5",
     "mongodb": "^3.1.13",
     "mongojs": "^2.6.0",
+    "node-cmd": "^3.0.0",
+    "sftp-node": "0.0.8",
+    "ssh2-sftp-client": "^2.5.0",
     "vue": "^2.6.3",
     "vue-router": "^3.0.1"
   },
@@ -84,7 +88,8 @@
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "webpack-sftp-upload-plugin": "^1.0.3"
   },
   "engines": {
     "node": ">= 6.0.0",

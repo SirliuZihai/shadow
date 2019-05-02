@@ -55,7 +55,8 @@ const myapp = new Vue({
   data: function () {
     return {
       prefx: '#',
-      curSelf: this
+      curSelf: this,
+      isForword: true
     }
   }
 })

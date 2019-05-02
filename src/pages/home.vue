@@ -57,7 +57,6 @@ let ObjectID = require('bson').ObjectID
 var homeCur
 // home event websocket
 var webSocket
-photo.reconnectSocket = initSocket
 function initSocket () {
   if (!window.WebSocket) {
     alert('error:不支持socket通信')
@@ -130,6 +129,10 @@ function initwebSocket (webSocket) {
           }
           homeCur.events.unshift(eventM)
         }
+        try {
+          photo.notify(eventM, null, null)
+        } catch (e) {
+        }
       }
     }
   }
@@ -142,12 +145,12 @@ function initwebSocket (webSocket) {
   webSocket.onclose = function () {
     window.clearInterval(heartid)
     navigator.app.exitApp()
-    /* while (webSocket.readyState !== webSocket.OPEN) {
+    while (webSocket.readyState !== webSocket.OPEN) {
       setTimeout(function () {
         webSocket = null
         initSocket()
-      }, 10000)
-    } */
+      }, 5000)
+    }
   }
   // 监听下socket的close事件，代码中最好还是别用try catch了，会严重拖垮性能
   var heartid = window.setInterval(function () { // 每隔20秒钟发送一次心跳，避免websocket连接因超时而自动断开

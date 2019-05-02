@@ -34,8 +34,15 @@ export default {
     return {
       username: '',
       password: '',
-      PasswordConfirm: ''
+      PasswordConfirm: '',
+      SIM: ''
     }
+  },
+  mounted () {
+    const self = this
+    window.plugins.sim.getSimInfo(function (res) {
+      self.SIM = res.phoneNumber
+    }, null)
   },
   methods: {
     regist () {
@@ -50,7 +57,7 @@ export default {
         'method': 'POST',
         'contentType': 'application/json',
         'url': url,
-        data: {username: self.username, password: hexmd5(self.password)}
+        data: {username: self.username, password: hexmd5(self.password), SIM: self.SIM}
       }).then(function (data) {
         if (data === 'OK') { router.back() } else { self.$f7.dialog.alert(data) }
       })

@@ -44,9 +44,9 @@ function dealDirFils(path,dealBus){
 
 var options = {
   host: '47.112.131.22',
-  port: '22',
+  port: '8089',
   username: 'zihai',
-  privateKey: 'D:\\key\\id_rsa(ziahi)'
+  privateKey: 'D:\\key\\id_rsa(zihai)'
 };
 function doUpload(from,to){
   sftp.upload(options, to,from,function(err,res){
