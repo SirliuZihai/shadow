@@ -203,16 +203,14 @@ function sendPicture (ws) {
         let SERVER = process.env.API_HOST + 'event/uploadtempfile.do'
         ft.upload(dataUrl, encodeURI(SERVER), success, fail, options)
       }
-    }, (e)=>{alert(e)},
-    { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
-      allowEdit: false,encodingType:1,targetWidth:416,targetHeight:312,mediaType:0
+    }, (e)=>{},
+    { quality: 75, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: false,encodingType:0,targetWidth:1040,targetHeight:780,mediaType:0
     })
 }
 export default {
   getPhoto,
-  myPosition,
   notify,
   sendPicture,
   getPosition,
-  isForword
 }
