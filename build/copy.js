@@ -16,24 +16,24 @@ fs.readdir(fPath,(err,files)=>{
           console.log(err)
         }else{
           if(stats.isFile()){
-            if(filename.match(/app\..*\.gz/)){
+            /*if(filename.match(/app\..*\.gz/)){
               let readStream = fs.createReadStream(path.join(fPath,filename));
               let writeStream = fs.createWriteStream(projectPath+'\\static\\js\\'+'app.js.gz');
               readStream.pipe(writeStream);
               console.log(filename+"移动完成")
-            }
+            }*/
             if(filename.match(/app\..*\.js$/)){
               let readStream = fs.createReadStream(path.join(fPath,filename));
               let writeStream = fs.createWriteStream(fPaht3+'app.js');
               readStream.pipe(writeStream);
               console.log(filename+"移动完成")
             }
-            if(filename.match(/vendor\..*\.gz/)){
+            /*if(filename.match(/vendor\..*\.gz/)){
               let readStream = fs.createReadStream(path.join(fPath,filename));
               let writeStream = fs.createWriteStream(projectPath+'\\static\\js\\'+'vendor.js.gz');
               readStream.pipe(writeStream);
               console.log(filename+"移动完成")
-            }
+            }*/
             if(filename.match(/vendor\..*\.js$/)){
               let readStream = fs.createReadStream(path.join(fPath,filename));
               let writeStream = fs.createWriteStream(fPaht3+'vendor.js');
@@ -41,8 +41,8 @@ fs.readdir(fPath,(err,files)=>{
               console.log(filename+"移动完成")
             }
             if(filename.match(/manifest\..*\.js/)){
-              let readStream = fs.createReadStream(path.join(fPath,filename));
-              let writeStream = fs.createWriteStream(projectPath+'\\static\\js\\'+'manifest.js');
+             // let readStream = fs.createReadStream(path.join(fPath,filename));
+             // let writeStream = fs.createWriteStream(projectPath+'\\static\\js\\'+'manifest.js');
               readStream.pipe(writeStream);
               let writeStream2 = fs.createWriteStream(fPaht3+'manifest.js');
               readStream.pipe(writeStream2);
