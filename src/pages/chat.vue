@@ -113,6 +113,7 @@ export default {
     },
     initwebSocket (webSocket) {
       const self = this
+      /** 在这里，事件是必然存在的 */
       webSocket.onmessage = function (data) {
         let type = data.data.substring(0, 4)
         if (type === '0001') {
@@ -122,13 +123,15 @@ export default {
           }
           for (let i = 0; i < array2.length; i++) {
             self.msgs.push(array2[i])
+            let eventPage = theEventPage.methods.getCur()
             if (array2[i].type === undefined || array2[i].type === 'text') {
               theEventPage.methods.getCur().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
             } else {
-              if (array2[i].type === 'operate') { theEventPage.methods.getCur().curEvent.latestMsg = array2[i].data }
-              if (array2[i].type === 'image') { theEventPage.methods.getCur().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
-              if (array2[i].type === 'file') { theEventPage.methods.getCur().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
+              if (array2[i].type === 'operate') { eventPage.curEvent.latestMsg = array2[i].data }
+              if (array2[i].type === 'image') { eventPage.curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
+              if (array2[i].type === 'file') { eventPage.curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
             }
+            eventPage.addEvent(eventPage.curEvent) // 事件置顶
           }
         }
       }

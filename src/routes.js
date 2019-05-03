@@ -105,7 +105,7 @@ export default [
   },
   {
     path: '/explore/',
-    templateUrl: process.env.API_HOST + 'explore/home.do'
+    componentUrl: process.env.API_HOST + 'explore/home.do'
   },
   {
     path: '/bdmap/',
