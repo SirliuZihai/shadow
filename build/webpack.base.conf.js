@@ -92,7 +92,7 @@ module.exports = {
   externals: {
     'vue': 'Vue',
     'framework7/framework7.esm.bundle': 'Framework7',
-    // 'framework7-vue': 'Framework7Vue'
+    'framework7-vue/framework7-vue.esm.bundle.js': 'Framework7Vue',
     'BMap': 'BMap',
     'BMap_Symbol_SHAPE_POINT': 'BMap_Symbol_SHAPE_POINT'
   }

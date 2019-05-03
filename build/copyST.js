@@ -3,8 +3,8 @@ var path = require('path');
 
 var fPath = 'D:\\dev\\work_2020\\dist\\static\\js'
 var fPath2 = 'D:\\dev\\work_2020\\dist\\static\\css'
-var fPaht3 = 'D:\\dev\\work_1.7jdk\\Secretary\\www\\dynamic\\js\\'
-var fPaht4 = 'D:\\dev\\work_1.7jdk\\Secretary\\www\\dynamic\\css\\'
+var fPaht3 = 'D:\\dev\\work_1.7jdk\\Secretary2\\www\\dynamic\\js\\'
+var fPaht4 = 'D:\\dev\\work_1.7jdk\\Secretary2\\www\\dynamic\\css\\'
 var projectPath = 'D:\\dev\\work_1.7jdk\\Myapp\\src\\main\\webapp'
 fs.readdir(fPath,(err,files)=>{
   if(err){
