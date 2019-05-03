@@ -19,6 +19,7 @@ import bdmap from './components/map.vue'
 import calendarPage from './components/calendar-page2.vue'
 import Settings from './pages/setting.vue'
 import queryEventHis from './pages/homeSub/queryEventHistory.vue'
+import test from './components/test.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -105,7 +106,7 @@ export default [
   },
   {
     path: '/explore/',
-    componentUrl: process.env.API_HOST + 'explore/home.do'
+    component: test
   },
   {
     path: '/bdmap/',
