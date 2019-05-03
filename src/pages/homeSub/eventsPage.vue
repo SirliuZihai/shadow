@@ -19,6 +19,7 @@ let ObjectID = require('bson').ObjectID
 var curEventPage
 // event websocket
 var webSocket
+var trytime = 0
 function initSocket () {
   if (!window.WebSocket) {
     alert('error:不支持socket通信')
@@ -40,6 +41,7 @@ function initwebSocket (webSocket) {
     let type = data.data.substring(0, 4)
     if (type === '0003') {
       try {
+        trytime = 0 // 重连初始化
         nativeUtil.writeLogFile2(new Date() + '===0003')
       } catch (e) {
         console.log(e)
@@ -107,12 +109,10 @@ function initwebSocket (webSocket) {
   }
   webSocket.onopen = function () {
     webSocket.send('receive Home date')
-    trytime = 0 // 重连初始化
   }
   webSocket.onerror = function (event) {
-    nativeUtil.writeLogFile2(JSON.stringify(event))
+    nativeUtil.writeLogFile2('WS_ERROR:' + new Date() + JSON.stringify(event))
   }
-  var trytime = 0
   webSocket.onclose = function () {
     window.clearInterval(heartid)
     // navigator.app.exitApp()
@@ -120,7 +120,11 @@ function initwebSocket (webSocket) {
       if (webSocket.readyState !== webSocket.OPEN && webSocket.readyState !== webSocket.CONNECTING) {
         setTimeout(function () {
           webSocket = null
-          nativeUtil.writeLogFile2('TRY TO RECONNECT')
+          try {
+            nativeUtil.writeLogFile2(new Date() + '  TRY TO RECONNECT')
+          } catch (e) {
+            console.log(e)
+          }
           initSocket()
         }, 3000)
       }
@@ -153,7 +157,6 @@ export default {
     self.events = temp === null ? [] : temp
     try {
       initSocket()
-      nativeUtil.removeLogFile2()
     } catch (e) {
       console.log(e)
     }
