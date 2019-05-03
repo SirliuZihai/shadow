@@ -46,7 +46,7 @@ fs.readdir(fPath2,(err,files)=> {
     console.log(err)
   } else {
     files.forEach((filename)=>{
-      if(filename.match(/app.css/)){
+      if(filename.match(/app\..*\.css/)){
         let readStream = fs.createReadStream(path.join(fPath2,filename));
         let writeStream2 = fs.createWriteStream(fPaht4+'app2.css');
         readStream.pipe(writeStream2);

@@ -3,15 +3,15 @@ var pathLib = require('path');
 var sftp = require('sftp-node');
 let path2 = 'D:\\dev\\work_1.7jdk\\Secretary\\www\\dynamic'
 let path21 =   path2.replace(/\\/g,'/')
-let path3 = '/home/yizhi/program/Myapp-2/www/dynamic/'
+let path3 = '/home/yizhi/program/Myapp-1/www/dynamic/'
 
 var nodeCmd = require('node-cmd');
 nodeCmd.get(
   'cd/d D:\\dev\\work_1.7jdk\\Secretary &&cordova-hcp build',
   function(err, data, stderr){
     console.log(data);
-    doUpload('D:\\dev\\work_1.7jdk\\Secretary\\www\\chcp.json','/home/yizhi/program/Myapp-2/www/chcp.json')
-    doUpload('D:\\dev\\work_1.7jdk\\Secretary\\www\\chcp.manifest','/home/yizhi/program/Myapp-2/www/chcp.manifest')
+    doUpload('D:\\dev\\work_1.7jdk\\Secretary\\www\\chcp.json','/home/yizhi/program/Myapp-1/www/chcp.json')
+    doUpload('D:\\dev\\work_1.7jdk\\Secretary\\www\\chcp.manifest','/home/yizhi/program/Myapp-1/www/chcp.manifest')
     dealDirFils(path2,deal)
   }
 );
