@@ -76,6 +76,9 @@ function initSocket () {
 function initwebSocket (webSocket) {
   webSocket.onmessage = function (data) {
     let type = data.data.substring(0, 4)
+    if (type === '0003') {
+      nativeUtil.writeLogFile2(new Date() + '===0003')
+    }
     if (type === '0000') {
       let array = homeCur.$root.myevil(data.data.substring(4))
       if (array.length === 0) {
@@ -138,18 +141,24 @@ function initwebSocket (webSocket) {
   }
   webSocket.onopen = function () {
     webSocket.send('receive Home date')
+    trytime = 0 // 重连初始化
   }
   webSocket.onerror = function (event) {
-    nativeUtil.writeLogFile2(event)
+    nativeUtil.writeLogFile2(JSON.stringify(event))
   }
+  var trytime = 0
   webSocket.onclose = function () {
     window.clearInterval(heartid)
-    navigator.app.exitApp()
-    while (webSocket.readyState !== webSocket.OPEN) {
-      setTimeout(function () {
-        webSocket = null
-        initSocket()
-      }, 5000)
+    // navigator.app.exitApp()
+    while (trytime < 1) {
+      if (webSocket.readyState !== webSocket.OPEN && webSocket.readyState !== webSocket.CONNECTING) {
+        setTimeout(function () {
+          webSocket = null
+          nativeUtil.writeLogFile2('TRY TO RECONNECT')
+          initSocket()
+        }, 3000)
+      }
+      trytime++
     }
   }
   // 监听下socket的close事件，代码中最好还是别用try catch了，会严重拖垮性能
@@ -189,6 +198,7 @@ export default {
     let temp = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
     self.events = temp === null ? [] : temp
     try {
+      nativeUtil.removeLogFile2()
       initSocket()
     } catch (e) {
       console.log(e)
