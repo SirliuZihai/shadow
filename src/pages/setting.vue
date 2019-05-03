@@ -5,10 +5,12 @@
       <f7-list-item title="退出全部已读">
         <f7-toggle slot="after" :checked="settings.allReadOnExit"  @change="settings.allReadOnExit = $event.target.checked"></f7-toggle>
       </f7-list-item>
+      <f7-list-button title="清除日志" @click="doClear" />
     </f7-list>
   </f7-page>
 </template>
 <script>
+import nativeUtil from '@/assets/js/nativeUtil.js'
 var CurSetting
 export default {
   name: 'setting',
@@ -33,6 +35,11 @@ export default {
         localStorage.setItem(CurSetting.$root.prefx + 'settings', JSON.stringify(val))
       },
       deep: true
+    }
+  },
+  methods: {
+    doClear () {
+      nativeUtil.removeLogFile2()
     }
   }
 }

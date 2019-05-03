@@ -46,7 +46,7 @@ function writeFile(fileEntry, dataObj, isAppend) {
   // Create a FileWriter object for our FileEntry (log.txt).
   fileEntry.createWriter(function (fileWriter) {
     fileWriter.onwriteend = function() {
-      alert(fileEntry.fullPath + 'has written')
+      //alert(fileEntry.fullPath + 'has written')
      // readFile(fileEntry)
     };
     fileWriter.onerror = function (e) {
@@ -79,9 +79,9 @@ function removeLogFile2(){
     fileEntry.remove(function () {
       alert('delete success');
     }, function (err) {
-      alert(JSON.stringify(err));
+     // alert(JSON.stringify(err));
     }, function () {
-      alert('file not exist');
+     // alert('file not exist');
     });
   })
 }
