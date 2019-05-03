@@ -20,14 +20,14 @@
   </f7-page>
 </template>
 <script>
-import theHome from '@/pages/home.vue'
+import eventPage from '@/pages/homeSub/eventsPage.vue'
 export default {
   created () {
     const self = this
     let colorMap = ['#2196f3', '#e91e63', '#4caf50', '#ff9800']
     // event初始化
-    const homeEvents = theHome.methods.getCurHome().events
-    homeEvents.forEach((e) => {
+    const mainEvents = eventPage.methods.getCur().events
+    mainEvents.forEach((e) => {
       for (let i = Number(e.starttime); i <= Number(e.endtime); i++) {
         self.events.push({
           _id: e._id,
@@ -71,6 +71,7 @@ export default {
       self.eventItems = eventItems
     },
     onPageInit (e, page) {
+      alert()
       const self = this
       const app = self.$f7
       const $ = self.$$
@@ -105,11 +106,8 @@ export default {
       return new Date(Number(str.substring(0, 4)), Number(str.substring(4, 6)) - 1, Number(str.substring(6, 8)))
     },
     doClick (el) {
-      const self = this
-      const homeEvents = theHome.methods.getCurHome()
-      let deEle = self.$root.delEleFromArray(el, homeEvents.events)
-      homeEvents.events.unshift(deEle)
-      self.$f7router.back()
+      eventPage.methods.getCur().curEvent = el
+      this.$f7router.navigate('/event-detail/')
     }
   }
 }

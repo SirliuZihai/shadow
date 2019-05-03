@@ -28,6 +28,7 @@
 <script>
 import {hexmd5} from '../assets/js/md5.js'
 import thehome from '@/pages/home.vue'
+import theEventPage from '@/pages/homeSub/eventsPage.vue'
 import theLeft from '@/pages/left-panel.vue'
 export default {
   data () {
@@ -93,8 +94,8 @@ export default {
           let curhome1 = thehome.methods.getCurHome()
           if (curhome1) {
             curhome1.changeTitle(data3.data.alias)
-            curhome1.events = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
-            curhome1.initSocket()
+            theEventPage.methods.getCur().events = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
+            theEventPage.methods.getCur().initSocket()
           }
           self.$f7router.navigate('/')
         } else {

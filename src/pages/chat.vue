@@ -34,7 +34,7 @@
 
 <script>
 import defautImg from '@/assets/image/nohead.jpg'
-import theHome from '@/pages/home.vue'
+import theEventPage from '@/pages/homeSub/eventsPage.vue'
 import photo from '@/assets/js/phonto.js'
 let ObjectID = require('bson').ObjectID
 export default {
@@ -123,11 +123,11 @@ export default {
           for (let i = 0; i < array2.length; i++) {
             self.msgs.push(array2[i])
             if (array2[i].type === undefined || array2[i].type === 'text') {
-              theHome.methods.getCurHome().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
+              theEventPage.methods.getCur().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + array2[i].data
             } else {
-              if (array2[i].type === 'operate') { theHome.methods.getCurHome().curEvent.latestMsg = array2[i].data }
-              if (array2[i].type === 'image') { theHome.methods.getCurHome().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
-              if (array2[i].type === 'file') { theHome.methods.getCurHome().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
+              if (array2[i].type === 'operate') { theEventPage.methods.getCur().curEvent.latestMsg = array2[i].data }
+              if (array2[i].type === 'image') { theEventPage.methods.getCur().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '图片' }
+              if (array2[i].type === 'file') { theEventPage.methods.getCur().curEvent.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
             }
           }
         }

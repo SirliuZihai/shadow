@@ -29,7 +29,7 @@
   </f7-page>
 </template>
 <script>
-import theHome from '@/pages/home.vue'
+import theEventPage from '@/pages/homeSub/eventsPage.vue'
 var curEventDetail
 let endOfDay = new Date()
 endOfDay.setHours(23)
@@ -39,7 +39,7 @@ export default {
   created () {
     const self = this
     curEventDetail = self
-    self.eventInfo = JSON.parse(JSON.stringify(theHome.methods.getCurHome().curEvent))
+    self.eventInfo = JSON.parse(JSON.stringify(theEventPage.methods.getCur().curEvent))
     let name = localStorage.getItem('username')
     self.args.canedit = self.eventInfo.username === name
   },
@@ -95,8 +95,8 @@ export default {
           (data) => {
             self.$root.toastbuttom(self, data.message)
             if (data.success === true || data.message === '该记录已被移除') {
-              self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().events)
-              self.$root.delEleFromArray(self.eventInfo, theHome.methods.getCurHome().hisEvents)
+              self.$root.delEleFromArray(self.eventInfo, theEventPage.methods.getCur().events)
+              self.$root.delEleFromArray(self.eventInfo, theEventPage.methods.getCur().hisEvents)
             }
             self.$f7router.back()
           },
@@ -106,7 +106,7 @@ export default {
     },
     cancel () {
       const self = this
-      self.eventInfo = JSON.parse(JSON.stringify(theHome.methods.getCurHome().curEvent))
+      self.eventInfo = JSON.parse(JSON.stringify(theEventPage.methods.getCur().curEvent))
       self.args.isdisable = true
     },
     deleteTag (array, index, text) {

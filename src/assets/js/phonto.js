@@ -1,6 +1,6 @@
 /* eslint-disable */
 import myapp from '@/app'
-import theHome from '@/pages/home.vue'
+import theEventPage from '@/pages/homeSub/eventsPage.vue'
 var myPosition
 document.addEventListener('deviceready', onDeviceReady, false)
 
@@ -17,51 +17,52 @@ function onDeviceReady () {
     if (error) {
       //alert('--更新版本异常，或其他错误--'+error.code+'  '+error.description);
       if (error.code === -2) {
-        var dialogMessage = '有新的版本是否下载';
+        /*var dialogMessage = '有新的版本是否下载';
         //调用升级提示框 点击确认会跳转对应商店升级
-        chcp.requestApplicationUpdate(dialogMessage, null, null);
+        chcp.requestApplicationUpdate(dialogMessage, null, null);*/
+        if(window.confirm('有新的版本是否下载')){
+          cordova.InAppBrowser.open(process.env.API_HOST+'/store/app.html', '_blank', 'location=yes');
+        }
       }
     }
-    if(rror.code === -17){
-      setTimeout(()=>{
-      // 服务器版本信息
-      chcp.isUpdateAvailableForInstallation((error, data) => {
-        if (error) {
-         //alert('No update was loaded => nothing to install');
-        } else {
-          // 询问用户是否更新
-          if ( window.confirm('检测到新版本，是否更新') ) {
-            // 更新中
-            chcp.installUpdate((error) => {
-              if (error) {
-                // 更新失败
-                alert('error code: ' + error.code +' DES:'+error.description);
+    /*        setTimeout(()=>{
+          // 服务器版本信息
+        chcp.isUpdateAvailableForInstallation((error, data) => {
+            if (error) {
+             //alert('No update was loaded => nothing to install');
+            } else {
+              // 询问用户是否更新
+              if ( window.confirm('检测到新版本，是否更新') ) {
+                // 更新中
+                chcp.installUpdate((error) => {
+                  if (error) {
+                    // 更新失败
+                    alert('error code: ' + error.code +' DES:'+error.description);
+                  } else {
+                    // 更新成功
+                    alert('更新成功!');
+                  }
+                });
               } else {
-                // 更新成功
-                alert('更新成功!');
+                console.log('您已拒绝更新');
               }
-            });
-          } else {
-            console.log('您已拒绝更新');
-          }
-        }
-      })},2000);
+            }
+          })},2000);*/
     // 版本信息
     /*chcp.getVersionInfo((err, data) => {
       console.log('服务器应用时间版本: ' + data.readyToInstallWebVersion);
       console.log('当前应用时间版本： ' + data.currentWebVersion);
       console.log('当前应用version name: ' + data.appVersion + ' curVersion:' + data.currentVersion);
     });*/
-    }
   });
 
 }
 function onResume () {
-  theHome.methods.getCurHome().$root.isForword = true
-  theHome.methods.getCurHome().initSocket()
+  theEventPage.methods.getCur().$root.isForword = true
+  theEventPage.methods.getCur().initSocket()
 }
 function onPause () {
-  theHome.methods.getCurHome().$root.isForword = false
+  theEventPage.methods.getCur().$root.isForword = false
 }
 function reconnectSocket(){}
 
@@ -81,10 +82,10 @@ navigator.geolocation.getCurrentPosition(
     //HOME键
     navigator.Backbutton.goHome(function() {
       //清除所有以读
-      let curHome = theHome.methods.getCurHome()
-      let settings = JSON.parse(localStorage.getItem(curHome.$root.prefx + 'settings'))
+      let eventPage = theEventPage.methods.getCur()
+      let settings = JSON.parse(localStorage.getItem(eventPage.$root.prefx + 'settings'))
       if (settings&&settings.allReadOnExit === true) {
-        curHome.events.forEach((e)=>{
+        eventPage.events.forEach((e)=>{
           e.num = null
         })
       }

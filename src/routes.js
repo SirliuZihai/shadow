@@ -1,4 +1,6 @@
 import Home from './pages/home.vue'
+import tabEvents from './pages/homeSub/eventsPage.vue'
+import tabCalendar from './pages/homeSub/calendar-page.vue'
 import About from './pages/about.vue'
 import NotFound from './pages/404.vue'
 import LeftPanel from './pages/left-panel.vue'
@@ -14,8 +16,9 @@ import letter from './pages/letter.vue'
 import chat from './pages/chat.vue'
 import myLetters from './pages/myLetters.vue'
 import bdmap from './components/map.vue'
-import calendarPage from './components/calendar-page.vue'
+import calendarPage from './components/calendar-page2.vue'
 import Settings from './pages/setting.vue'
+import queryEventHis from './pages/homeSub/queryEventHistory.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -23,7 +26,26 @@ export default [
   {
     path: '/',
     component: Home,
-    keepAlive: true
+    keepAlive: true,
+    tabs: [
+      {
+        path: '/',
+        id: 'tab-event',
+        component: tabEvents,
+        keepAlive: true
+      },
+      {
+        path: 'tab-calendar/',
+        id: 'tab-calendar',
+        component: tabCalendar,
+        keepAlive: true
+      }
+    ]
+  },
+
+  {
+    path: '/queryEventHis/',
+    component: queryEventHis
   },
   // About page
   {
