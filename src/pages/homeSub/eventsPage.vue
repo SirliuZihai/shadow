@@ -115,6 +115,7 @@ function initwebSocket (webSocket) {
   }
   webSocket.onclose = function () {
     window.clearInterval(heartid)
+    console.log('eventPage ws closed')
     // navigator.app.exitApp()
     while (trytime < 1) {
       if (webSocket.readyState !== webSocket.OPEN && webSocket.readyState !== webSocket.CONNECTING) {
@@ -140,10 +141,10 @@ function initwebSocket (webSocket) {
         window.clearInterval(heartid)
       }
     }
-  }, 12000)
+  }, 30000)
 }
 export default {
-  name: 'eventsPage',
+  name: 'events-page',
   data: function () {
     return {
       events: [],
@@ -151,6 +152,7 @@ export default {
     }
   },
   created () {
+    console.log('eventPage created')
     const self = this
     curEventPage = self
     let temp = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))

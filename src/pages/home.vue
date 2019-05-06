@@ -16,19 +16,27 @@
       </f7-nav-right>
     </f7-navbar>
     <f7-toolbar tabbar bottom>
-    <f7-link tab-link href="/" route-tab-id="#tab-event"  tab-link-active @click="args.showTab = 'events'">消息</f7-link>
-    <f7-link tab-link href="/tab-calendar/" route-tab-id="#tab-calendar"  @click="args.showTab = 'calendar'">日历</f7-link>
-  </f7-toolbar>
-    <f7-tabs routable>
-      <f7-tab id="tab-event" class="page-content" tab-active ></f7-tab>
-     <f7-tab id="tab-calendar" class="page-content" ></f7-tab>
+      <f7-link tab-link="#tab-event" tab-link-active>消息</f7-link>
+      <f7-link tab-link="#tab-calendar" >日历</f7-link>
+    </f7-toolbar>
+    <f7-tabs animated>
+      <f7-tab id="tab-event" class="page-content" tab-active>
+        <tabEvents></tabEvents>
+      </f7-tab>
+      <f7-tab id="tab-calendar" class="page-content" >
+        <tabCalendar></tabCalendar>
+    </f7-tab>
     </f7-tabs>
   </f7-page>
 </template>
 <script>
+import tabEvents from '@/pages/homeSub/eventsPage.vue'
+import tabCalendar from '@/pages/homeSub/calendar-page.vue'
 var homeCur
-
 export default {
+  components: {
+    tabEvents, tabCalendar
+  },
   data: function () {
     return {
       thetitle: '',
@@ -38,9 +46,13 @@ export default {
     }
   },
   created () {
+    console.log('home created')
     const self = this
     homeCur = self
     self.changeTitle(localStorage.getItem('alias'))
+  },
+  destroyed () {
+    console.log('home destroyed')
   },
   methods: {
     changeTitle (alia) {

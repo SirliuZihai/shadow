@@ -146,6 +146,9 @@ function upload (fileURL) {
   var success = function (r) {
     let data = myapp.myevil(r.response)
     myapp.curSelf.changeImgUrl ()
+    if(theEventPage.methods.getCur()){
+      theEventPage.methods.getCur().reload()
+    }
   }
 
   // 上传失败

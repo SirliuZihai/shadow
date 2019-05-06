@@ -40,7 +40,12 @@ export default {
   created: function () {
     const self = this
     CurContact = self
-    self.getContact()
+    let localContacts = localStorage.getItem(self.$root.prefx + 'contacts')
+    if (!localContacts) {
+      self.getContact()
+    } else {
+      self.contacts = JSON.parse(localContacts)
+    }
   },
   data: function () {
     return {
@@ -69,7 +74,7 @@ export default {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
           self.contacts = data2.data
-          sessionStorage.setItem('contacts', JSON.stringify(data2.data))
+          localStorage.setItem(self.$root.prefx + 'contacts', JSON.stringify(data2.data))
         } else {
           self.$root.toastbuttom(self, data2.message)
         }
@@ -121,7 +126,7 @@ export default {
       })
     },
     changeContactListImgUrl (name) {
-      let url = process.env.API_HOST + 'image/head/' + name + '.jpg?temp=1' // + Math.floor((Math.random() * 10000) + 1)
+      let url = process.env.API_HOST + 'image/head/' + name + '.jpg' // + Math.floor((Math.random() * 10000) + 1)
       return url
     },
     onerror (e) {
