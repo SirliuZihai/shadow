@@ -16,15 +16,15 @@
       </f7-nav-right>
     </f7-navbar>
     <f7-toolbar tabbar bottom>
-      <f7-link tab-link="#tab-event" tab-link-active>消息</f7-link>
-      <f7-link tab-link="#tab-calendar" >日历</f7-link>
+      <f7-link tab-link="#tab-event" tab-link-active @click="args.link = 'event'">消息</f7-link>
+      <f7-link tab-link="#tab-calendar" @click="args.link = 'calendar'">日历</f7-link>
     </f7-toolbar>
     <f7-tabs animated>
       <f7-tab id="tab-event" class="page-content" tab-active>
         <tabEvents></tabEvents>
       </f7-tab>
-      <f7-tab id="tab-calendar" class="page-content" >
-        <tabCalendar></tabCalendar>
+      <f7-tab ref="tabCalendar" id="tab-calendar" class="page-content" >
+        <tabCalendar v-if="args.link==='calendar'"></tabCalendar>
     </f7-tab>
     </f7-tabs>
   </f7-page>
@@ -41,7 +41,8 @@ export default {
     return {
       thetitle: '',
       args: {
-        showTab: 'events'
+        showTab: 'events',
+        link: 'event'
       }
     }
   },
