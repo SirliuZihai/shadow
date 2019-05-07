@@ -1,6 +1,6 @@
 <template>
   <div class="page-content" style="padding: 0px">
-  <div id="calendar" class="block block-strong no-padding no-margin no-hairline-top"></div>
+  <div id="calendar" style="height: 22rem" class="block block-strong no-padding no-margin no-hairline-top"></div>
   <f7-list id="calendar-events" class="no-margin no-hairlines no-safe-area-left">
     <f7-list-item v-for="(item, index) in eventItems" @click="doClick(item)"
                   :key="index"
