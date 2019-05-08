@@ -1,19 +1,23 @@
 <template>
-  <f7-page>
+  <f7-page :page-content="false">
     <f7-navbar back-link="Back" sliding :title="title" subtitle="讨论区">
     </f7-navbar>
     <f7-photo-browser type="popup" :photos="photos" ref="photosbrowser" />
-    <f7-messages ref="messages">
-      <template v-for="(msg,index) in msgs" >
-        <f7-messages-title :key="index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-        <f7-message :key="index" v-else-if="msg.type==='image'" :image="cromp(msg.data)" :first="true" :last="true" :tail="true" @click="photos[0].url=msg.data;$refs.photosbrowser.open()"
-                    :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
-                    @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
-        />
-        <f7-message :key="index" v-else :first="true" :last="true" :tail="true" @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
-                    :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :text="msg.data" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
-                    />
-      </template>
+    <f7-messages id="chatMessages" ref="messages"  class="page-content ptr-content" :scrollMessages="args.scroll">
+      <div class="ptr-preloader" style="margin-top:10px">
+        <div class="preloader"></div>
+        <div class="ptr-arrow"></div>
+      </div>
+        <template v-for="(msg,index) in msgs.slice(showNum)" >
+          <f7-messages-title :key="index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
+          <f7-message :key="index" v-else-if="msg.type==='image'" :image="cromp(msg.data)" :first="true" :last="true" :tail="true" @click="photos[0].url=msg.data;$refs.photosbrowser.open()"
+                      :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
+                      @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
+          />
+          <f7-message :key="index" v-else :first="true" :last="true" :tail="true" @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
+                      :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :text="msg.data" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
+          />
+        </template>
     </f7-messages>
     <f7-messagebar placeholder="Message"
                    :sheet-visible="sheetVisible">
@@ -45,6 +49,7 @@ export default {
     let oldData = JSON.parse(localStorage.getItem(eventId))
     if (oldData) {
       self.msgs = oldData
+      self.pageUp()
     }
     self.initSocket()
   },
@@ -52,6 +57,11 @@ export default {
     const self = this
     this.$nextTick(() => {
       self.$refs.messages.scroll()
+    })
+    self.$$('.ptr-content').on('ptr:refresh', function (e) {
+      self.args.scroll = false
+      self.pageUp()
+      e.detail()
     })
   },
   beforeDestroy () {
@@ -62,6 +72,7 @@ export default {
       title: '',
       webSocket: '',
       msgs: [],
+      showNum: 0,
       name: localStorage.getItem('username'),
       attachments: [],
       sheetVisible: false,
@@ -69,7 +80,10 @@ export default {
       photos: [{
         url: '',
         caption: ''
-      }]
+      }],
+      args: {
+        scroll: true
+      }
     }
   },
   watch: {
@@ -158,6 +172,14 @@ export default {
     cromp (arg) {
       let laNum = arg.lastIndexOf('/')
       return arg.substring(0, laNum) + '/cromp/' + arg.substring(laNum + 1)
+    },
+    pageUp () {
+      const self = this
+      self.showNum = self.showNum - 20
+      if (Math.abs(self.showNum) >= self.msgs.length) {
+        self.$$('.ptr-preloader').hide()
+        self.showNum = -self.msgs.length
+      }
     }
   }
 }
