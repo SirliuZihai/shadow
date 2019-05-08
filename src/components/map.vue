@@ -5,7 +5,7 @@
         <f7-link @click="doConfirm()">确定</f7-link>
       </f7-nav-right>
       <f7-subnavbar :inner="false">
-        <form class="searchbar">
+        <div class="searchbar">
           <div class="searchbar-inner">
             <div class="searchbar-input-wrap">
               <input id="mapSearch" type="search" placeholder="请输入关键字" :value="placeName" @change="doSearch"/>
@@ -13,7 +13,7 @@
               <span class="input-clear-button"></span>
             </div>
           </div>
-        </form>
+        </div>
       </f7-subnavbar>
     </f7-navbar>
     <div class="baidumap" id="allmap" style="width: 100%;height:100%;">
@@ -185,11 +185,6 @@ export default {
           }, (error) => { console.log(error) })
         },
         on: {
-          change: (val) => {
-            self.placeName = val[0].name
-            self.curPoint = new BMap.Point(val[0].location.lng, val[0].location.lat)
-            self.updateCurPoint(true)
-          }
         }
       })
     },
@@ -233,7 +228,3 @@ export default {
 
 }
 </script>
-
-<style scoped>
-
-</style>
