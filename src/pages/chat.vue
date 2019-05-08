@@ -49,7 +49,6 @@ export default {
     let oldData = JSON.parse(localStorage.getItem(eventId))
     if (oldData) {
       self.msgs = oldData
-      self.pageUp()
     }
     self.initSocket()
   },
@@ -60,9 +59,10 @@ export default {
     })
     self.$$('.ptr-content').on('ptr:refresh', function (e) {
       self.args.scroll = false
-      self.pageUp()
+      self.pageUp(5)
       e.detail()
     })
+    self.pageUp(20)
   },
   beforeDestroy () {
     this.webSocket.close()
@@ -173,9 +173,9 @@ export default {
       let laNum = arg.lastIndexOf('/')
       return arg.substring(0, laNum) + '/cromp/' + arg.substring(laNum + 1)
     },
-    pageUp () {
+    pageUp (num) {
       const self = this
-      self.showNum = self.showNum - 20
+      self.showNum = self.showNum - num
       if (Math.abs(self.showNum) >= self.msgs.length) {
         self.$$('.ptr-preloader').hide()
         self.showNum = -self.msgs.length
