@@ -3,8 +3,9 @@
     <f7-navbar back-link="Back" sliding :title="title" subtitle="讨论区">
     </f7-navbar>
     <f7-photo-browser type="popup" :photos="photos" ref="photosbrowser" />
-    <f7-messages id="chatMessages" ref="messages"  class="page-content ptr-content" :scrollMessages="args.scroll">
-      <div class="ptr-preloader" style="margin-top:10px">
+    <div class="page-content ptr-content">
+    <f7-messages id="chatMessages" ref="messages"   :scrollMessages="args.scroll">
+      <div class="ptr-preloader">
         <div class="preloader"></div>
         <div class="ptr-arrow"></div>
       </div>
@@ -19,6 +20,7 @@
           />
         </template>
     </f7-messages>
+    </div>
     <f7-messagebar placeholder="Message"
                    :sheet-visible="sheetVisible">
       <f7-link
@@ -190,5 +192,8 @@ export default {
     width: 50px;
     height: 50px;
     border-radius:50%
+  }
+  .messages2{
+    overflow: auto;
   }
 </style>
