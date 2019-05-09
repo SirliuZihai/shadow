@@ -59,7 +59,7 @@ export default {
         'url': url,
         data: {username: self.username, password: hexmd5(self.password), SIM: self.SIM}
       }).then(function (data) {
-        if (data === 'OK') { self.$root.toastbuttom(self,'注册成功'); router.back() } else { self.$f7.dialog.alert(data) }
+        if (data === 'OK') { self.$root.toastbuttom(self, '注册成功'); router.back() } else { self.$f7.dialog.alert(data) }
       })
     }
   }

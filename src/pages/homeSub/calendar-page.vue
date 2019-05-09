@@ -43,8 +43,14 @@ export default {
     let colorMap = ['#2196f3', '#e91e63', '#4caf50', '#ff9800']
     // event初始化
     const homeEvents = eventPage.methods.getCur().events
+    if (!homeEvents) {
+      return false
+    }
     homeEvents.forEach((e) => {
       for (let i = Number(e.starttime); i <= Number(e.endtime); i++) {
+        if (!e.type) {
+          e.type = ''
+        }
         self.events.push({
           _id: e._id,
           date: self.intTodate(i),

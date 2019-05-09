@@ -61,8 +61,8 @@ export default {
       },
       eventInfo: {
         title: '',
-        starttime: self.$root.dateFormat(new Date(), 'yyyy-MM-ddThh:mm'),
-        endtime: self.$root.dateFormat(endOfDay, 'yyyy-MM-ddThh:mm'),
+        starttime: self.$root.dateFormat(new Date(), 'yyyyMMdd'),
+        endtime: self.$root.dateFormat(endOfDay, 'yyyyMMdd'),
         relationship: [],
         remark: '',
         place: {type: 'Point', coordinates: [], name: ''},
