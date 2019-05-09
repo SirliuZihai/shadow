@@ -94,8 +94,13 @@ export default {
           let curhome1 = thehome.methods.getCurHome()
           if (curhome1) {
             curhome1.changeTitle(data3.data.alias)
-            theEventPage.methods.getCur().events = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
-            theEventPage.methods.getCur().initSocket()
+            let storedEvents = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
+            if (storedEvents) {
+              theEventPage.methods.getCur().events = storedEvents
+            } else {
+              theEventPage.methods.getCur().events = []
+            }
+            theEventPage.methods.getCur().ReinitSocket()
           }
           self.$f7router.navigate('/')
         } else {

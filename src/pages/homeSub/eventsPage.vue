@@ -205,6 +205,10 @@ export default {
     initSocket () {
       initSocket()
     },
+    ReinitSocket () {
+      webSocket = null
+      initSocket()
+    },
     dateformate (id, fmt) {
       return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt)
     },

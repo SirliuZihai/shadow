@@ -34,6 +34,9 @@ function dateFormat (thedate, fmt) { // author: meizz
  * 从数组中删除元素，根据objectId 返回被删除元素
  * */
 function delEleFromArray (e, array) {
+  if (!array) {
+    return null
+  }
   for (let i = 0; i < array.length; i++) {
     let e1 = array[i]
     if (e._id === e1._id) {
