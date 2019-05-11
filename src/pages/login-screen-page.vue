@@ -21,6 +21,7 @@
     <f7-list>
       <f7-list-button @click="signIn">登录</f7-list-button>
       <f7-list-button @click="regist">注册</f7-list-button>
+      <f7-list-button @click="refound">找回密码</f7-list-button>
       <f7-list-button @click="cancel">退出</f7-list-button>
     </f7-list>
   </f7-page>
@@ -64,7 +65,7 @@ export default {
       } else {
         self.$root.toastbuttom(self, data2.message)
       }
-    })
+    }, () => { self.$root.toastbuttom(self, '通讯异常') })
   },
   methods: {
     test (e) {
@@ -73,6 +74,7 @@ export default {
     signIn () {
       const self = this
       var url = process.env.API_HOST + 'shiro/login.do'
+      self.$f7.dialog.preloader('正在登录...')
       this.$f7.request.promise({
         method: 'POST',
         contentType: 'application/json',
@@ -83,6 +85,7 @@ export default {
         },
         data: {username: self.username, password: hexmd5(self.password)}
       }).then(function (data) {
+        self.$f7.dialog.close(); self.$f7.dialog.destroy()
         let data3 = self.$root.myevil(data)
         if (data3.success === true) {
           self.$root.toastbuttom(self, data3.message)
@@ -106,7 +109,7 @@ export default {
         } else {
           self.$root.toastbuttom(self, data3.message)
         }
-      })
+      }, () => { self.$f7.dialog.close(); self.$root.toastbuttom(self, '通讯异常') })
     },
     regist () {
       const self = this
@@ -116,6 +119,9 @@ export default {
     },
     cancel () {
       navigator.app.exitApp()
+    },
+    refound () {
+      this.$f7router.navigate('/resetPassword/')
     }
   }
 }
