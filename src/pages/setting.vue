@@ -5,6 +5,9 @@
       <f7-list-item title="退出全部已读">
         <f7-toggle slot="after" :checked="settings.allReadOnExit"  @change="settings.allReadOnExit = $event.target.checked"></f7-toggle>
       </f7-list-item>
+      <f7-list-item :title="'绑定邮箱   '+mail">
+        <f7-link slot="after" @click="changeMail">设置</f7-link>
+      </f7-list-item>
       <f7-list-button title="清除日志" @click="doClear" />
     </f7-list>
   </f7-page>
@@ -21,12 +24,14 @@ export default {
     if (settings) {
       self.settings = settings
     }
+    self.updateMail()
   },
   data: function () {
     return {
       settings: {
         allReadOnExit: false
-      }
+      },
+      mail: ''
     }
   },
   watch: {
@@ -40,6 +45,18 @@ export default {
   methods: {
     doClear () {
       nativeUtil.removeLogFile2()
+    },
+    updateMail () {
+      const self = this
+      let url = process.env.API_HOST + 'shiro/getMail.do'
+      self.$f7.request.promise.get(url, {}, 'json').then((data) => {
+        if (data.success) {
+          self.mail = data.data.mail
+        }
+      }, () => { self.$root.toastbuttom(self, '通讯异常') })
+    },
+    changeMail () {
+      this.$f7router.navigate('/resetMail/')
     }
   }
 }

@@ -19,6 +19,8 @@ import Settings from './pages/setting.vue'
 import queryEventHis from './pages/homeSub/queryEventHistory.vue'
 import test from './components/test.vue'
 import testHome from './test/home.vue'
+import resetMail from './components/resetMail.vue'
+import resetPassword from './components/resetPassword.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -106,6 +108,14 @@ export default [
   {
     path: '/setting/',
     component: Settings
+  },
+  {
+    path: '/resetMail/',
+    component: resetMail
+  },
+  {
+    path: '/resetPassword/',
+    component: resetPassword
   },
   /* {
     path: '/showPanOrHistory/',

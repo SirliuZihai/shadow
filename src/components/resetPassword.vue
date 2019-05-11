@@ -81,7 +81,7 @@ export default {
     },
     sendCode () {
       const self = this
-      if(!self.username){
+      if (!self.username) {
         self.$f7.dialog.alert('用户名不能为空')
         return false
       }
@@ -117,7 +117,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

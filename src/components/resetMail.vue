@@ -20,7 +20,7 @@
 var CurResetMail
 export default {
   name: 'resetMail',
-  created (){
+  created () {
     const self = this
     CurResetMail = self
   },
@@ -73,7 +73,7 @@ export default {
         self.$f7.dialog.alert('邮箱格式不正确，请重新输入')
         return false
       }
-      if(!self.code){
+      if (!self.code) {
         self.$f7.dialog.alert('验证码不能为空')
         return false
       }
@@ -88,7 +88,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,6 +1,6 @@
 <template>
   <f7-page>
-    <f7-navbar title="Not found" backLink="Back"></f7-navbar>
+    <f7-navbar title="Not found2" backLink="Back"></f7-navbar>
     <f7-block strong>
       <p v-for="(msg ,index) in msgs" :key="index">
          {{msg}}
@@ -28,6 +28,15 @@ export default {
       'cordova.file.cacheDirectory:' + cordova.file.cacheDirectory,
       '400'
     ]
+    try{
+      self.$f7.dialog.alert(JSON.stringify(window.plugins.sim))
+      window.plugins.sim.getSimInfo(function (res) {
+        self.$f7.dialog.alert('SIM:'+res.phoneNumber)
+      }, null)
+    }catch (e) {
+      self.$f7.dialog.alert(JSON.stringify(e))
+    }
+
   },
   data: function () {
     return {
