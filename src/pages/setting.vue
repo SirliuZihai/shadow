@@ -51,7 +51,9 @@ export default {
       let url = process.env.API_HOST + 'shiro/getMail.do'
       self.$f7.request.promise.get(url, {}, 'json').then((data) => {
         if (data.success) {
-          self.mail = data.data.mail
+          if (data.data.mail) {
+            self.mail = data.data.mail
+          }
         }
       }, () => { self.$root.toastbuttom(self, '通讯异常') })
     },

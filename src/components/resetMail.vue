@@ -81,6 +81,7 @@ export default {
       self.$f7.request.promise.get(url, {code: self.code, mailName: self.mail}, 'json').then((data) => {
         self.$root.toastbuttom(self, data.message)
         if (data.success) {
+          self.$f7router.clearPreviousPages()
           self.$f7router.back()
         }
       }, () => { self.$root.toastbuttom(self, '通讯异常') })
