@@ -14,7 +14,16 @@
       <f7-list-item title="是否公开">
         <f7-toggle slot="after" :checked="eventInfo.public"  @change="eventInfo.public = $event.target.checked"></f7-toggle>
       </f7-list-item>
-      <f7-list-input label="说明" type="textarea" resizable :value="eventInfo.remark" @input="eventInfo.remark=$event.target.value" clear-button />
+      <f7-list-item title="事件分类" smart-select :smart-select-params="{openIn: 'popover'}">
+        <div :style="'height:1rem; width: 1rem;background:'+colorMap[eventInfo.type]"></div>
+        <select :value="eventInfo.type" @change="eventInfo.type = $event.target.value">
+          <option value="3">普通</option>
+          <option value="2">重要</option>
+          <option value="1">紧急</option>
+          <option value="0">紧急重要</option>
+        </select>
+      </f7-list-item>
+\      <f7-list-input label="说明" type="textarea" resizable :value="eventInfo.remark" @input="eventInfo.remark=$event.target.value" clear-button />
     </f7-list>
     <f7-list>
       <f7-list-button @click="saveEvent">保存</f7-list-button>
@@ -44,6 +53,7 @@ export default {
   data: function () {
     const self = this
     return {
+      colorMap: ['#e91e63', '#ff9800', '#2196f3', '#4caf50'],
       eventInfo: {
         title: '',
         starttime: self.$root.dateFormat(new Date(), 'yyyyMMdd'),
@@ -52,7 +62,7 @@ export default {
         remark: '',
         place: {type: 'Point', coordinates: [], name: ''},
         public: '',
-        type: ''
+        type: 3
       }
     }
   },

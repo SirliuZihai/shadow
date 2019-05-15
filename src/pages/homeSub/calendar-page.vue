@@ -40,7 +40,7 @@ export default {
   },
   created () {
     const self = this
-    let colorMap = ['#2196f3', '#e91e63', '#4caf50', '#ff9800']
+    let colorMap = ['#e91e63', '#ff9800', '#2196f3', '#4caf50']
     // event初始化
     const homeEvents = eventPage.methods.getCur().events
     if (!homeEvents) {
@@ -49,13 +49,13 @@ export default {
     homeEvents.forEach((e) => {
       for (let i = Number(e.starttime); i <= Number(e.endtime); i++) {
         if (!e.type) {
-          e.type = ''
+          e.type = 3
         }
         self.events.push({
           _id: e._id,
           date: self.intTodate(i),
           title: e.title,
-          color: e.type.constructor === Number ? colorMap[e.type] : '#4caf50'
+          color: colorMap[e.type]
         })
       }
     })
