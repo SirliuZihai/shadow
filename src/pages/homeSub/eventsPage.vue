@@ -163,15 +163,6 @@ export default {
       console.log(e)
     }
   },
-  mounted () {
-    const self = this
-    // Range Picker
-    self.calendarRange = self.$f7.calendar.create({
-      inputEl: '#homeRangtime',
-      dateFormat: 'yyyymmdd',
-      rangePicker: true
-    })
-  },
   destroyed () {
     console.log('eventPage destroyed')
   },
@@ -218,21 +209,6 @@ export default {
     },
     eventImage (name) {
       return process.env.API_HOST + 'image/head/' + name + '.jpg'
-    },
-    inputDate (e) {
-      const self = this
-      let value = e.target.value
-      if (value) {
-        let dateArray = value.split('-')
-        if (dateArray.length === 2) {
-          self.queryEvent.starttime = dateArray[0].trim()
-          self.queryEvent.endtime = dateArray[1].trim()
-        }
-        if (dateArray.length === 1) {
-          self.queryEvent.starttime = dateArray[0]
-          self.queryEvent.endtime = dateArray[0]
-        }
-      }
     }
   }
 }

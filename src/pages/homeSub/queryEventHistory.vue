@@ -29,6 +29,15 @@ import eventPage from '@/pages/homeSub/eventsPage.vue'
 let ObjectID = require('bson').ObjectID
 export default {
   name: 'queryEventHistory',
+  mounted () {
+    const self = this
+    // Range Picker
+    self.calendarRange = self.$f7.calendar.create({
+      inputEl: '#homeRangtime',
+      dateFormat: 'yyyymmdd',
+      rangePicker: true
+    })
+  },
   data: function () {
     return {
       queryEvent: {
@@ -62,6 +71,21 @@ export default {
         },
         () => { self.$root.toastbuttom(self, '通讯异常') }
       )
+    },
+    inputDate (e) {
+      const self = this
+      let value = e.target.value
+      if (value) {
+        let dateArray = value.split('-')
+        if (dateArray.length === 2) {
+          self.queryEvent.starttime = dateArray[0].trim()
+          self.queryEvent.endtime = dateArray[1].trim()
+        }
+        if (dateArray.length === 1) {
+          self.queryEvent.starttime = dateArray[0]
+          self.queryEvent.endtime = dateArray[0]
+        }
+      }
     },
     // 用于从历史中添加事件
     addEvent2 (e) {
