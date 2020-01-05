@@ -26,6 +26,7 @@
 
 <script>
 import eventPage from '@/pages/homeSub/eventsPage.vue'
+import EditNews from '@/components/editNews.vue'
 let ObjectID = require('bson').ObjectID
 export default {
   name: 'queryEventHistory',
@@ -90,9 +91,20 @@ export default {
     // 用于从历史中添加事件
     addEvent2 (e) {
       const self = this
-      self.$root.delEleFromArray(e, eventPage.methods.getCur().events)
-      eventPage.methods.getCur().events.unshift(e)
-      self.$refs.searchbarHomeEvent.disable()
+      let option = self.$f7route.query.option
+      if (option) {
+        if (option === 'editNews') {
+          const curEdit = EditNews.methods.getCur()
+          curEdit.relateEvents.length = 0
+          self.$root.addTag(curEdit, curEdit.relateEvents, e.title)
+          curEdit.tip.eventId = e._id
+          self.$f7router.back()
+        }
+      } else {
+        self.$root.delEleFromArray(e, eventPage.methods.getCur().events)
+        eventPage.methods.getCur().events.unshift(e)
+        self.$refs.searchbarHomeEvent.disable()
+      }
     },
     dateformate (id, fmt) {
       return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt)

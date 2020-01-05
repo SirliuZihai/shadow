@@ -20,7 +20,7 @@ export default {
         theme: 'ios',
         routes,
         id: 'com.zihai.app',
-        name: '影子'
+        name: '云日历'
       }
     }
   }

@@ -212,9 +212,40 @@ function sendPicture (ws) {
       allowEdit: false,encodingType:0,targetWidth:1040,targetHeight:780,mediaType:0
     })
 }
+
+/**
+ * 用于动态圈上传照片
+ * */
+function upPicture (clazzName,imgArry) {
+  navigator.camera.getPicture((dataUrl) => {
+      if (dataUrl){
+        // 上传成功
+        let success = function (r) {
+          let data = myapp.myevil(r.response)
+          imgArry.push(data.message)
+        }
+        // 上传失败
+        let fail = function (error) {
+          myapp.$f7.dialog.alert("上传失败! ")
+        }
+        let options = new FileUploadOptions()
+        options.fileKey = 'tempFile'
+        options.fileName = 'temqq.png'
+
+        let ft = new FileTransfer()
+        // 上传地址
+        let SERVER = process.env.API_HOST + 'event/uploadtempfile.do?classify='+clazzName
+        ft.upload(dataUrl, encodeURI(SERVER), success, fail, options)
+      }
+    }, (e)=>{},
+    { quality: 75, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: false,encodingType:0,targetWidth:1040,targetHeight:780,mediaType:0
+    })
+}
 export default {
   getPhoto,
   notify,
   sendPicture,
   getPosition,
+  upPicture
 }

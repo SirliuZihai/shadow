@@ -6,7 +6,7 @@
         type="text"
         placeholder="用户名"
         :value="username"
-        @input="username = $event.target.value"
+        @input="username = $event.target.value" validate pattern="\w" errorMessage="请使用字母、数字、下划线"
       ></f7-list-input>
       <f7-list-input
         type="password"

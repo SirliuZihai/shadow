@@ -23,7 +23,7 @@
           <option value="0">紧急重要</option>
         </select>
       </f7-list-item>
-\      <f7-list-input label="说明" type="textarea" resizable :value="eventInfo.remark" @input="eventInfo.remark=$event.target.value" clear-button />
+      <f7-list-input label="说明" type="textarea" resizable :value="eventInfo.remark" @input="eventInfo.remark=$event.target.value" clear-button />
     </f7-list>
     <f7-list>
       <f7-list-button @click="saveEvent">保存</f7-list-button>

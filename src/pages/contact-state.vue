@@ -32,7 +32,7 @@ export default {
   created: function () {
     const self = this
     let people = self.$f7route.params.people
-    let contacts = JSON.parse(sessionStorage.getItem('contacts'))
+    let contacts = JSON.parse(localStorage.getItem(self.$root.prefx + 'contacts'))
     for (let i = 0; i < contacts.length; i++) {
       if (contacts[i].people === people) {
         // 数组初始化，
@@ -44,6 +44,7 @@ export default {
       }
     }
     self.getInfo()
+    self.myInfo.people = people
   },
   data: function () {
     return {

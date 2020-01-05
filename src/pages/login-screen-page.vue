@@ -1,6 +1,6 @@
 <template>
   <f7-page no-toolbar no-navbar no-swipeback login-screen>
-    <f7-login-screen-title>影子</f7-login-screen-title>
+    <f7-login-screen-title>云日历</f7-login-screen-title>
     <f7-list form>
     <f7-list-input
       lable="用户名"
@@ -88,7 +88,6 @@ export default {
         self.$f7.dialog.close(); self.$f7.dialog.destroy()
         let data3 = self.$root.myevil(data)
         if (data3.success === true) {
-          self.$root.toastbuttom(self, data3.message)
           localStorage.setItem('username', self.username)
           localStorage.setItem('alias', data3.data.alias)
           localStorage.setItem('token', data3.data.token)
