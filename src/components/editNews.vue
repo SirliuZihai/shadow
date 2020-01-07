@@ -30,7 +30,7 @@
         <f7-list-item title="谁可以看">
           <div strong style="width: 70%;height: 100%;">
               <f7-chip v-if="tip.range.length === 0" text="公开" ></f7-chip>
-              <f7-chip v-for="(tag,index) in tip.range" :key="index" :text="tag" ></f7-chip>
+              <f7-chip v-for="(tag,index) in tip.range" :key="index" :text="tag" deleteable @delete="tip.range.splice(index)"></f7-chip>
               <f7-chip text="添加标签"  color="blue" @click="addRange()"></f7-chip>
           </div>
         </f7-list-item>
@@ -40,6 +40,7 @@
 
 <script>
 import photo from '@/assets/js/phonto.js'
+import theTips from '@/pages/tips.vue'
 var curEdit
 export default {
   name: 'editNews',
@@ -52,7 +53,9 @@ export default {
         picture: [],
         enter: false,
         publisher: localStorage.getItem('username'),
-        range: []
+        range: [],
+        comments: [],
+        likes: []
       }
     }
   },
@@ -63,6 +66,10 @@ export default {
   methods: {
     addPic () {
       const self = this
+      if (self.tip.picture.length > 8) {
+        self.$f7.dialog.alert('相框已满')
+        return false
+      }
       self.$root.curSelf = self
       if (self.$device.android === true || self.$device.ios === true) {
         photo.upPicture('tempFile', self.tip.picture)
@@ -112,6 +119,8 @@ export default {
       self.$f7.request.promise.postJSON(url, self.tip).then(
         (data) => {
           self.$root.toastbuttom(self, data.message)
+          theTips.methods.getCur().tips.length = 0
+          theTips.methods.getCur().getTips()
           self.$f7router.back()
         },
         () => { self.$root.toastbuttom(self, '通讯异常') }

@@ -39,7 +39,23 @@ endOfDay.setMinutes(59)
 endOfDay.setSeconds(59)
 export default {
   created () {
-    CurInserPan = this
+    const self = this
+    CurInserPan = self
+    if (self.$f7route.query.eventId) {
+      let url = process.env.API_HOST + 'event/getEvent.do'
+      self.$f7.request.promise.get(url, {'eventId': self.$f7route.query.eventId}, 'json').then(
+        (data) => {
+          self.eventInfo.parentId = data.data._id
+          self.eventInfo.title = data.data.title
+          self.eventInfo.starttime = data.data.starttime
+          self.eventInfo.endtime = data.data.endtime
+          self.eventInfo.place = data.data.place
+          self.eventInfo.remark = data.data.remark
+          self.eventInfo.public = data.data.public
+          self.eventInfo.type = data.data.type
+        }, () => { self.$root.toastbuttom(self, '通讯异常') }
+      )
+    }
   },
   mounted () {
     const self = this
@@ -61,7 +77,7 @@ export default {
         relationship: [],
         remark: '',
         place: {type: 'Point', coordinates: [], name: ''},
-        public: '',
+        public: false,
         type: 3
       }
     }

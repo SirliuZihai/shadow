@@ -1,6 +1,7 @@
 /* eslint-disable */
 import myapp from '@/app'
 import theEventPage from '@/pages/homeSub/eventsPage.vue'
+import NativeUtil from '@/assets/js/nativeUtil.js'
 var myPosition
 document.addEventListener('deviceready', onDeviceReady, false)
 
@@ -159,6 +160,8 @@ function upload (fileURL) {
   var options = new FileUploadOptions()
   options.fileKey = 'headImageFile'
   options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1)
+  nativeUtil.writeLogFile2('upImage:' + new Date() +options.fileName)
+
 
   var ft = new FileTransfer()
   // 上传地址
@@ -191,7 +194,7 @@ function sendPicture (ws) {
         let success = function (r) {
           let data = myapp.myevil(r.response)
           //alert(JSON.stringify(data.response))
-          ws.send('[image]:' + process.env.API_HOST +data.message)
+          ws.send('[image]:' + data.message)
 
         }
         // 上传失败
@@ -200,7 +203,8 @@ function sendPicture (ws) {
         }
         let options = new FileUploadOptions()
         options.fileKey = 'tempFile'
-        options.fileName = 'temqq.png'
+        options.fileName = dataUrl.substr(dataUrl.lastIndexOf('/') + 1)
+        nativeUtil.writeLogFile2('upImage:' + new Date() +options.fileName)
 
         let ft = new FileTransfer()
         // 上传地址
@@ -230,11 +234,12 @@ function upPicture (clazzName,imgArry) {
         }
         let options = new FileUploadOptions()
         options.fileKey = 'tempFile'
-        options.fileName = 'temqq.png'
+        options.fileName = dataUrl.substr(dataUrl.lastIndexOf('/') + 1)
+        nativeUtil.writeLogFile2('upImage:' + new Date() +options.fileName)
 
         let ft = new FileTransfer()
         // 上传地址
-        let SERVER = process.env.API_HOST + 'event/uploadtempfile.do?classify='+clazzName
+        let SERVER = process.env.API_HOST + 'tips/uploadImage.do?classify=' + 'tips'
         ft.upload(dataUrl, encodeURI(SERVER), success, fail, options)
       }
     }, (e)=>{},

@@ -173,7 +173,7 @@ export default {
     },
     cromp (arg) {
       let laNum = arg.lastIndexOf('/')
-      return arg.substring(0, laNum) + '/cromp/' + arg.substring(laNum + 1)
+      return process.env.API_HOST + arg.substring(0, laNum) + '/cromp/' + arg.substring(laNum + 1)
     },
     pageUp (num) {
       const self = this

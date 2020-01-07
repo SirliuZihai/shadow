@@ -20,3 +20,6 @@ console.log('交集', intersection);
 console.log('并集', union);
 console.log('补集', complement);
 console.log('差集', diff);
+var colors = ["red", "blue", "grey"];
+colors.splice(2,1);
+console.log('删除',colors)
