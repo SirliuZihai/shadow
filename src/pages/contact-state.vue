@@ -123,6 +123,7 @@ export default {
         let data2 = self.$root.myevil(data)
         self.$root.toastbuttom(self, data2.message)
         if (data2.success === true) {
+          theList.methods.getCur().getContact()
           self.$f7router.back()
         }
       })
