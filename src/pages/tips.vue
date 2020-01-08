@@ -52,7 +52,8 @@ export default {
       username: localStorage.getItem('username'),
       tips: [],
       args: {
-        likeEnable: true // 点赞按钮 enable
+        likeEnable: true, // 点赞按钮 enable
+        partEnable: true // 加入按钮 enable
       },
       photos: [] // {url: '', caption: ''}
     }
@@ -131,8 +132,20 @@ export default {
       const self = this
       self.$f7router.navigate('/insertPanOrHistory/?eventId=' + eventid)
     },
-    participate () {
-
+    participate (eventId) {
+      const self = this
+      if (self.partEnable === false) {
+        return false
+      }
+      self.partEnable = false
+      let url = process.env.API_HOST + 'event/participateEvent.do'
+      self.$f7.request.promise.get(url, {eventId: eventId}, 'json').then(
+        (data) => {
+          self.$root.toastbuttom(self, data.message)
+          self.partEnable = true
+        },
+        () => { self.partEnable = true; self.$root.toastbuttom(self, '通讯异常') }
+      )
     },
     like (_id, likes, commentId, replyId, obj) {
       const self = this

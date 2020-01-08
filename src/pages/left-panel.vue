@@ -10,6 +10,7 @@
       <f7-list-item  link="/userInfo/" title="我" panel-close></f7-list-item>
       <f7-list-item  link="/contact/" title="联系人" panel-close></f7-list-item>
       <f7-list-item link="/tips/" title="动态" panel-close></f7-list-item>
+      <f7-list-item link="/notify/" title="请求&通知" panel-close></f7-list-item>
       <!--<f7-list-item link="/letterBox/" title="信箱" panel-close></f7-list-item>-->
       <f7-list-item  link="/login-screen-page/" title="注销" @click="logoff" panel-close></f7-list-item>
       <f7-list-item link="/setting/" title="设置" panel-close></f7-list-item>

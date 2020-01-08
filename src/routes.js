@@ -23,6 +23,7 @@ import resetMail from './components/resetMail.vue'
 import resetPassword from './components/resetPassword.vue'
 import tips from './pages/tips.vue'
 import editNews from './components/editNews.vue'
+import notify from './components/notify.vue'
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -126,6 +127,10 @@ export default [
   {
     path: '/editNews/',
     component: editNews
+  },
+  {
+    path: '/notify/',
+    component: notify
   },
   /* {
     path: '/showPanOrHistory/',
