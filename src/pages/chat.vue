@@ -11,7 +11,7 @@
       </div>
         <template v-for="(msg,index) in msgs.slice(showNum)" >
           <f7-messages-title :key="index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-          <f7-message :key="index" v-else-if="msg.type==='image'" :image="cromp(msg.data)" :first="true" :last="true" :tail="true" @click="photos[0].url=msg.data;$refs.photosbrowser.open()"
+          <f7-message :key="index" v-else-if="msg.type==='image'" :image="cromp(msg.data,true)" :first="true" :last="true" :tail="true" @click="photos[0].url=cromp(msg.data,fakse);$refs.photosbrowser.open()"
                       :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
                       @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
           />
@@ -171,9 +171,13 @@ export default {
       const self = this
       photo.sendPicture(self.webSocket)
     },
-    cromp (arg) {
-      let laNum = arg.lastIndexOf('/')
-      return process.env.API_HOST + arg.substring(0, laNum) + '/cromp/' + arg.substring(laNum + 1)
+    cromp (arg, useable) {
+      if (useable === false) {
+        return process.env.API_HOST + arg
+      } else {
+        let laNum = arg.lastIndexOf('/')
+        return process.env.API_HOST + arg.substring(0, laNum) + '/cromp/' + arg.substring(laNum + 1)
+      }
     },
     pageUp (num) {
       const self = this

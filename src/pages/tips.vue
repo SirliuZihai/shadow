@@ -18,9 +18,9 @@
       <f7-card-content>
         <p>{{tip.event_title}}<br/>{{tip.event_starttime + '-'+tip.event_endtime}}</p>
         <p>{{tip.context}}}</p>
-        <div style="float: left;width: 100%" @click="$refs.photosbrowser.open()">
+        <div style="float: left;width: 100%">
           <template v-for="(pic,index) in tip.picture" >
-            <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index"/>
+            <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index" @click="setPhotos(ip.picture);$refs.photosbrowser.open(index)"/>
           </template>
         </div>
         <!--<p class="likes">Likes: 112 &nbsp;&nbsp; Comments: 43</p>-->
@@ -28,7 +28,8 @@
       <f7-card-footer class="no-border" >
         <f7-link style="text-align: center;" @click="like(tip._id,tip.likes,'','',tip)"><span :style="tip.likes === true?'color: #0066d6':''">赞</span>({{tip.likesNum}})</f7-link>
         <f7-link @click="comment()">评论({{tip.comments}})</f7-link>
-        <f7-link v-show="tip.event_isJoin !== true" @click="participate(tip.eventId)">添加日程</f7-link>
+        <f7-link v-show="tip.event_isJoin !== true" @click="addEvent(tip.eventId)">添加日程</f7-link>
+        <f7-link v-show="tip.enter === true&&tip.event_isJoin !== true" @click="participate(tip.eventId)">申请加入</f7-link>
         <f7-link v-show="tip.publisher === username" @click="deletetip(tip._id,index)">删除</f7-link>
       </f7-card-footer>
     </f7-card>
@@ -53,10 +54,7 @@ export default {
       args: {
         likeEnable: true // 点赞按钮 enable
       },
-      photos: [{url: 'https://cdn.framework7.io/placeholder/nature-1000x700-7.jpg', caption: ''},
-        {url: 'https://cdn.framework7.io/placeholder/nature-1000x700-8.jpg', caption: ''},
-        {url: 'https://cdn.framework7.io/placeholder/nature-1000x700-6.jpg', caption: ''},
-        {url: 'https://cdn.framework7.io/placeholder/nature-1000x700-10.jpg', caption: ''}]
+      photos: [] // {url: '', caption: ''}
     }
   },
   created () {
@@ -83,8 +81,15 @@ export default {
       return url
     },
     imgUrl (arg) {
-      let url = process.env.API_HOST + arg + '.jpg'
+      let url = process.env.API_HOST + arg
       return url
+    },
+    setPhotos (pictures) {
+      const self = this
+      for (let i = 0; i < pictures.length; i++) {
+        // {url: '', caption: ''}
+        self.photos.push({url: pictures[i], caption: ''})
+      }
     },
     dateformate (id, fmt) { return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt) },
     cromp (arg) {
@@ -122,9 +127,12 @@ export default {
         () => { self.$root.toastbuttom(self, '通讯异常') }
       )
     },
-    participate (eventid) {
+    addEvent (eventid) {
       const self = this
       self.$f7router.navigate('/insertPanOrHistory/?eventId=' + eventid)
+    },
+    participate () {
+
     },
     like (_id, likes, commentId, replyId, obj) {
       const self = this

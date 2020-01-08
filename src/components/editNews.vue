@@ -12,7 +12,7 @@
         <f7-list-item>
           <div style="float: left;width: 100%" @click="$refs.photosbrowser.open()">
             <template v-for="(pic,index) in tip.picture" >
-              <img style="float: left" src="imgUrl(pic)" width="33%" :key="index"/>
+              <img style="float: left" src="imgUrl(pic)" width="33%" :key="index"  @click="$refs.photosbrowser.open(index)"/>
             </template>
           </div>
         </f7-list-item>
@@ -24,7 +24,7 @@
             <f7-chip text="选择事件"  color="blue" @click="relateEvent()"></f7-chip>
           </div>
         </f7-list-item>
-        <f7-list-item title="允许联系人加入">
+        <f7-list-item title="允许申请加入日程">
           <f7-toggle slot="after" :checked="tip.enter"  @change="tip.enter = $event.target.checked"></f7-toggle>
         </f7-list-item>
         <f7-list-item title="谁可以看">
@@ -74,6 +74,10 @@ export default {
       if (self.$device.android === true || self.$device.ios === true) {
         photo.upPicture('tempFile', self.tip.picture)
       }
+    },
+    imgUrl (arg) {
+      let url = process.env.API_HOST + arg
+      return url
     },
     addRange () {
       const self = this

@@ -160,8 +160,6 @@ function upload (fileURL) {
   var options = new FileUploadOptions()
   options.fileKey = 'headImageFile'
   options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1)
-  nativeUtil.writeLogFile2('upImage:' + new Date() +options.fileName)
-
 
   var ft = new FileTransfer()
   // 上传地址
@@ -203,9 +201,7 @@ function sendPicture (ws) {
         }
         let options = new FileUploadOptions()
         options.fileKey = 'tempFile'
-        options.fileName = dataUrl.substr(dataUrl.lastIndexOf('/') + 1)
-        nativeUtil.writeLogFile2('upImage:' + new Date() +options.fileName)
-
+        options.fileName = 'fs.jpg'
         let ft = new FileTransfer()
         // 上传地址
         let SERVER = process.env.API_HOST + 'event/uploadtempfile.do'
@@ -234,8 +230,7 @@ function upPicture (clazzName,imgArry) {
         }
         let options = new FileUploadOptions()
         options.fileKey = 'tempFile'
-        options.fileName = dataUrl.substr(dataUrl.lastIndexOf('/') + 1)
-        nativeUtil.writeLogFile2('upImage:' + new Date() +options.fileName)
+        options.fileName = 'fs.jpg'
 
         let ft = new FileTransfer()
         // 上传地址
