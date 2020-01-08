@@ -8,7 +8,7 @@
       <f7-list-item title="关联人">
         <div strong style="width: 70%;height: 100%;">
           <f7-chip v-for="(p,index) in eventInfo.relationship" :key="index" :text="p" deleteable @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
-          <f7-chip text="添加"  color="blue" @click="addTag()"></f7-chip>
+          <f7-chip text="邀请"  color="blue" @click="addTag()"></f7-chip>
         </div>
       </f7-list-item>
       <f7-list-item title="是否公开">
