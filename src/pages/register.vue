@@ -6,7 +6,7 @@
         type="text"
         placeholder="用户名"
         :value="username"
-        @input="username = $event.target.value" validate pattern="\w" errorMessage="请使用字母、数字、下划线"
+        @input="username = $event.target.value" validate pattern="^[a-zA-Z]\w{0,15}$" errorMessage="请使用字母、数字、下划线"
       ></f7-list-input>
       <f7-list-input
         type="password"
@@ -39,15 +39,27 @@ export default {
     }
   },
   mounted () {
-    const self = this
-    window.plugins.sim.getSimInfo(function (res) {
+    // const self = this
+    /* window.plugins.sim.getSimInfo(function (res) {
       self.SIM = res.phoneNumber
-    }, null)
+    }, null) */
   },
   methods: {
     regist () {
       const self = this
       const router = self.$f7router
+      if(!(self.username&&self.password)){
+        self.$f7.dialog.alert('用户名、密码不能为空！')
+        return false
+      }
+      if (!/^[a-zA-Z]\w{0,15}$/.test(self.username)) {
+        self.$f7.dialog.alert('用户名格式错误！')
+        return false
+      }
+      if (self.password.length <6) {
+        self.$f7.dialog.alert('密码至少六位！')
+        return false
+      }
       if (self.password !== self.PasswordConfirm) {
         self.$f7.dialog.alert('密码不一致！')
         return false
