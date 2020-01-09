@@ -18,9 +18,9 @@
       <f7-card-content>
         <p>{{tip.event_title}}<br/>{{tip.event_starttime + '-'+tip.event_endtime}}</p>
         <p>{{tip.context}}}</p>
-        <div style="float: left;width: 100%">
+        <div style="float: left;width: 100%">t
           <template v-for="(pic,index) in tip.picture" >
-            <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index" @click="setPhotos(ip.picture);$refs.photosbrowser.open(index)"/>
+            <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index" @click="setPhotos(tip.picture);$refs.photosbrowser.open(index)"/>
           </template>
         </div>
         <!--<p class="likes">Likes: 112 &nbsp;&nbsp; Comments: 43</p>-->
@@ -34,6 +34,9 @@
       </f7-card-footer>
     </f7-card>
     </template>
+      <f7-block-footer v-show="noMore===true" style="text-align: center">
+            没有更多了
+      </f7-block-footer>
       <div class="ptr-preloader">
         <div class="preloader"></div>
         <div class="ptr-arrow"></div>
@@ -55,7 +58,8 @@ export default {
         likeEnable: true, // 点赞按钮 enable
         partEnable: true // 加入按钮 enable
       },
-      photos: [] // {url: '', caption: ''}
+      photos: [], // {url: '', caption: ''}
+      noMore: false
     }
   },
   created () {
@@ -82,14 +86,14 @@ export default {
       return url
     },
     imgUrl (arg) {
-      let url = process.env.API_HOST + arg
-      return url
+      arg = arg.replace('image/', 'image/cromp/')
+      return process.env.API_HOST + arg
     },
     setPhotos (pictures) {
       const self = this
       for (let i = 0; i < pictures.length; i++) {
         // {url: '', caption: ''}
-        self.photos.push({url: pictures[i], caption: ''})
+        self.photos.push({url: process.env.API_HOST + pictures[i], caption: ''})
       }
     },
     dateformate (id, fmt) { return this.$root.dateFormat(new Date((new ObjectID(id)).getTimestamp()), fmt) },
@@ -114,15 +118,26 @@ export default {
     },
     getTips () {
       const self = this
+      if (self.noMore === true) {
+        return false
+      }
       let url = process.env.API_HOST + 'tips/queryTips.do'
       let args = {skipNum: self.tips.length}
       if (self.$f7route.query.eventId) {
         args.eventId = self.$f7route.query.eventId
       }
+      if (self.$f7route.query.tipId) {
+        args.tipId = self.$f7route.query.tipId
+      }
       self.$f7.request.promise.postJSON(url, args).then(
         (data) => {
+          self.$$('.ptr-preloader').hide()
           if (data.success === true) {
-            self.tips = self.tips.concat(data.data)
+            if (data.data.length > 0) {
+              self.tips = self.tips.concat(data.data)
+            } else {
+              self.noMore = true
+            }
           }
         },
         () => { self.$root.toastbuttom(self, '通讯异常') }

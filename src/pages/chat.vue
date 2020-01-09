@@ -11,7 +11,7 @@
       </div>
         <template v-for="(msg,index) in msgs.slice(showNum)" >
           <f7-messages-title :key="index" v-if="msg.type==='operate'">{{msg.data}}</f7-messages-title>
-          <f7-message :key="index" v-else-if="msg.type==='image'" :image="cromp(msg.data,true)" :first="true" :last="true" :tail="true" @click="photos[0].url=cromp(msg.data,fakse);$refs.photosbrowser.open()"
+          <f7-message :key="index" v-else-if="msg.type==='image'" :image="cromp(msg.data,true)" :first="true" :last="true" :tail="true" @click="photos[0].url=cromp(msg.data,false);$refs.photosbrowser.open()"
                       :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
                       @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
           />

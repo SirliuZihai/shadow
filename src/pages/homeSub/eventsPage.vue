@@ -39,7 +39,7 @@ function initSocket () {
 function initwebSocket (webSocket) {
   webSocket.onmessage = function (data) {
     let type = data.data.substring(0, 4)
-    if (type === '0003') {
+    if (type === '0003') { // 心跳返回
       try {
         trytime = 0 // 重连初始化
         nativeUtil.writeLogFile2(new Date() + '===0003')

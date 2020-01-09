@@ -6,13 +6,13 @@
           </f7-link>
         </f7-nav-right>
       </f7-navbar>
-      <f7-photo-browser type="popup" :photos="tip.picture" ref="photosbrowser" />
+      <f7-photo-browser type="popup" :photos="photos" ref="photosbrowser" />
       <f7-list no-hairlines form >
         <f7-list-input type="textarea" :value="tip.context" @input="tip.context=$event.target.value"  clear-button />
         <f7-list-item>
           <div style="float: left;width: 100%" @click="$refs.photosbrowser.open()">
             <template v-for="(pic,index) in tip.picture" >
-              <img style="float: left" src="imgUrl(pic)" width="33%" :key="index"  @click="$refs.photosbrowser.open(index)"/>
+              <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index" @click="setPhotos(tip.picture);$refs.photosbrowser.open(index)"/>
             </template>
           </div>
         </f7-list-item>
@@ -46,6 +46,7 @@ export default {
   name: 'editNews',
   data: function () {
     return {
+      photos: [],
       relateEvents: [],
       tip: {
         eventId: '',
@@ -75,9 +76,16 @@ export default {
         photo.upPicture('tempFile', self.tip.picture)
       }
     },
+    setPhotos (pictures) {
+      const self = this
+      for (let i = 0; i < pictures.length; i++) {
+        // {url: '', caption: ''}
+        self.photos.push({url: process.env.API_HOST + pictures[i], caption: ''})
+      }
+    },
     imgUrl (arg) {
-      let url = process.env.API_HOST + arg
-      return url
+      arg = arg.replace('image/', 'image/cromp/')
+      return process.env.API_HOST + arg
     },
     addRange () {
       const self = this

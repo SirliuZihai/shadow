@@ -26,7 +26,8 @@
       </f7-list-item>
       <f7-list-input label="说明" type="textarea"  resizable :value="eventInfo.remark" @input="eventInfo.remark=$event.target.value" :clear-button="!args.isdisable"  :disabled="args.isdisable"/>
     </f7-list>
-    <f7-list v-if="args.isdisable === true">
+    <f7-list v-if="args.justShow === true"></f7-list>
+    <f7-list v-else-if="args.isdisable === true">
       <f7-list-button v-show="args.canedit" @click="args.isdisable = false">编辑</f7-list-button>
       <f7-list-button  v-show="args.canedit"  @click="deleteEvent">删除</f7-list-button>
       <f7-list-button v-show="!args.canedit" @click="deleteEvent">不参与</f7-list-button>
@@ -51,6 +52,9 @@ export default {
     self.eventInfo = JSON.parse(JSON.stringify(theEventPage.methods.getCur().curEvent))
     let name = localStorage.getItem('username')
     self.args.canedit = self.eventInfo.username === name
+    if (self.$f7route.query.option === 'publicSee') {
+      self.args.justShow = true
+    }
   },
   mounted () {
     const self = this
@@ -66,7 +70,8 @@ export default {
     return {
       args: {
         isdisable: true,
-        canedit: false
+        canedit: false,
+        justShow: false
       },
       colorMap: ['#e91e63', '#ff9800', '#2196f3', '#4caf50'],
       eventInfo: {
