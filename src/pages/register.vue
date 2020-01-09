@@ -48,7 +48,7 @@ export default {
     regist () {
       const self = this
       const router = self.$f7router
-      if(!(self.username&&self.password)){
+      if (!(self.username && self.password)) {
         self.$f7.dialog.alert('用户名、密码不能为空！')
         return false
       }
@@ -56,7 +56,7 @@ export default {
         self.$f7.dialog.alert('用户名格式错误！')
         return false
       }
-      if (self.password.length <6) {
+      if (self.password.length < 6) {
         self.$f7.dialog.alert('密码至少六位！')
         return false
       }
