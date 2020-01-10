@@ -16,8 +16,8 @@
                       @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
           />
           <f7-message :key="index" v-else :first="true" :last="true" :tail="true" @click:avatar="photos[0].url=headImgUrl(msg.sender);$refs.photosbrowser.open()"
-                      :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender" :text="msg.data" :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
-          />
+                      :name="dateformate(msg._id,'MM-dd hh:mm')+' '+msg.sender"   :type="msg.sender===name?'sent':'received' " :avatar="headImgUrl(msg.sender)"
+          ><div v-html="msg.data"></div></f7-message>
         </template>
     </f7-messages>
     </div>
@@ -85,7 +85,8 @@ export default {
       }],
       args: {
         scroll: true
-      }
+      },
+      metest: '测试数据<br>，和/n换行'
     }
   },
   watch: {
@@ -200,4 +201,5 @@ export default {
   .messages2{
     overflow: auto;
   }
+
 </style>
