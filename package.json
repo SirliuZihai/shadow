@@ -9,7 +9,7 @@
   "build": "node build/build.js",
   "copy": "node build/copy.js",
   "upload": "node build/uploadToPrd.js",
-  "lint": "eslint --fix src/pages/*",
+  "lint": "eslint --fix src/pages/** src/components/*",
   "start": "npm run dev",
   "unit": "jest --config test/unit/jest.conf.js --coverage",
   "e2e": "node test/e2e/runner.js",

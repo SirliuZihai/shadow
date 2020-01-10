@@ -18,7 +18,7 @@
       <f7-card-content>
         <p>{{tip.event_title}}<br/>{{tip.event_starttime + '-'+tip.event_endtime}}</p>
         <p>{{tip.context}}}</p>
-        <div style="float: left;width: 100%">t
+        <div style="float: left;width: 100%">
           <template v-for="(pic,index) in tip.picture" >
             <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index" @click="setPhotos(tip.picture);$refs.photosbrowser.open(index)"/>
           </template>

@@ -3,9 +3,9 @@
     <f7-navbar title="请求&通知" back-link="Back">
     </f7-navbar>
     <f7-toolbar tabbar bottom>
-      <f7-link tab-link="#tab-1" tab-link-active >收到请求</f7-link>
+      <f7-link tab-link="#tab-1" tab-link-active >收到请求({{args.dealNum}})</f7-link>
       <f7-link tab-link="#tab-2" >发送申请</f7-link>
-      <f7-link tab-link="#tab-3" >通知</f7-link>
+      <f7-link tab-link="#tab-3" @click="ignore(1);args.notifyNum = 0">通知({{args.notifyNum}})</f7-link>
     </f7-toolbar>
     <f7-tabs>
       <f7-tab id="tab-1" class="page-content" tab-active>
@@ -68,6 +68,7 @@ export default {
   created () {
     // 查看统计信息，并冒泡
     const self = this
+    self.count()
     self.query(5)
     self.query(6)
     self.query(1)
@@ -98,6 +99,8 @@ export default {
       deal: [],
       comments: [],
       args: {
+        dealNum: 0,
+        notifyNum: 0,
         tab1noMore: false,
         tab2noMore: false,
         tab3noMore: false
@@ -105,11 +108,30 @@ export default {
     }
   },
   methods: {
+    count () {
+      const self = this
+      let url = process.env.API_HOST + 'notify/countNofify.do'
+      self.$f7.request.promise.get(url, null, 'json').then(
+        (data) => {
+          if (data.success) {
+            // 总数
+            self.args.dealNum = data.data.map((a) => { return a._id >= 5 ? a.count : 0 }).reduce((x, y) => { return x + y })
+            self.args.notifyNum = data.data.map((a) => { return a._id < 5 ? a.count : 0 }).reduce((x, y) => { return x + y })
+          }
+        },
+        () => { self.$root.toastbuttom(self, '通讯异常') }
+      )
+    },
     accept (i) {
       const self = this
       let url = process.env.API_HOST + 'event/accept.do'
       self.$f7.request.promise.get(url, {_id: i._id, eventId: i.relateId, type: i.type, sender: i.sender, receiver: i.receiver}, 'json').then(
         (data) => {
+          if (data.success) {
+            self.deal.length = 0
+            self.query(6)
+            self.count()
+          }
           self.$root.toastbuttom(self, data.message)
         },
         (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
@@ -117,9 +139,14 @@ export default {
     },
     deny (i) {
       const self = this
-      let url = process.env.API_HOST + 'notify/deny.do'
+      let url = process.env.API_HOST + 'event/deny.do'
       self.$f7.request.promise.get(url, {_id: i._id}, 'json').then(
         (data) => {
+          if (data.success) {
+            self.deal.length = 0
+            self.query(6)
+            self.count()
+          }
           self.$root.toastbuttom(self, data.message)
         },
         (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
@@ -189,6 +216,9 @@ export default {
         case 1: state = '已忽略'; break
         case 2: state = '已同意'; break
         case 3: state = '已拒绝'; break
+      }
+      if (!a.e_title) {
+        a.e_title = '[已删除]'
       }
       if (a.sender === username) {
         if (a.type === 5) { // 申请

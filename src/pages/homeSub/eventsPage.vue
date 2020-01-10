@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import theLeftPanelCur from '@/pages/homeSub/eventsPage.vue'
 import nativeUtil from '@/assets/js/nativeUtil.js'
 import photo from '@/assets/js/phonto.js'
 let ObjectID = require('bson').ObjectID
@@ -46,6 +47,9 @@ function initwebSocket (webSocket) {
       } catch (e) {
         console.log(e)
       }
+    }
+    if (type === '0004') { // 请求通知
+      theLeftPanelCur.methods.getCur().args.notify_num++
     }
     if (type === '0000') {
       let array = curEventPage.$root.myevil(data.data.substring(4))

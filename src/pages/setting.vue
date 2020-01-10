@@ -8,7 +8,7 @@
       <f7-list-item :title="'绑定邮箱   '+mail">
         <f7-link slot="after" @click="changeMail">设置</f7-link>
       </f7-list-item>
-      <f7-list-button title="清除日志" @click="doClear" />
+      <f7-list-button v-show="uname === 'ST'" title="清除日志" @click="doClear" />
     </f7-list>
   </f7-page>
 </template>
@@ -31,7 +31,8 @@ export default {
       settings: {
         allReadOnExit: false
       },
-      mail: ''
+      mail: '',
+      uname: localStorage.getItem('username')
     }
   },
   watch: {
