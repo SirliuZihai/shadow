@@ -4,8 +4,8 @@
     <f7-list no-hairlines form >
       <f7-list-input label="标题&事件" type="textarea"  resizable :value="eventInfo.title" @input="eventInfo.title=$event.target.value" placeholder="请输入关键字（默认：留白）" :disabled="args.isdisable" :clear-button="!args.isdisable" />
       <f7-list-input inputId="rangtime" label="起止日期"  placeholder="请选择日期" :value="eventInfo.starttime+'-'+eventInfo.endtime" @change="inputDate" :disabled="args.isdisable" />
-      <f7-list-input label="地点" type="textarea" resizable placeholder="请输入地址" :value="eventInfo.place.name" @focus="callMap()" :readonly="args.isdisable" :clear-button="!args.isdisable" />
-      <f7-list-item title="关联人">
+      <f7-list-input :disabled="args.isdisable" label="地点" type="textarea" resizable placeholder="请输入地址" :value="eventInfo.place.name" @focus="callMap()" :readonly="args.isdisable" :clear-button="!args.isdisable" />
+      <f7-list-item :disabled="args.isdisable" title="关联人">
         <div strong style="width: 70%;height: 100%;">
           <f7-chip v-show="!args.isdisable" v-for="(p,index) in eventInfo.relationship" :key="index" :text="p" deleteable @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
           <f7-chip v-show="args.isdisable" v-for="(p,index) in eventInfo.relationship" :key="index" :text="p"  @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
