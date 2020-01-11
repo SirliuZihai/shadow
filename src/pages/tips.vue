@@ -16,7 +16,7 @@
         <div class="demo-facebook-date">{{dateformate(tip._id,'MM-dd hh:mm')}}</div>
       </f7-card-header>
       <f7-card-content>
-        <p>{{tip.event_title}}<br/>{{tip.event_starttime + '-'+tip.event_endtime}}</p>
+        <p>事件：{{tip.event_title}}<br/>时间：{{tip.event_starttime + '-'+tip.event_endtime}}<br/>————————————————</p>
         <p>{{tip.context}}}</p>
         <div style="float: left;width: 100%">
           <template v-for="(pic,index) in tip.picture" >
@@ -108,7 +108,7 @@ export default {
         self.$f7.request.promise.postJSON(url, {_id: _id}).then(
           (data) => {
             if (data.success) {
-              self.tips.splice(index)
+              self.tips.splice(index,1)
             }
             self.$root.toastbuttom(self, data.message)
           },
@@ -149,6 +149,10 @@ export default {
     },
     participate (eventId) {
       const self = this
+      if (!eventId) {
+        self.$f7.dialog.alert('该事件已删除')
+        return false
+      }
       if (self.partEnable === false) {
         return false
       }

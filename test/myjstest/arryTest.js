@@ -12,4 +12,7 @@ console.log(arrays)
 let arg1 = []
 arg1 = arg1.concat([{'name':'oi'},{'name':'oi2'}])
 arg1 = arg1.concat([{'name':'o3'},{'name':'oi4'}])
+console.log(('slice==='))
+console.log(arg1.splice(1,1))
+console.log(('arg1==='))
 console.log(arg1)
