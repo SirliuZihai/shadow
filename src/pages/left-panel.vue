@@ -15,8 +15,7 @@
       <f7-list-item  link="/login-screen-page/" title="注销" @click="logoff" panel-close></f7-list-item>
       <f7-list-item link="/setting/" title="设置" panel-close></f7-list-item>
       <f7-list-item link="/about/" title="关于" panel-close></f7-list-item>
-      <f7-list-item v-if="uname === 'ST'" link="/explore/" title="测试" panel-close></f7-list-item>
-      <f7-list-item v-if="uname === 'yanzi'" link="/testHome/" title="测试" panel-close></f7-list-item>
+      <f7-list-item v-if="uname === 'yanzi'" link="/icon/" title="测试" panel-close></f7-list-item>
     </f7-list>
   </f7-page>
 </template>

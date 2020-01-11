@@ -124,13 +124,16 @@ export default {
     },
     accept (i) {
       const self = this
+      if (i.state !== 0) {
+        self.$f7.dialog.alert('已经处理过了')
+        return false
+      }
       let url = process.env.API_HOST + 'event/accept.do'
       self.$f7.request.promise.get(url, {_id: i._id, eventId: i.relateId, type: i.type, sender: i.sender, receiver: i.receiver}, 'json').then(
         (data) => {
           if (data.success) {
-            self.deal.length = 0
-            self.query(6)
-            self.count()
+            i.state = 2
+            self.args.dealNum--
           }
           self.$root.toastbuttom(self, data.message)
         },
@@ -139,13 +142,16 @@ export default {
     },
     deny (i) {
       const self = this
+      if (i.state !== 0) {
+        self.$f7.dialog.alert('已经处理过了')
+        return false
+      }
       let url = process.env.API_HOST + 'event/deny.do'
       self.$f7.request.promise.get(url, {_id: i._id}, 'json').then(
         (data) => {
           if (data.success) {
-            self.deal.length = 0
-            self.query(6)
-            self.count()
+            i.state = 3
+            self.args.dealNum--
           }
           self.$root.toastbuttom(self, data.message)
         },

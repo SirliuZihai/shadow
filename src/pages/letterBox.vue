@@ -3,7 +3,7 @@
     <f7-navbar title="信箱" back-link="Back">
       <f7-nav-right>
         <f7-link class="searchbar-enable" data-searchbar=".searchbar-otherletters" icon-ios="f7:search" icon-md="material:search"></f7-link>
-        <f7-menu-item icon-f7="add" link=true dropdown>
+        <f7-menu-item icon-f7="plus" link=true dropdown>
             <f7-menu-dropdown right>
               <f7-menu-dropdown-item v-show="false" text="处理bug" href="/404/" ></f7-menu-dropdown-item>
               <f7-menu-dropdown-item v-show='args.showotherletter' text="投递信件" href="/myletters/" ></f7-menu-dropdown-item>

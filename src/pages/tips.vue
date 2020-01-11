@@ -17,7 +17,7 @@
       </f7-card-header>
       <f7-card-content>
         <p>事件：{{tip.event_title}}<br/>时间：{{tip.event_starttime + '-'+tip.event_endtime}}<br/>————————————————</p>
-        <p>{{tip.context}}}</p>
+        <p>{{tip.context}}</p>
         <div style="float: left;width: 100%">
           <template v-for="(pic,index) in tip.picture" >
             <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index" @click="setPhotos(tip.picture);$refs.photosbrowser.open(index)"/>
@@ -108,7 +108,7 @@ export default {
         self.$f7.request.promise.postJSON(url, {_id: _id}).then(
           (data) => {
             if (data.success) {
-              self.tips.splice(index,1)
+              self.tips.splice(index, 1)
             }
             self.$root.toastbuttom(self, data.message)
           },

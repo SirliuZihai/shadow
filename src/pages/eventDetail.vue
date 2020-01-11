@@ -1,15 +1,21 @@
 <template>
   <f7-page>
-    <f7-navbar title="事件" back-link="Back"></f7-navbar>
+    <f7-navbar title="事件" back-link="Back">
+      <f7-nav-right>
+        <f7-link icon-f7="star_round_fill" :href="'/tips/?eventId='+eventInfo._id"></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
     <f7-list no-hairlines form >
       <f7-list-input label="标题&事件" type="textarea"  resizable :value="eventInfo.title" @input="eventInfo.title=$event.target.value" placeholder="请输入关键字（默认：留白）" :disabled="args.isdisable" :clear-button="!args.isdisable" />
       <f7-list-input inputId="rangtime" label="起止日期"  placeholder="请选择日期" :value="eventInfo.starttime+'-'+eventInfo.endtime" @change="inputDate" :disabled="args.isdisable" />
       <f7-list-input :disabled="args.isdisable" label="地点" type="textarea" resizable placeholder="请输入地址" :value="eventInfo.place.name" @focus="callMap()" :readonly="args.isdisable" :clear-button="!args.isdisable" />
+      <f7-list-item :disabled="true" title="发起人">
+        <div strong style="width: 70%;height: 100%;"><f7-chip :text="eventInfo.username"></f7-chip></div></f7-list-item>
       <f7-list-item :disabled="args.isdisable" title="关联人">
         <div strong style="width: 70%;height: 100%;">
           <f7-chip v-show="!args.isdisable" v-for="(p,index) in eventInfo.relationship" :key="index" :text="p" deleteable @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
           <f7-chip v-show="args.isdisable" v-for="(p,index) in eventInfo.relationship" :key="index" :text="p"  @delete="deleteTag(eventInfo.relationship,index,'关联人')" ></f7-chip>
-          <f7-chip text="添加"  color="blue" @click="addTag()" v-if="!args.isdisable"></f7-chip>
+          <f7-chip text="邀请"  color="blue" @click="addTag()" v-if="!args.isdisable"></f7-chip>
         </div>
       </f7-list-item>
       <f7-list-item title="是否公开" :disabled="args.isdisable">
