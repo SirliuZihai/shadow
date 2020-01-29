@@ -1,5 +1,5 @@
 <template>
-  <f7-page :page-content="false">
+  <f7-page :page-content="false" >
     <f7-navbar title="请求&通知" back-link="Back">
     </f7-navbar>
     <f7-toolbar tabbar bottom>
@@ -19,13 +19,12 @@
             <img slot="media" :src="eventImage(i.sender)" />
           </f7-list-item>
         </f7-list>
-        <f7-block-footer v-show="args.tab1noMore===true" style="text-align: center">
+        <f7-block-footer v-if="args.tab1noMore===true" style="text-align: center">
           没有更多了
         </f7-block-footer>
-        <div class="ptr-preloader">
-          <div class="preloader"></div>
-          <div class="ptr-arrow"></div>
-        </div>
+        <f7-block-footer v-else style="text-align: center;color:blue" >
+          <a @click="query(6)">点击加载更多</a>
+        </f7-block-footer>
       </f7-tab>
       <f7-tab id="tab-2" class="page-content">
         <f7-list  mediaList class="notify-list">
@@ -34,27 +33,25 @@
             <img slot="media" :src="eventImage(a.receiver)" />
           </f7-list-item>
         </f7-list>
-          <f7-block-footer v-show="args.tab2noMore===true" style="text-align: center">
+          <f7-block-footer v-if="args.tab2noMore===true" style="text-align: center">
             没有更多了
           </f7-block-footer>
-          <div class="ptr-preloader">
-            <div class="preloader"></div>
-            <div class="ptr-arrow"></div>
-          </div>
+        <f7-block-footer v-else style="text-align: center;color:blue">
+          <a @click="query(5)">点击加载更多</a>
+        </f7-block-footer>
       </f7-tab>
       <f7-tab id="tab-3" class="page-content">
-        <f7-list  mediaList class="notify-list" >
+        <f7-list mediaList class="notify-list" >
           <f7-list-item v-for="(c,index) in comments" :key="index" :title="c.sender" :subtitle="c.content" :after="dateformate(c._id,'MM-dd hh:mm')" :link="'/tips/?tipId='+c.relateId">
             <img slot="media" :src="eventImage(c.sender)" />
           </f7-list-item>
         </f7-list>
-          <f7-block-footer v-show="args.tab3noMore===true" style="text-align: center">
+          <f7-block-footer v-if="args.tab3noMore===true" style="text-align: center">
             没有更多了
           </f7-block-footer>
-          <div class="ptr-preloader">
-            <div class="preloader"></div>
-            <div class="ptr-arrow"></div>
-          </div>
+        <f7-block-footer v-else style="text-align: center;color:blue">
+          <a @click="query(1)">点击加载更多</a>
+        </f7-block-footer>
       </f7-tab>
     </f7-tabs>
   </f7-page>
@@ -72,24 +69,6 @@ export default {
     self.query(5)
     self.query(6)
     self.query(1)
-    /* self.$$('#div_tab-1').on('ptr:refresh', function (e) {
-      if (self.args.tab1noMore === false) {
-        self.query(6)
-        e.detail()
-      }
-    })
-    self.$$('#div_tab-2').on('ptr:refresh', function (e) {
-      if (self.args.tab2noMore === false) {
-        self.query(5)
-      }
-      e.detail()
-    })
-    self.$$('#div_tab-3').on('ptr:refresh', function (e) {
-      if (self.args.tab3noMore === false) {
-        self.query(1)
-      }
-      e.detail()
-    }) */
   },
   data: function () {
     return {
@@ -113,7 +92,7 @@ export default {
       let url = process.env.API_HOST + 'notify/countNofify.do'
       self.$f7.request.promise.get(url, null, 'json').then(
         (data) => {
-          if (data.success) {
+          if (data.success && data.data.length > 0) {
             // 总数
             self.args.dealNum = data.data.map((a) => { return a._id >= 5 ? a.count : 0 }).reduce((x, y) => { return x + y })
             self.args.notifyNum = data.data.map((a) => { return a._id < 5 ? a.count : 0 }).reduce((x, y) => { return x + y })
@@ -170,25 +149,26 @@ export default {
       self.$f7.request.promise.postJSON(url, {type: type, skipNum: skipNum}, 'json').then(
         (data) => {
           if (data.success === true) {
-            if (data.data.length === 0) {
+            if (data.data == null || data.data.length === 0 || data.data.length < 20) {
               switch (type) {
                 case 1: self.args.tab3noMore = true; break
                 case 5: self.args.tab2noMore = true; break
                 case 6: self.args.tab1noMore = true; break
               }
             }
-            for (let i = 0; i < data.data.length; i++) {
-              switch (type) {
-                case 1: self.comments.push(data.data[i]); break
-                case 5: self.applys.push(data.data[i]); break
-                case 6: self.deal.push(data.data[i]); break
+            if (data.data) {
+              for (let i = 0; i < data.data.length; i++) {
+                switch (type) {
+                  case 1: self.comments.push(data.data[i]); break
+                  case 5: self.applys.push(data.data[i]); break
+                  case 6: self.deal.push(data.data[i]); break
+                }
               }
             }
-            self.$$('.ptr-preloader').hide()
           }
           console.log(data.message)
         },
-        (e) => { self.$$('.ptr-preloader').hide(); self.$root.toastbuttom(self, '通讯异常\n' + e) }
+        (e) => { self.$root.toastbuttom(self, '通讯异常\n' + e) }
       )
     },
     ignore (type) {

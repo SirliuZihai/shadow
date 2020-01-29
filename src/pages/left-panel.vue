@@ -15,7 +15,7 @@
       <f7-list-item  link="/login-screen-page/" title="注销" @click="logoff" panel-close></f7-list-item>
       <f7-list-item link="/setting/" title="设置" panel-close></f7-list-item>
       <f7-list-item link="/about/" title="关于" panel-close></f7-list-item>
-      <f7-list-item v-if="uname === 'yanzi'" link="/icon/" title="测试" panel-close></f7-list-item>
+      <f7-list-item v-if="uname === 'yanzi'||uname === 'xiaotong'" link="/test2/" title="测试" panel-close></f7-list-item>
     </f7-list>
   </f7-page>
 </template>
@@ -30,7 +30,7 @@ export default {
     let url = process.env.API_HOST + 'notify/countNofify.do'
     self.$f7.request.promise.get(url, null, 'json').then(
       (data) => {
-        if (data.success) {
+        if (data.success && data.data.length > 0) {
           // 总数
           self.args.notify_num = data.data.map((a) => { return a.count }).reduce((x, y) => { return x + y })
         }

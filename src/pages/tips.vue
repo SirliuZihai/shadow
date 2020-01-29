@@ -23,16 +23,22 @@
             <img style="float: left" :src="imgUrl(pic)" width="33%" :key="index" @click="setPhotos(tip.picture);$refs.photosbrowser.open(index)"/>
           </template>
         </div>
-        <!--<p class="likes">Likes: 112 &nbsp;&nbsp; Comments: 43</p>-->
       </f7-card-content>
       <f7-card-footer class="no-border" >
         <f7-link style="text-align: center;" @click="like(tip._id,tip.likes,'','',tip)"><span :style="tip.likes === true?'color: #0066d6':''">赞</span>({{tip.likesNum}})</f7-link>
-        <f7-link @click="comment()">评论({{tip.comments}})</f7-link>
+        <f7-link @click="comment(tip)">评论({{tip.comments}})</f7-link>
         <f7-link v-show="tip.event_isJoin !== true" @click="addEvent(tip.eventId)">添加日程</f7-link>
         <f7-link v-show="tip.enter === true&&tip.event_isJoin !== true" @click="participate(tip.eventId)">申请加入</f7-link>
         <f7-link v-show="tip.publisher === username" @click="deletetip(tip._id,index)">删除</f7-link>
       </f7-card-footer>
     </f7-card>
+      <!--<f7-block-title style="margin-top: 0rem" :key="index" v-show="tip.comments.length>0"> 评论</f7-block-title>
+      <f7-list mediaList inset :key="index" style="margin-top: 0rem">
+        <f7-list-item v-for="(co,index) in tip.comments" :key="index" :subtitle="co.publisher+' '+dateformate(co._id,'MM-dd hh:mm')" :text="co.conxtext">
+          <img slot="media" :src="headImgUrl(co.publisher)" />
+          <span class="show">查看回复</span><a class="comment" :style="co.likes === true?'color: #0066d6':''">赞({{co.likesNum}})</a><a class="comment">回复</a>
+        </f7-list-item>
+      </f7-list>-->
     </template>
       <f7-block-footer v-show="noMore===true" style="text-align: center">
             没有更多了
@@ -59,7 +65,8 @@ export default {
         partEnable: true // 加入按钮 enable
       },
       photos: [], // {url: '', caption: ''}
-      noMore: false
+      noMore: false,
+      curTip: {}
     }
   },
   created () {
@@ -190,8 +197,13 @@ export default {
         () => { self.likeEnable = true; self.$root.toastbuttom(self, '通讯异常') }
       )
     },
-    comment () {
-
+    comment (tip) {
+      const self = this
+      self.curTip = tip
+      self.$f7router.navigate('/comments/?tipId=' + tip._id)
+    },
+    getCurTip () {
+      return this.curTip
     }
   }
 
@@ -200,8 +212,8 @@ export default {
 
 <style scoped>
   .headImg{
-    width: 50px;
-    height: 50px;
+    width: 3.2rem;
+    height: 3.2rem;
     border-radius:50%
   }
 </style>

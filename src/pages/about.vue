@@ -2,7 +2,7 @@
   <f7-page>
     <f7-navbar title="关于" back-link="Back"></f7-navbar>
     <f7-block strong>
-      <p style="text-align: center">云日历 <br/>version 2.2</p>
+      <p style="text-align: center">云日历 <br/>version beta2.3</p>
       <f7-list>
         <f7-list-button style="text-align: center">检查版本</f7-list-button>
       </f7-list>

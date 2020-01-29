@@ -1,5 +1,6 @@
 :root {
   --f7-panel-width: 180px; //260
+  --f7-list-item-text-max-lines: 100; //2
 }
 
   /*--f7-menu-bg-color: rgba(0, 0, 0, 0.9);

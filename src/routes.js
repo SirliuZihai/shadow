@@ -22,9 +22,11 @@ import testHome from './test/home.vue'
 import resetMail from './components/resetMail.vue'
 import resetPassword from './components/resetPassword.vue'
 import tips from './pages/tips.vue'
+import comments from './components/comments.vue'
 import editNews from './components/editNews.vue'
 import notify from './components/notify.vue'
-import icon from './pages_demo/icons.vue'
+import test2 from './pages_demo/pull-to-refresh.vue'
+
 // import ShowPanOrHistory from './pages/showPanOrHistory.vue'
 // Pages
 export default [
@@ -126,6 +128,10 @@ export default [
     component: tips
   },
   {
+    path: '/comments/',
+    component: comments
+  },
+  {
     path: '/editNews/',
     component: editNews
   },
@@ -134,8 +140,8 @@ export default [
     component: notify
   },
   {
-    path: '/icon/',
-    component: icon
+    path: '/test2/',
+    component: test2
   },
   /* {
     path: '/showPanOrHistory/',

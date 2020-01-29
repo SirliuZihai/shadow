@@ -3113,7 +3113,7 @@ html.device-full-viewport body {
 /* === List View === */
 :root {
   --f7-list-bg-color: #fff;
-  --f7-list-item-text-max-lines: 2;
+  --f7-list-item-text-max-lines: 100;
   --f7-list-chevron-icon-color: #c7c7cc;
   --f7-list-item-title-font-size: inherit;
   --f7-list-item-title-font-weight: 400;
