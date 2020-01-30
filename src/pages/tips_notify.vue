@@ -1,15 +1,14 @@
 <template>
   <f7-page :page-content="false">
-    <f7-navbar title="动态" back-link="Back">
+    <f7-navbar title="相关动态" back-link="Back">
     <f7-nav-right>
       <f7-link icon-f7="compose" href="/editNews/">
       </f7-link>
     </f7-nav-right>
     </f7-navbar>
     <f7-photo-browser type="popup" :photos="photos" ref="photosbrowser" />
-    <div class="page-content ptr-content ptr-bottom">
-    <template v-for="(tip,index) in tips" >
-    <f7-card class="demo-facebook-card" :key="index">
+    <div v-show="tip._id !== undefined" class="page-content">
+   <f7-card class="demo-facebook-card">
       <f7-card-header class="no-border">
         <div class="demo-facebook-avatar "><img :src="headImgUrl(tip.publisher)" class="headImg"/></div>
         <div class="demo-facebook-name">{{tip.publisher}}</div>
@@ -26,66 +25,78 @@
       </f7-card-content>
       <f7-card-footer class="no-border" >
         <f7-link style="text-align: center;" @click="like(tip._id,tip.likes,'','',tip)"><span :style="tip.likes === true?'color: #0066d6':''">赞</span>({{tip.likesNum}})</f7-link>
-        <f7-link @click="comment(tip)">评论({{tip.comments}})</f7-link>
+        <f7-link @click="comment(tip)">评论({{tip.commentsNum}})</f7-link>
         <f7-link v-show="tip.event_isJoin !== true" @click="addEvent(tip.eventId)">添加日程</f7-link>
         <f7-link v-show="tip.enter === true&&tip.event_isJoin !== true" @click="participate(tip.eventId)">申请加入</f7-link>
         <f7-link v-show="tip.publisher === username" @click="deletetip(tip._id,index)">删除</f7-link>
       </f7-card-footer>
     </f7-card>
-      <!--<f7-block-title style="margin-top: 0rem" :key="index" v-show="tip.comments.length>0"> 评论</f7-block-title>
+      <f7-block-title style="margin-top: 0rem" :key="index" v-show="tip.commentsNum>0">相关评论</f7-block-title>
       <f7-list mediaList inset :key="index" style="margin-top: 0rem">
-        <f7-list-item v-for="(co,index) in tip.comments" :key="index" :subtitle="co.publisher+' '+dateformate(co._id,'MM-dd hh:mm')" :text="co.conxtext">
-          <img slot="media" :src="headImgUrl(co.publisher)" />
-          <span class="show">查看回复</span><a class="comment" :style="co.likes === true?'color: #0066d6':''">赞({{co.likesNum}})</a><a class="comment">回复</a>
-        </f7-list-item>
-      </f7-list>-->
-    </template>
-      <f7-block-footer v-show="noMore===true" style="text-align: center">
-            没有更多了
-      </f7-block-footer>
-      <div class="ptr-preloader">
-        <div class="preloader"></div>
-        <div class="ptr-arrow"></div>
-      </div>
+        <template v-for="(co,index) in tip.comments" >
+          <f7-list-item :key="index" :subtitle="co.publisher" :text="co.content" ><img slot="media" :src="headImgUrl(co.publisher)"/>
+            <span class="comment_left">{{dateformate(co._id,'MM-dd hh:mm')}}</span><a v-if="co.publisher === args.uname" @click="deleteComment(co._id,null)" class="comment">删除</a><a class="comment" @click="like(null,co.likes,co._id,'',co)">{{co.likes === true?'已赞':'赞'}}({{co.likesNum}})</a><a v-if="args.comment === true" class="comment" @click="args.comment = false;curComment = co._id;curReceiver=co.publisher">回复</a><a v-else class="comment" @click="args.comment = true;curComment = null">取消回复</a>
+          </f7-list-item>
+          <f7-list-item v-for="(reply,index) in co.replys" :key="index" :subtitle="reply.publisher+'回复'+reply.receiver" :text="reply.content"><img slot="media" :src="headImgUrl(reply.publisher)" />
+            <span class="comment_left">{{dateformate(reply._id,'MM-dd hh:mm')}}</span><a v-if="co.publisher === args.uname" @click="deleteComment(co._id,reply._id)" class="comment">删除</a><a class="comment" @click="like(null,reply.likes,co._id,reply._id,reply)">{{reply.likes === true?'已赞':'赞'}}({{reply.likesNum}})</a><a  v-if="args.comment === true" class="comment" @click="do_reply(reply.publisher,co._id)">回复</a><a  v-else class="comment" @click="un_reply()">取消回复</a>
+          </f7-list-item>
+        </template>
+      </f7-list>
     </div>
+      <f7-messagebar v-if="args.comment === true" placeholder="请输入评论" :sheet-visible="sheetVisible">
+        <f7-link
+          icon-ios="f7:arrow_up_fill"
+          icon-md="material:send"
+          slot="inner-end"
+          @click="addComment(null)"/>
+      </f7-messagebar>
+      <f7-messagebar v-else placeholder="请输入回复" :sheet-visible="sheetVisible">
+        <f7-link
+          icon-ios="f7:arrow_up_fill"
+          icon-md="material:send"
+          slot="inner-end"
+          @click="addComment(curComment)"/>
+      </f7-messagebar>
   </f7-page>
 </template>
 
 <script>
 let ObjectID = require('bson').ObjectID
-var curTips
 export default {
   name: 'tips',
   data: function () {
     return {
       username: localStorage.getItem('username'),
-      tips: [],
+      tip: {},
       args: {
         likeEnable: true, // 点赞按钮 enable
-        partEnable: true // 加入按钮 enable
+        partEnable: true, // 加入按钮 enable
+        uname: localStorage.getItem('username'),
+        comment: true
       },
       photos: [], // {url: '', caption: ''}
       noMore: false,
-      curTip: {}
+      curTip: {},
+      curReceiver: '',
+      curComment: ''
     }
   },
   created () {
-    console.log('…………tip created')
     const self = this
-    curTips = self
-    self.tips.length = 0
     self.getTips()
   },
-  mounted () {
-    const self = this
-    self.$$('.ptr-content').on('ptr:refresh', function (e) {
-      self.getTips()
-      e.detail()
-    })
-  },
   methods: {
-    getCur () {
-      return curTips
+    do_reply (publisher, commentId) {
+      const self = this
+      self.args.comment = false
+      self.curComment = commentId
+      self.curReceiver = publisher
+    },
+    un_reply () {
+      const self = this
+      self.args.comment = true
+      self.curComment = null
+      self.curReceiver = null
     },
     headImgUrl (name) {
       let url = process.env.API_HOST + 'image/head/' + name + '.jpg'
@@ -115,7 +126,7 @@ export default {
         self.$f7.request.promise.postJSON(url, {_id: _id}).then(
           (data) => {
             if (data.success) {
-              self.tips.splice(index, 1)
+              self.tip = {}
             }
             self.$root.toastbuttom(self, data.message)
           },
@@ -125,26 +136,25 @@ export default {
     },
     getTips () {
       const self = this
-      if (self.noMore === true) {
-        return false
-      }
-      let url = process.env.API_HOST + 'tips/queryTips.do'
-      let args = {skipNum: self.tips.length}
-      if (self.$f7route.query.eventId) {
-        args.eventId = self.$f7route.query.eventId
-      }
-      if (self.$f7route.query.tipId) {
-        args.tipId = self.$f7route.query.tipId
+      let url = process.env.API_HOST + 'tips/queryTips_notify.do'
+      let args = {}
+      let relateId = self.$f7route.query.relateId
+      if (relateId) {
+        relateId = relateId.split('_')
+        if (relateId.length > 2) {
+          args.replyId = relateId[2]
+        }
+        if (relateId.length > 1) {
+          args.commentId = relateId[1]
+        }
+        if (relateId.length > 0) {
+          args.tipId = relateId[0]
+        }
       }
       self.$f7.request.promise.postJSON(url, args).then(
         (data) => {
-          self.$$('.ptr-preloader').hide()
           if (data.success === true) {
-            if (data.data.length > 0) {
-              self.tips = self.tips.concat(data.data)
-            } else {
-              self.noMore = true
-            }
+            self.tip = data.data
           }
         },
         () => { self.$root.toastbuttom(self, '通讯异常') }
@@ -173,12 +183,27 @@ export default {
         () => { self.partEnable = true; self.$root.toastbuttom(self, '通讯异常') }
       )
     },
+    deleteComment (commentId, replyId) {
+      const self = this
+      let url = process.env.API_HOST + 'tips/removeComment.do'
+      let tipId = self.$f7route.query.tipId
+      self.$f7.request.promise.postJSON(url, {_id: tipId, commentId: commentId, replyId: replyId}).then(
+        (data) => {
+          if (data.success) {
+            self.queryComments()
+          }
+          self.$root.toastbuttom(self, data.message)
+        },
+        () => { self.$root.toastbuttom(self, '通讯异常') }
+      )
+    },
     like (_id, likes, commentId, replyId, obj) {
       const self = this
       if (self.likeEnable === false) {
         return false
       }
       self.likeEnable = false
+      _id = self.$f7route.query.tipId
       let url = process.env.API_HOST + 'tips/like.do'
       self.$f7.request.promise.postJSON(url, {_id: _id, like: !likes, commentId: commentId, replyId: replyId}).then(
         (data) => {
@@ -196,6 +221,29 @@ export default {
         },
         () => { self.likeEnable = true; self.$root.toastbuttom(self, '通讯异常') }
       )
+    },
+    addComment (commentId) {
+      const self = this
+      const text = self.$f7.messagebar.getValue().replace(/\n/g, '<br>').trim()
+      // Hide sheet
+      self.sheetVisible = false
+      // Clear area
+      self.$f7.messagebar.clear()
+      // Send message
+      if (text) {
+        let url = process.env.API_HOST + 'tips/comment.do'
+        let tipId = self.$f7route.query.relateId.split('_')[0]
+        self.$f7.request.promise.postJSON(url, {_id: tipId, commentId: commentId, content: text, receiver: self.curReceiver}).then(
+          (data) => {
+            if (data.success) {
+              self.getTips()
+              self.args.comment = true
+            }
+            self.$root.toastbuttom(self, data.message)
+          },
+          () => { self.$root.toastbuttom(self, '通讯异常') }
+        )
+      }
     },
     comment (tip) {
       const self = this
@@ -215,5 +263,19 @@ export default {
     width: 3.0rem;
     height: 3.0rem;
     border-radius:50%
+  }
+  .comment{
+    float: right;
+    font-size: small;
+    margin-right: 0.5rem;
+  }
+  .comment_left{
+    float: left;
+    font-size: small;
+    margin-right: 0.5rem;
+  }
+  img{
+    width: 2.5rem;
+    height: 2.5rem;
   }
 </style>

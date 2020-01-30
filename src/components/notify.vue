@@ -42,7 +42,7 @@
       </f7-tab>
       <f7-tab id="tab-3" class="page-content">
         <f7-list mediaList class="notify-list" >
-          <f7-list-item v-for="(c,index) in comments" :key="index" :title="c.sender" :subtitle="c.content" :after="dateformate(c._id,'MM-dd hh:mm')" :link="'/tips/?tipId='+c.relateId">
+          <f7-list-item v-for="(c,index) in comments" :key="index" :title="c.sender" :subtitle="c.content" :after="dateformate(c._id,'MM-dd hh:mm')" :link="'/tipsNotify/?relateId='+c.relateId">
             <img slot="media" :src="eventImage(c.sender)" />
           </f7-list-item>
         </f7-list>

@@ -22,6 +22,7 @@ import testHome from './test/home.vue'
 import resetMail from './components/resetMail.vue'
 import resetPassword from './components/resetPassword.vue'
 import tips from './pages/tips.vue'
+import tipsNotify from './pages/tips_notify.vue'
 import comments from './components/comments.vue'
 import editNews from './components/editNews.vue'
 import notify from './components/notify.vue'
@@ -126,6 +127,10 @@ export default [
   {
     path: '/tips/',
     component: tips
+  },
+  {
+    path: '/tipsNotify/',
+    component: tipsNotify
   },
   {
     path: '/comments/',

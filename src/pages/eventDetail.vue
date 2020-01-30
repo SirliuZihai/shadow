@@ -98,6 +98,9 @@ export default {
     },
     saveEvent () {
       const self = this
+      if (!self.eventInfo.title) {
+        self.$f7.dialog.alert('标题不能为空')
+      }
       let url = process.env.API_HOST + 'event/saveEvent.do'
       delete self.eventInfo.latestMsg
       self.$f7.request.promise.postJSON(url, self.eventInfo).then(
