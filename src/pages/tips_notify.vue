@@ -7,7 +7,7 @@
     </f7-nav-right>
     </f7-navbar>
     <f7-photo-browser type="popup" :photos="photos" ref="photosbrowser" />
-    <div v-show="tip._id !== undefined" class="page-content">
+    <div v-if="tip !== null" class="page-content">
    <f7-card class="demo-facebook-card">
       <f7-card-header class="no-border">
         <div class="demo-facebook-avatar "><img :src="headImgUrl(tip.publisher)" class="headImg"/></div>
@@ -31,7 +31,7 @@
         <f7-link v-show="tip.publisher === username" @click="deletetip(tip._id,index)">删除</f7-link>
       </f7-card-footer>
     </f7-card>
-      <f7-block-title style="margin-top: 0rem" :key="index" v-show="tip.commentsNum>0">相关评论</f7-block-title>
+      <f7-block-title style="margin-top: 0rem" :key="index" v-show="tip.comments&&tip.comments.length>0">相关评论</f7-block-title>
       <f7-list mediaList inset :key="index" style="margin-top: 0rem">
         <template v-for="(co,index) in tip.comments" >
           <f7-list-item :key="index" :subtitle="co.publisher" :text="co.content" ><img slot="media" :src="headImgUrl(co.publisher)"/>
@@ -139,6 +139,7 @@ export default {
       let url = process.env.API_HOST + 'tips/queryTips_notify.do'
       let args = {}
       let relateId = self.$f7route.query.relateId
+      args.type = self.$f7route.query.type
       if (relateId) {
         relateId = relateId.split('_')
         if (relateId.length > 2) {
@@ -186,11 +187,11 @@ export default {
     deleteComment (commentId, replyId) {
       const self = this
       let url = process.env.API_HOST + 'tips/removeComment.do'
-      let tipId = self.$f7route.query.tipId
+      let tipId = self.$f7route.query.relateId.split('_')[0]
       self.$f7.request.promise.postJSON(url, {_id: tipId, commentId: commentId, replyId: replyId}).then(
         (data) => {
           if (data.success) {
-            self.queryComments()
+            self.getTips()
           }
           self.$root.toastbuttom(self, data.message)
         },
@@ -203,7 +204,7 @@ export default {
         return false
       }
       self.likeEnable = false
-      _id = self.$f7route.query.tipId
+      _id = self.$f7route.query.relateId.split('_')[0]
       let url = process.env.API_HOST + 'tips/like.do'
       self.$f7.request.promise.postJSON(url, {_id: _id, like: !likes, commentId: commentId, replyId: replyId}).then(
         (data) => {
