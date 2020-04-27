@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'http://localhost:8081/myapp',//设置你调用的接口域名和端口号 别忘了加http
-      //  target: 'http://47.112.131.22/myapp',
+       // target: 'http://47.112.131.22/myapp',
       //  target: 'http://47.112.131.22:8088/myapp',
         changeOrigin: true,
         pathRewrite: {
@@ -23,7 +23,7 @@ module.exports = {
       },
       '/myws':{
         target: 'ws://localhost:8081/myapp',//设置你调用的接口域名和端口号 别忘了加http
-       // target: 'ws://47.112.131.22/myapp',
+        //target: 'ws://47.112.131.22/myapp',
        // target: 'ws://47.112.131.22:8088/myapp',
         ws: true,
         changeOrigin: true,

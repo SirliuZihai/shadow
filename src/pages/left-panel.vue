@@ -12,7 +12,6 @@
       <f7-list-item link="/tips/" title="动态" :badge="args.tips_num" badge-color="blue" @click="args.tips_num=0" panel-close></f7-list-item>
       <f7-list-item link="/notify/" title="请求&通知" :badge="args.notify_num" badge-color="blue" @click="args.notify_num=0"  panel-close></f7-list-item>
       <!--<f7-list-item link="/letterBox/" title="信箱" panel-close></f7-list-item>-->
-      <f7-list-item  link="/login-screen-page/" title="注销" @click="logoff" panel-close></f7-list-item>
       <f7-list-item link="/setting/" title="设置" panel-close></f7-list-item>
       <f7-list-item link="/about/" title="关于" panel-close></f7-list-item>
       <f7-list-item v-if="uname === 'yanzi'||uname === 'xiaotong'" link="/test2/" title="测试" panel-close></f7-list-item>
@@ -70,10 +69,6 @@ export default {
     },
     nohaedImg () {
       this.$$('#headImg').attr('src', defautImg)
-    },
-    logoff () {
-      localStorage.removeItem('username')
-      localStorage.removeItem('token')
     }
 
   }

@@ -9,6 +9,7 @@
         <f7-link slot="after" @click="changeMail">设置</f7-link>
       </f7-list-item>
       <f7-list-button v-show="uname === 'ST'" title="清除日志" @click="doClear" />
+      <f7-list-button title="退出账号" @click="logoff"></f7-list-button>
     </f7-list>
   </f7-page>
 </template>
@@ -60,6 +61,11 @@ export default {
     },
     changeMail () {
       this.$f7router.navigate('/resetMail/')
+    },
+    logoff () {
+      localStorage.removeItem('username')
+      localStorage.removeItem('token')
+      this.$f7router.navigate('/login-screen-page/')
     }
   }
 }

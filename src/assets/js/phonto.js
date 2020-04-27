@@ -75,8 +75,9 @@ navigator.geolocation.getCurrentPosition(
     function(error){myPosition = ''}, null
   );
 }
-  function onBackKeyDown() {
-  if(myapp.$f7.views.main.history.length>2){
+function onBackKeyDown() {
+  let his = myapp.$f7.views.main.history
+  if(his.length==1||his[his.length-2]=='/login-screen-page/'){
     //如果有history则执行返回
     myapp.$f7.views.main.router.back()
   }else{
@@ -95,7 +96,6 @@ navigator.geolocation.getCurrentPosition(
       console.log('go home fail');
     });
   }
-
 }
 function cordovaDevice() {
   navigator.notification.alert("Cordova version: " + device.cordova + "\n" +
