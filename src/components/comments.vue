@@ -9,7 +9,7 @@
           <span class="comment_left">{{dateformate(co._id,'MM-dd hh:mm')}}</span><a v-if="co.publisher === args.uname" @click="deleteComment(co._id,null)" class="comment">删除</a><a class="comment" @click="like(null,co.likes,co._id,'',co)">{{co.likes === true?'已赞':'赞'}}({{co.likesNum}})</a><a v-if="args.comment === true" class="comment" @click="args.comment = false;curComment = co._id;curReceiver=co.publisher">回复</a><a v-else class="comment" @click="args.comment = true;curComment = null">取消回复</a>
         </f7-list-item>
         <f7-list-item v-for="(reply,index) in co.replys" :key="index" :subtitle="reply.publisher+'回复'+reply.receiver" :text="reply.content"><img slot="media" :src="headImgUrl(reply.publisher)" />
-          <span class="comment_left">{{dateformate(reply._id,'MM-dd hh:mm')}}</span><a v-if="co.publisher === args.uname" @click="deleteComment(co._id,reply._id)" class="comment">删除</a><a class="comment" @click="like(null,reply.likes,co._id,reply._id,reply)">{{reply.likes === true?'已赞':'赞'}}({{reply.likesNum}})</a><a  v-if="args.comment === true" class="comment" @click="do_reply(reply.publisher,co._id)">回复</a><a  v-else class="comment" @click="un_reply()">取消回复</a>
+          <span class="comment_left">{{dateformate(reply._id,'MM-dd hh:mm')}}</span><a v-if="reply.publisher === args.uname" @click="deleteComment(co._id,reply._id)" class="comment">删除</a><a class="comment" @click="like(null,reply.likes,co._id,reply._id,reply)">{{reply.likes === true?'已赞':'赞'}}({{reply.likesNum}})</a><a  v-if="args.comment === true" class="comment" @click="do_reply(reply.publisher,co._id)">回复</a><a  v-else class="comment" @click="un_reply()">取消回复</a>
         </f7-list-item>
       </template>
     </f7-list>

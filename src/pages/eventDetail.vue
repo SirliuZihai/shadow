@@ -46,6 +46,7 @@
 </template>
 <script>
 import theEventPage from '@/pages/homeSub/eventsPage.vue'
+import theCalendar from '@/pages/homeSub/calendar-page.vue'
 var curEventDetail
 let endOfDay = new Date()
 endOfDay.setHours(23)
@@ -120,6 +121,7 @@ export default {
             self.$root.toastbuttom(self, data.message)
             if (data.success === true || data.message === '该记录已被移除') {
               self.$root.delEleFromArray(self.eventInfo, theEventPage.methods.getCur().events)
+              theCalendar.methods.getCur().init()
             }
             self.$f7router.back()
           },

@@ -16,6 +16,7 @@
 import theLeftPanelCur from '@/pages/homeSub/eventsPage.vue'
 import nativeUtil from '@/assets/js/nativeUtil.js'
 import photo from '@/assets/js/phonto.js'
+import theCalendar from '@/pages/homeSub/calendar-page.vue'
 let ObjectID = require('bson').ObjectID
 var curEventPage
 // event websocket
@@ -61,6 +62,7 @@ function initwebSocket (webSocket) {
       }
     }
     if (type === '0001') {
+      console.log('getMessage' + type)
       let array2 = curEventPage.$root.myevil(data.data.substring(4))
       if (array2.length === 0) {
         return false
@@ -73,7 +75,7 @@ function initwebSocket (webSocket) {
           if (curEventPage.events[j]._id === array2[i].relateId) {
             hasevent = true
             eventM = curEventPage.events[j]
-            curEventPage.events.splice(j, 1)
+            curEventPage.events.splice(j, 1) // 将事件删除，然后添加事件
           }
         }
         if (!hasevent) {
@@ -91,6 +93,7 @@ function initwebSocket (webSocket) {
               if (array2[i].type === 'file') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
             }
             curEventPage.events.unshift(eventM)
+            theCalendar.methods.getCur().init()
           }, () => { curEventPage.$root.toastbuttom(self, '通讯异常') })
         } else {
           // 更新事件栏
@@ -103,6 +106,7 @@ function initwebSocket (webSocket) {
             if (array2[i].type === 'file') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
           }
           curEventPage.events.unshift(eventM)
+          theCalendar.methods.getCur().init()
         }
         try {
           photo.notify(eventM, null, null)

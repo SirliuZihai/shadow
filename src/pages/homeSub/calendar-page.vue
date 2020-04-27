@@ -17,6 +17,7 @@
 
 <script>
 import eventPage from '@/pages/homeSub/eventsPage.vue'
+var curCalendar
 export default {
   name: 'calendar-page',
   mounted () {
@@ -40,25 +41,9 @@ export default {
   },
   created () {
     const self = this
-    let colorMap = ['#e91e63', '#ff9800', '#2196f3', '#4caf50']
+    curCalendar = self
     // event初始化
-    const homeEvents = eventPage.methods.getCur().events
-    if (!homeEvents) {
-      return false
-    }
-    homeEvents.forEach((e) => {
-      for (let i = Number(e.starttime); i <= Number(e.endtime); i++) {
-        if (!e.type) {
-          e.type = 3
-        }
-        self.events.push({
-          _id: e._id,
-          date: self.intTodate(i),
-          title: e.title,
-          color: colorMap[e.type]
-        })
-      }
-    })
+    self.init()
   },
   data: () => {
     const date = new Date()
@@ -72,6 +57,35 @@ export default {
     }
   },
   methods: {
+    getCur () {
+      return curCalendar
+    },
+    init () {
+      console.log('calendar.init')
+      const self = this
+      let colorMap = ['#e91e63', '#ff9800', '#2196f3', '#4caf50']
+      const homeEvents = eventPage.methods.getCur().events
+      if (!homeEvents) {
+        return false
+      }
+      self.events = []
+      homeEvents.forEach((e) => {
+        for (let i = Number(e.starttime); i <= Number(e.endtime); i++) {
+          if (!e.type) {
+            e.type = 3
+          }
+          self.events.push({
+            _id: e._id,
+            date: self.intTodate(i),
+            title: e.title,
+            color: colorMap[e.type]
+          })
+        }
+      })
+      if (self.calendar) {
+        self.renderEvents(self.calendar)
+      }
+    },
     renderEvents (calendar) {
       const self = this
       const currentDate = calendar.value[0]
