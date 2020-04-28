@@ -77,7 +77,7 @@ navigator.geolocation.getCurrentPosition(
 }
 function onBackKeyDown() {
   let his = myapp.$f7.views.main.history
-  if(!(his.length==1||his[his.length-2]=='/login-screen-page/')){
+  if(!(his.length==1||his[his.length-2]=='/login-screen-page/'||his[his.length-1]=='/login-screen-page/')){
     //如果有history则执行返回
     myapp.$f7.views.main.router.back()
   }else{
