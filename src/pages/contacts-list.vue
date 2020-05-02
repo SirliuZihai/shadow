@@ -114,7 +114,7 @@ export default {
         xhrFields: {
           withCredentials: true
         },
-        data: {'people': inputarg, 'interest': false, 'tag': '', 'remark': alias}
+        data: {'people': inputarg, 'interest': true, 'tag': '', 'remark': alias}
       }).then(function (data) {
         let data2 = self.$root.myevil(data)
         if (data2.success === true) {
