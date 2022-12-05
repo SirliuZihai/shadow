@@ -15,7 +15,6 @@
 <script>
 import theLeftPanelCur from '@/pages/homeSub/eventsPage.vue'
 import nativeUtil from '@/assets/js/nativeUtil.js'
-import photo from '@/assets/js/phonto.js'
 import theCalendar from '@/pages/homeSub/calendar-page.vue'
 let ObjectID = require('bson').ObjectID
 var curEventPage
@@ -44,7 +43,6 @@ function initwebSocket (webSocket) {
     if (type === '0003') { // 心跳返回
       try {
         trytime = 0 // 重连初始化
-        nativeUtil.writeLogFile2(new Date() + '===0003')
       } catch (e) {
         console.log(e)
       }
@@ -93,7 +91,6 @@ function initwebSocket (webSocket) {
               if (array2[i].type === 'file') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
             }
             curEventPage.events.unshift(eventM)
-            theCalendar.methods.getCur().init()
           }, () => { curEventPage.$root.toastbuttom(self, '通讯异常') })
         } else {
           // 更新事件栏
@@ -106,13 +103,9 @@ function initwebSocket (webSocket) {
             if (array2[i].type === 'file') { eventM.latestMsg = array2[i].sender === null ? '' : array2[i].sender + ':' + '文件' }
           }
           curEventPage.events.unshift(eventM)
-          theCalendar.methods.getCur().init()
-        }
-        try {
-          photo.notify(eventM, null, null)
-        } catch (e) {
         }
       }
+      if (theCalendar) { theCalendar.methods.getCur().init() }
     }
   }
   webSocket.onopen = function () {
@@ -135,7 +128,7 @@ function initwebSocket (webSocket) {
             console.log(e)
           }
           initSocket()
-        }, 3000)
+        }, 10000)
       }
       trytime++
     }
@@ -166,7 +159,10 @@ export default {
     let temp = JSON.parse(localStorage.getItem(self.$root.prefx + 'events'))
     self.events = temp === null ? [] : temp
     try {
-      initSocket()
+      setTimeout(function () {
+        initSocket()
+      }, 5000
+      )
     } catch (e) {
       console.log(e)
     }

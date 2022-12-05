@@ -140,6 +140,11 @@ function onPhotoURISuccess (imageURI) {
   }, imageURI, {quality: 80});
 }
 
+// 上传失败
+var uploadFail = function (error) {
+  myapp.$f7.dialog.alert("上传失败2： "+JSON.stringify(error))
+}
+
 // 上传文件
 function upload (fileURL) {
   //alert(fileURL)
@@ -152,10 +157,7 @@ function upload (fileURL) {
     }
   }
 
-  // 上传失败
-  var fail = function (error) {
-    myapp.$f7.dialog.alert("上传失败! ")
-  }
+
 
   var options = new FileUploadOptions()
   options.fileKey = 'headImageFile'
@@ -164,7 +166,7 @@ function upload (fileURL) {
   var ft = new FileTransfer()
   // 上传地址
   var SERVER = process.env.API_HOST + 'user/uploadHeadImg.do'
-  ft.upload(fileURL, encodeURI(SERVER), success, fail, options)
+  ft.upload(fileURL, encodeURI(SERVER), success, uploadFail, options)
 };
 
 function notify (event,success,ignore) {
@@ -195,17 +197,14 @@ function sendPicture (ws) {
           ws.send('[image]:' + data.message)
 
         }
-        // 上传失败
-        let fail = function (error) {
-          myapp.$f7.dialog.alert("发送失败! ")
-        }
+
         let options = new FileUploadOptions()
         options.fileKey = 'tempFile'
         options.fileName = 'fs.jpg'
         let ft = new FileTransfer()
         // 上传地址
         let SERVER = process.env.API_HOST + 'event/uploadtempfile.do'
-        ft.upload(dataUrl, encodeURI(SERVER), success, fail, options)
+        ft.upload(dataUrl, encodeURI(SERVER), success, uploadFail, options)
       }
     }, (e)=>{},
     { quality: 75, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
@@ -224,10 +223,7 @@ function upPicture (clazzName,imgArry) {
           let data = myapp.myevil(r.response)
           imgArry.push(data.message)
         }
-        // 上传失败
-        let fail = function (error) {
-          myapp.$f7.dialog.alert("上传失败! ")
-        }
+
         let options = new FileUploadOptions()
         options.fileKey = 'tempFile'
         options.fileName = 'fs.jpg'
@@ -235,7 +231,7 @@ function upPicture (clazzName,imgArry) {
         let ft = new FileTransfer()
         // 上传地址
         let SERVER = process.env.API_HOST + 'tips/uploadImage.do?classify=' + 'tips'
-        ft.upload(dataUrl, encodeURI(SERVER), success, fail, options)
+        ft.upload(dataUrl, encodeURI(SERVER), success, uploadFail, options)
       }
     }, (e)=>{},
     { quality: 75, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
