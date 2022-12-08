@@ -33,6 +33,9 @@ export default {
     const self = this
     let people = self.$f7route.params.people
     let contacts = JSON.parse(localStorage.getItem(self.$root.prefx + 'contacts'))
+    if (!contacts){
+      return
+    }
     for (let i = 0; i < contacts.length; i++) {
       if (contacts[i].people === people) {
         // 数组初始化，

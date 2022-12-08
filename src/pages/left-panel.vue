@@ -3,7 +3,7 @@
     <f7-list>
       <div style="text-align:center">
         <img id="headImg" src="" class="headImg"/>
-        <input type="file" accept="image/*" @change="uploadFileForm" hidden />
+        <input id="left_panelHeadImg" type="file" accept="image/*" @change="uploadFileForm" hidden />
       </div>
       <f7-button @click="uploadFile">点击上传头像</f7-button>
     </f7-list>
@@ -71,8 +71,8 @@
         self.$root.curSelf = self
         if (self.$device.android === true || self.$device.ios === true) {
           photo.getPhoto()
-        } else if (self.$device.desktop === true) {
-          LeftPanelCur.$$('input[type="file"]').click()
+        } else {
+          LeftPanelCur.$$('#left_panelHeadImg').click()
         }
       },
       uploadFileForm (event) {

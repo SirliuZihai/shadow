@@ -7,6 +7,7 @@
         </f7-nav-right>
       </f7-navbar>
       <f7-photo-browser type="popup" :photos="photos" ref="photosbrowser" />
+      <input id="editNewImage" type="file" accept="image/*" @change="uploadFileForm3" hidden/>
       <f7-list no-hairlines form >
         <f7-list-input type="textarea" :value="tip.context" @input="tip.context=$event.target.value"  clear-button />
         <f7-list-item>
@@ -73,8 +74,29 @@ export default {
       }
       self.$root.curSelf = self
       if (self.$device.android === true || self.$device.ios === true) {
-        photo.upPicture('tempFile', self.tip.picture)
+        photo.upPicture('tips', self.tip.picture)
+      }else {
+        this.$$('#editNewImage').click()
       }
+    },
+    uploadFileForm3 (event){
+      const self = this
+      var SERVER = process.env.API_HOST + 'tips/uploadImage.do?classify=tips'
+      var imgFile = event.target.files[0] // 获取图片文件
+      var formData = new FormData() // 创建form对象
+      formData.append('tempFile', imgFile)// 通过append向form对象添加数据
+      self.$f7.request.promise({
+        method: 'POST',
+        url: SERVER,
+        data: formData
+      }).then(function (data) {
+        let data2 = self.$root.myevil(data)
+        if (data2.success === true) {
+          self.tip.picture.push(data2.message)
+        } else {
+          self.$root.toastbuttom(self, data2.message)
+        }
+      })
     },
     setPhotos (pictures) {
       const self = this
@@ -92,6 +114,9 @@ export default {
       let outArray = []
       let helpArray = []
       let contacts = JSON.parse(localStorage.getItem(self.$root.prefx + 'contacts'))
+      if (!contacts){
+        return
+      }
       for (let i = 0; i < contacts.length; i++) {
         // 数组初始化，
         if (contacts[i].tags === undefined) {

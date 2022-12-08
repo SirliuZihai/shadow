@@ -230,7 +230,7 @@ function upPicture (clazzName,imgArry) {
 
         let ft = new FileTransfer()
         // 上传地址
-        let SERVER = process.env.API_HOST + 'tips/uploadImage.do?classify=' + 'tips'
+        let SERVER = process.env.API_HOST + 'tips/uploadImage.do?classify=' + clazzName
         ft.upload(dataUrl, encodeURI(SERVER), success, uploadFail, options)
       }
     }, (e)=>{},
