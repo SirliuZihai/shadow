@@ -1,7 +1,7 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  API_HOST: '"http://47.112.131.22/myapp/"',
-  API_WS: '"ws://47.112.131.22/myapp/"',
+  API_HOST: '"https://299u3q7822.goho.co/myapp/"',
+  API_WS: '"wss://299u3q7822.goho.co/myapp/"',
   API_BDMAP: '"http://api.map.baidu.com"'
 }
