@@ -98,6 +98,7 @@ export default {
     },
     setPhotos (pictures) {
       const self = this
+      self.photos = []
       for (let i = 0; i < pictures.length; i++) {
         // {url: '', caption: ''}
         self.photos.push({url: process.env.API_HOST + pictures[i], caption: ''})
