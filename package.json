@@ -19,7 +19,7 @@
     "dns": "^0.2.2",
     "framework7": "^4.0.5",
     "framework7-vue": "^4.0.5",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "jquery.cookie": "^1.4.1",
     "jquery.js": "0.0.2-security",
     "module": "^1.2.5",
